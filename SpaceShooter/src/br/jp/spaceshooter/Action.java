@@ -76,9 +76,4 @@ public class Action {
 		isTouching=false;		
 	}
 
-//	@Override
-//	public void itemOnClick() {
-//		Toast.makeText(getContext(), "Clicked!!", Toast.LENGTH_SHORT).show();
-//	}
-
 }
