@@ -7,11 +7,62 @@ import android.view.MenuItem;
 
 public class MainActivity extends Activity {
 
+	SpaceShooterController ssc;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		ssc = new SpaceShooterController(this);
+		setContentView(ssc);
 	}
+
+	@Override
+	protected void onStart() {
+		ssc.resume();
+		super.onStart();
+	}
+
+
+
+	@Override
+	protected void onRestart() {
+		ssc.resume();
+		super.onRestart();
+	}
+
+
+
+	@Override
+	protected void onResume() {
+		ssc.resume();
+		super.onResume();
+	}
+
+
+
+	@Override
+	protected void onPause() {
+		ssc.pause();
+		super.onPause();
+	}
+
+
+
+	@Override
+	protected void onStop() {
+		ssc.stop();
+		super.onStop();
+	}
+
+
+
+	@Override
+	protected void onDestroy() {
+		ssc.stop();
+		super.onDestroy();
+	}
+
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
