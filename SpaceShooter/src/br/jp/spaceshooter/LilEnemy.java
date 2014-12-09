@@ -22,12 +22,12 @@ public class LilEnemy extends Entity {
 	
 	public LilEnemy(Context context, int w, int h, int colLayer, GameObject collswith) {
 		super(context, w, h,colLayer);
-		setX(32);
-		setY(32);
+		setX(50);
+		setY(50);
 		
 		setImage(BitmapFactory.decodeResource(getResources(), 
 				R.drawable.enemy_default_sheet));
-		setDefaultAnimation(new Animation(1, 1, 32, 32));
+		setDefaultAnimation(new Animation(1, 1, 50, 50));
 		getDefaultAnimation().src = new Rect(0, 0, w, h);
 		getDefaultAnimation().dst = new Rect( getObjX(), getObjY(), 0, 0);
 
@@ -58,7 +58,7 @@ public class LilEnemy extends Entity {
 				getWorldItBelongs().addProjectile(new Projectile(getContext(), 
 						(getObjX()+getWIDTH())/2 - 16,
 						getObjY()+getHEIGHT(),
-						32, 32, 1,
+						50, 50, 1,
 						this,
 						getWorldItBelongs().getEntityById(0)));
 				getWorldItBelongs().getProjectileById(getWorldItBelongs().getProjectiles().size()-1).setpY(5);
