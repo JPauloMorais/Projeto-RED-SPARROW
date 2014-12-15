@@ -1,6 +1,7 @@
 package br.jp.engine.components;
 
-import android.graphics.Canvas;
+import javax.microedition.khronos.opengles.GL10;
+
 import br.jp.engine.core.Component;
 
 public class AnimatedSpriteComponent extends Component {
@@ -11,15 +12,15 @@ public class AnimatedSpriteComponent extends Component {
 	}
 
 	@Override
-	public void update(Canvas canvas) {
+	public void update(GL10 gl, float x, float y) {
 		// TODO Auto-generated method stub
 		
 	}
 	
 	@Override
-	public void render(Canvas canvas) {
+	public void render(GL10 gl) {
 		// TODO Auto-generated method stub
-		super.render(canvas);
+		super.render(gl);
 	}
 
 }

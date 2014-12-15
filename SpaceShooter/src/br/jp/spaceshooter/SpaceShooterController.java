@@ -13,10 +13,10 @@ public class SpaceShooterController extends GameController {
 	public SpaceShooterController(Context context) {
 		super(context);
 			
-		world = new World();	 
-		world.addObject(ObjectFactory.createObject(ObjectType.DEFAULT,10,10));
-		world.addObject(ObjectFactory.createObject(ObjectType.DEFAULT,1000,1000));
-		world.addObject(ObjectFactory.createObject(ObjectType.DEFAULT,20,20));
+//		world = new World();	 
+//		world.addObject(ObjectFactory.createObject(context,ObjectType.DEFAULT,10,10));
+//		world.addObject(ObjectFactory.createObject(context,ObjectType.DEFAULT,1000,1000));
+//		world.addObject(ObjectFactory.createObject(context,ObjectType.DEFAULT,100,100));
 		
 	}
 
@@ -30,12 +30,13 @@ public class SpaceShooterController extends GameController {
 
 	@Override
 	public void update(Canvas canvas) {
-		world.update(canvas);
+//		world.update(canvas);
 	}
 
 	@Override
 	public void render(Canvas canvas) {
-		world.render(canvas);
+//		world.render(canvas);
+		
 	}
 
 }

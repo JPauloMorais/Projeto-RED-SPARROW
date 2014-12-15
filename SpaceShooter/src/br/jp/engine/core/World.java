@@ -3,8 +3,10 @@ package br.jp.engine.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.graphics.Canvas;
+import javax.microedition.khronos.opengles.GL10;
+
 import br.jp.engine.components.SpriteComponent;
+import br.jp.engine.components.PhysicsComponent;
 import br.jp.engine.physics.Physics;
 
 public class World {
@@ -21,30 +23,26 @@ public class World {
 
 	}
 
-	public synchronized void update(Canvas canvas){
-		try {			
-			//checando colisões
-			if(!mObjects.isEmpty()){ 
-				for (GameObject object : mObjects) {
-					toCheck = grid.getLikelyToInteract(object);
-					for (GameObject object2 : toCheck) {
-						if(object.getId()!=object2.getId()){						
-							if(Physics.isColliding(object, object2)) ;
-							//								Log.i("COLLISION", "Collision!");
+	public synchronized void loop(GL10 gl){
+		if(!mObjects.isEmpty()){ 
+			for (GameObject object : mObjects) {
+				object.update(gl);
+				toCheck = grid.getLikelyToInteract(object);
+				for (GameObject object2 : toCheck) {
+					if(object.getId()!=object2.getId()){						
+						if(Physics.isColliding(object, object2)) 
+						{
+							if(object.getComponentByName("PhysicsComponent")!=null){
+								grid.clear();
+								grid.addObject(object);
+
+							}
 						}
 					}
 				}
+				object.render(gl);
+				gl.glLoadIdentity();
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			update(canvas);
-		}
-	}
-
-	public synchronized void render(Canvas canvas){
-		for (GameObject object : mObjects) {
-			Component sComp = object.getComponent(SpriteComponent.mName);
-			if(sComp!=null) sComp.render(canvas);
 		}
 	}
 
