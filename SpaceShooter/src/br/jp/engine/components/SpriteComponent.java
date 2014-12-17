@@ -14,7 +14,7 @@ import javax.microedition.khronos.opengles.GL10;
 import br.jp.engine.core.Component;
 import br.jp.engine.core.GameObject;
 
-public class SpriteComponent extends Component {
+public class SpriteComponent extends Component implements Renderable {
 
 	private FloatBuffer vertexBuffer;
 
@@ -35,7 +35,6 @@ public class SpriteComponent extends Component {
 	public SpriteComponent(GameObject parent, float r, float g, float b, float a) {
 		super("SpriteComponent");
 		
-		mParent = parent;
 		mR = r;
 		mG = g;
 		mB = b;
@@ -43,10 +42,10 @@ public class SpriteComponent extends Component {
 		
 		// vertices para 2 triangulos (x,y,z)
 		float v[] = { 
-				mParent.getX(), mParent.getY(), 0.0f, //Bottom Left
-				mParent.getX() + mParent.getWidth(), mParent.getY(), 0.0f, 	//Bottom Right
-				mParent.getX(), mParent.getY() + mParent.getHeight(), 0.0f, 	//Top Left
-				mParent.getX() + mParent.getWidth(), mParent.getY() + mParent.getHeight(), 0.0f 	//Top Right
+				parent.getX(), parent.getY(), 0.0f, //Bottom Left
+				parent.getX() + parent.getWidth(), parent.getY(), 0.0f, 	//Bottom Right
+				parent.getX(), parent.getY() + parent.getHeight(), 0.0f, 	//Top Left
+				parent.getX() + parent.getWidth(), parent.getY() + parent.getHeight(), 0.0f 	//Top Right
 				};
 		vertices = v;
 
@@ -58,26 +57,22 @@ public class SpriteComponent extends Component {
 	}
 
 	@Override
-	public void render(GL10 gl) {
+	public void render(GL10 gl, GameObject object) {
 		
 		gl.glPushMatrix();
-		//Set the face rotation
+		
+		//Rotacao da face
 		gl.glFrontFace(GL_CW);
-
-		//Point to our vertex buffer
+		//Referencia ao buffer de vertices
 		gl.glVertexPointer(3, GL_FLOAT, 0, vertexBuffer);
-
-		//Enable vertex buffer
+		//Ativando buffer de vertices
 		gl.glEnableClientState(GL_VERTEX_ARRAY);
-
-		//Set The Color To Blue
+		//Setando cor solida
 		gl.glColor4f(mR, mG, mB, mA);	
-
-		//Draw the vertices as triangle strip
+		//Renderizando vertices como Triangle Strips
 		gl.glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices.length / 3);
-
-		//Disable the client state before leaving
-		gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+		//desabilitando estado
+		gl.glDisableClientState(GL_VERTEX_ARRAY);
 		
 		gl.glPopMatrix();
 	}

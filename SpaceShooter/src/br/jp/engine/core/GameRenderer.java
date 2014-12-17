@@ -1,12 +1,9 @@
 package br.jp.engine.core;
 
 import static javax.microedition.khronos.opengles.GL10.GL_COLOR_BUFFER_BIT;
-import static javax.microedition.khronos.opengles.GL10.GL_DEPTH_BUFFER_BIT;
 import static javax.microedition.khronos.opengles.GL10.GL_DEPTH_TEST;
 import static javax.microedition.khronos.opengles.GL10.GL_MODELVIEW;
 import static javax.microedition.khronos.opengles.GL10.GL_PROJECTION;
-
-import java.util.Random;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -15,7 +12,6 @@ import android.content.Context;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
 import android.util.Log;
-import br.jp.engine.components.SpriteComponent;
 import br.jp.engine.util.FPSCounter;
 import br.jp.spaceshooter.ObjectFactory;
 import br.jp.spaceshooter.ObjectFactory.ObjectType;
@@ -25,8 +21,8 @@ public class GameRenderer implements Renderer {
 	private float mWidth, mHeight;
 //	private Context mContext;
 
-	private GameObject testObj;
-	private World world;
+	private GameObject mPlayer;
+	private World mWorld;
 	
 	private FPSCounter log;
 
@@ -37,18 +33,15 @@ public class GameRenderer implements Renderer {
 		mHeight = 320;
 		
 		log = new FPSCounter();
-		world = new World();
+		
+		mPlayer = ObjectFactory.createObject(context, ObjectType.PLAYER, -1.5f, -1.5f,1,0,0,1);
+		mWorld = new World();
+		
+		mWorld.addObject(mPlayer);
 				
-		for (int i = 0; i < 300; i++) {			
-			world.addObject(ObjectFactory.createObject(context, ObjectType.DEFAULT, -1f, -1f,
+		for (int i = 0; i < 30; i++) {			
+			mWorld.addObject(ObjectFactory.createObject(context, ObjectType.DEFAULT, -0.5f + i/10, -0.5f + i/10,
 					1,0,0,1));
-			
-			world.addObject(ObjectFactory.createObject(context, ObjectType.DEFAULT, 0f, 0f,
-					1,0,0,1));
-			
-			world.addObject(ObjectFactory.createObject(context, ObjectType.DEFAULT, -1f, -1f,
-					1,0,0,1));
-			
 		}
 		
 	}
@@ -75,6 +68,7 @@ public class GameRenderer implements Renderer {
 			height = 1; 						
 		}
 		
+		//Obtendo novas dimensoes da tela
 		this.mWidth  = width;
 		this.mHeight = height;
 		
@@ -82,19 +76,19 @@ public class GameRenderer implements Renderer {
 		gl.glMatrixMode(GL_PROJECTION); 	
 		gl.glLoadIdentity(); 					
 
-		//Calculate The Aspect Ratio Of The Window
-		GLU.gluPerspective(gl, 45.0f, (float)width / (float)height, 1f, 1000.0f);
+		//Calculando Aspect Ratio
+		GLU.gluPerspective(gl, 70.0f, (float)width / (float)height, 1f, 1000.0f);
 		gl.glMatrixMode(GL_MODELVIEW); 	
 		gl.glLoadIdentity(); 					
 	}
 
 	@Override
 	public void onDrawFrame(GL10 gl) {
-		//Clear Screen And Depth Buffer
-		gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
+		//Limpando tela com a cor no Color Buffer
+		gl.glClear(GL_COLOR_BUFFER_BIT);	
 		gl.glLoadIdentity();					
 
-		world.loop(gl);
+		mWorld.loop(gl);
 		
 		log.logFrame();
 		
@@ -102,12 +96,23 @@ public class GameRenderer implements Renderer {
 
 	public void handleTouchPress(float normalizedX, float normalizedY) {
 		// TODO Auto-generated method stub		
-		Log.i("TouchPress", "TouchPress");
+		if(LogConfig.IS_DEBUGGING) Log.i("INPUT", "TouchPress");
 	}
 
 	public void handleTouchDrag(float normalizedX, float normalizedY) {
 		// TODO Auto-generated method stub
-		Log.i("TouchDrag", "TouchDrag");
+		if(LogConfig.IS_DEBUGGING) Log.i("INPUT", "TouchDrag");
+	}
+	
+	public void handleSensorChange(float[] values) {
+		//TODO Calculo correto da rotacao
+		//TODO Rotacao a partir do centro do objeto 
+		
+		if(values[0]<0) mWorld.sendMessage(new Message(0, 90f));
+		if(values[0]>0) mWorld.sendMessage(new Message(0, 270f));
+		if(values[1]>0) mWorld.sendMessage(new Message(0, 180f));
+		
+		
 	}
 
 	public float getWidth() {

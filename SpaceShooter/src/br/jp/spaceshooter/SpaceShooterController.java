@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import br.jp.engine.core.GameController;
 import br.jp.engine.core.World;
-import br.jp.spaceshooter.ObjectFactory.ObjectType;
 
 public class SpaceShooterController extends GameController {
 	

@@ -9,6 +9,10 @@ public class Grid {
 	private List<GameObject> likelyToInteract;
 	int gridRows, gridCols;
 	int mCellSize;
+	private int top;
+	private int left;
+	private int right;
+	private int bottom;
 
 	public Grid(int mapWidth, int mapHeight, int cellSize){
 		mCellSize = cellSize;
@@ -25,10 +29,10 @@ public class Grid {
 
 	public void addObject(GameObject object){
 
-		int left   = (int) Math.max(0,(object.getX() / mCellSize));
-		int top    = (int) Math.max(0,(object.getY() / mCellSize));
-		int right  = (int) Math.min( gridCols-1,((object.getX() + object.getWidth() - 1) / mCellSize));
-		int bottom = (int) Math.min( gridRows-1,((object.getY() + object.getHeight() - 1) / mCellSize));
+		left   = (int) Math.max(0,(object.getX() / mCellSize));
+		top    = (int) Math.max(0,(object.getY() / mCellSize));
+		right  = (int) Math.min( gridCols-1,((object.getX() + object.getWidth() - 1) / mCellSize));
+		bottom = (int) Math.min( gridRows-1,((object.getY() + object.getHeight() - 1) / mCellSize));
 		
 		for (int x = left; x <= right; x++)
 		{

@@ -1,23 +1,25 @@
 package br.jp.engine.core;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
-import br.jp.engine.components.SpriteComponent;
+import br.jp.engine.components.Renderable;
+import br.jp.engine.components.Updatable;
 
 
 
 public class GameObject{
 
-	private int id;
-	private float mX, mY;
-	private float mWidth, mHeight;
-	private float mLayer;
+	private float mX; 
+	private float mY;
+	private float mWidth;
+	private float mHeight;
+	private float mRotation;
+	private byte mLayer;
 	private List<Component> mComponents;
-	private List<String> mComponentsNames;
+	private Message curMessage;
 
 	public GameObject(Context context,float x, float y, float size){ this(context,x, y, size, size); }
 
@@ -25,28 +27,31 @@ public class GameObject{
 
 	public GameObject(Context context, float x, float y, float width, float height, List<Component> components) {
 		
-		id = 0;
 		setX(x);
 		setY(y);
 		setWidth(width);
 		setHeight(height);
+		setRotation(0);
 		setLayer(0);
 		mComponents = components;
-		mComponentsNames = new ArrayList<String>();
-		for (Component component : components) {
-			mComponentsNames.add(component.getName());
-		}
 		
 	}
+	
+	public void recieveMessage(Message message){
+		setCurMessage(message);
+	}
 
-	public void update(GL10 gl) {
+	public synchronized void update(GL10 gl) {
 		for (Component component : mComponents) {
-			component.update(gl);
+			if(component instanceof Updatable) ((Updatable) component).update(gl, this);
 		}
 	}
-	public void render(GL10 gl) {
+	public synchronized void render(GL10 gl) {
 		for (Component component : mComponents) {
-			if(component.getName().equals(SpriteComponent.mName)) component.render(gl);
+			if(component instanceof Renderable) {
+				((Renderable) component).render(gl, this);
+				gl.glLoadIdentity();
+			}
 		}
 	}
 
@@ -98,27 +103,13 @@ public class GameObject{
 			return mComponents.get(mComponents.lastIndexOf(component));
 		return null;
 	}
-	public Component getComponentByName(String name) {
-		if (mComponentsNames.contains(name)) 
-			return mComponents.get(mComponentsNames.lastIndexOf(name));
-		return null;
-	}
 
 	public void addComponent(Component component) {
 		mComponents.add(component);
-		mComponentsNames.add(component.getName());
 	}
 	
 	public void setComponents(List<Component> mComponents) {
 		this.mComponents = mComponents;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	public float getLayer() {
@@ -126,7 +117,23 @@ public class GameObject{
 	}
 
 	public void setLayer(float mLayer) {
-		this.mLayer = (mLayer + 8.5f) * -1;
+		this.mLayer = (byte) ((mLayer + 8.5f) * -1);
+	}
+
+	public float getRotation() {
+		return mRotation;
+	}
+
+	public void setRotation(float mRotation) {
+		this.mRotation = mRotation;
+	}
+
+	public Message getCurMessage() {
+		return curMessage;
+	}
+
+	public void setCurMessage(Message curMessage) {
+		this.curMessage = curMessage;
 	}
 
 
