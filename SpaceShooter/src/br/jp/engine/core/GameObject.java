@@ -26,7 +26,7 @@ public class GameObject{
 	public GameObject(Context context, float x, float y, float width, float height){ this(context,x, y, width, height, null); }
 
 	public GameObject(Context context, float x, float y, float width, float height, List<Component> components) {
-		
+
 		setX(x);
 		setY(y);
 		setWidth(width);
@@ -34,9 +34,9 @@ public class GameObject{
 		setRotation(0);
 		setLayer(0);
 		mComponents = components;
-		
+
 	}
-	
+
 	public void recieveMessage(Message message){
 		setCurMessage(message);
 	}
@@ -62,7 +62,7 @@ public class GameObject{
 	public void setX(float mX) {
 		this.mX = mX;
 	}
-	
+
 	public float getCenterX(){
 		return (mX+mWidth)/2;
 	}
@@ -107,7 +107,7 @@ public class GameObject{
 	public void addComponent(Component component) {
 		mComponents.add(component);
 	}
-	
+
 	public void setComponents(List<Component> mComponents) {
 		this.mComponents = mComponents;
 	}

@@ -19,7 +19,7 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 	//	private GameView gv;
 	private GLSurfaceView mGlSView;
 	private GameRenderer mGameRenderer;
-	
+
 	Sensor mSensorAccelerometer;
 	SensorManager mSensorManager;
 
@@ -75,12 +75,12 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 		mSensorManager.unregisterListener(this);
 	}
 
-	
+
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		v.performClick();
 		if(event!=null){
-			
+
 			final float normalizedX = (event.getX()/(float)v.getWidth())*2-1;
 			final float normalizedY = -((event.getY()/(float)v.getHeight())*2-1);
 
@@ -117,6 +117,6 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

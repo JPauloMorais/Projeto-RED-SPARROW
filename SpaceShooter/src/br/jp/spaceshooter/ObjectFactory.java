@@ -33,14 +33,14 @@ public class ObjectFactory {
 
 			return object;
 		case PLAYER:
-			
+
 			object = new GameObject(context,x, y, 1, 1, components);
 			object.setLayer(0);
-			
+
 			object.addComponent(new SpriteComponent(object, .5f, .5f, 1f, 1));
 			object.addComponent(new PhysicsComponent());
-//			object.addComponent(new PlayerInputComponent());
-			
+			//			object.addComponent(new PlayerInputComponent());
+
 			return object;
 		default:
 			break;

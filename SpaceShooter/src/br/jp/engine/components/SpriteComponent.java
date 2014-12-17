@@ -21,12 +21,12 @@ public class SpriteComponent extends Component implements Renderable {
 	private float vertices[];
 	private float mR, mG, mB, mA;
 	//coords da textura
-//	private float texture[] = {
-//								0.0f, 0.0f, 
-//								1.0f, 0.0f, 
-//								0.0f, 1.0f, 
-//								1.0f, 1.0f,
-//											};
+	//	private float texture[] = {
+	//								0.0f, 0.0f, 
+	//								1.0f, 0.0f, 
+	//								0.0f, 1.0f, 
+	//								1.0f, 1.0f,
+	//											};
 
 	public SpriteComponent() {
 		this(null, 0.5f, 0.5f, 1.0f, 1.0f);
@@ -34,19 +34,19 @@ public class SpriteComponent extends Component implements Renderable {
 
 	public SpriteComponent(GameObject parent, float r, float g, float b, float a) {
 		super("SpriteComponent");
-		
+
 		mR = r;
 		mG = g;
 		mB = b;
 		mA = a;
-		
+
 		// vertices para 2 triangulos (x,y,z)
 		float v[] = { 
 				parent.getX(), parent.getY(), 0.0f, //Bottom Left
 				parent.getX() + parent.getWidth(), parent.getY(), 0.0f, 	//Bottom Right
 				parent.getX(), parent.getY() + parent.getHeight(), 0.0f, 	//Top Left
 				parent.getX() + parent.getWidth(), parent.getY() + parent.getHeight(), 0.0f 	//Top Right
-				};
+		};
 		vertices = v;
 
 		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);
@@ -58,9 +58,9 @@ public class SpriteComponent extends Component implements Renderable {
 
 	@Override
 	public void render(GL10 gl, GameObject object) {
-		
+
 		gl.glPushMatrix();
-		
+
 		//Rotacao da face
 		gl.glFrontFace(GL_CW);
 		//Referencia ao buffer de vertices
@@ -73,7 +73,7 @@ public class SpriteComponent extends Component implements Renderable {
 		gl.glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices.length / 3);
 		//desabilitando estado
 		gl.glDisableClientState(GL_VERTEX_ARRAY);
-		
+
 		gl.glPopMatrix();
 	}
 

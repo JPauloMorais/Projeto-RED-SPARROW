@@ -25,11 +25,11 @@ public class SpaceShooterController extends GameController implements SensorEven
 	private LilEnemy lilEnemy;
 	private Spaceship player;
 	private Action action;
-//	private Paint cyanPaint;
-	
+	//	private Paint cyanPaint;
+
 	Sensor accelerometer;
 	SensorManager sm;
-	
+
 
 	public SpaceShooterController(Context context) {
 		super(context);
@@ -39,23 +39,23 @@ public class SpaceShooterController extends GameController implements SensorEven
 
 		player = new Spaceship(context, 64, 64, 1, lilEnemy);
 		lilEnemy = new LilEnemy(context, 128, 128, 1, player);
-		
+
 		final List<Entity> entities = new ArrayList<Entity>();
 		entities.add(player);
-		
+
 		final Tilemap map = new Tilemap( 50, 50, 64, 64, BitmapFactory.decodeResource(getResources(), 
 				R.drawable.tile_test));
-//		map.setRelativeTo(player);
+		//		map.setRelativeTo(player);
 
 		world = new World(entities, map);
-		
+
 		sm = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
 		accelerometer = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 		sm.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
-		
+
 		action = new Action(context);
-//		cyanPaint = new Paint();
-//		cyanPaint.setColor(Color.CYAN);
+		//		cyanPaint = new Paint();
+		//		cyanPaint.setColor(Color.CYAN);
 
 	}
 
@@ -64,7 +64,7 @@ public class SpaceShooterController extends GameController implements SensorEven
 		if (!gameOver) {
 			bg.update(canvas);
 			world.update(canvas);
-//			canvas.drawText("Stuff", 0, 0, cyanPaint);
+			//			canvas.drawText("Stuff", 0, 0, cyanPaint);
 			if (world.getEntities().isEmpty()) {
 				gameOver=true;
 				world.removeAllEntites();
@@ -87,7 +87,7 @@ public class SpaceShooterController extends GameController implements SensorEven
 		if (!gameOver) {
 			bg.draw(canvas);
 			world.draw(canvas);
-//			canvas.drawText(text, 0, 0, paint);
+			//			canvas.drawText(text, 0, 0, paint);
 		} else {
 			gameOverBg.draw(canvas);
 		}
@@ -111,80 +111,80 @@ public class SpaceShooterController extends GameController implements SensorEven
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
-		
+
 		if(event.values[0]<0) action.goRight(world);
 		if(event.values[0]>0) action.goLeft(world);
 		if(event.values[1]<0) action.goUp(world);
 		if(event.values[1]>0) action.goDown(world);
-		
+
 	}
 
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-//	private int getScreenOrientation() {
-//	    Display = getContext().getSystemService(Context.WINDOW_SERVICE);
-//		int rotation = getContext().getSystemService(Context.WINDOW_SERVICE).getDefaultDisplay().getRotation();
-//	    DisplayMetrics dm = new DisplayMetrics();
-//	    getWindowManager().getDefaultDisplay().getMetrics(dm);
-//	    int width = dm.widthPixels;
-//	    int height = dm.heightPixels;
-//	    int orientation;
-//	    // if the device's natural orientation is portrait:
-//	    if ((rotation == Surface.ROTATION_0
-//	            || rotation == Surface.ROTATION_180) && height > width ||
-//	        (rotation == Surface.ROTATION_90
-//	            || rotation == Surface.ROTATION_270) && width > height) {
-//	        switch(rotation) {
-//	            case Surface.ROTATION_0:
-//	                orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-//	                break;
-//	            case Surface.ROTATION_90:
-//	                orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-//	                break;
-//	            case Surface.ROTATION_180:
-//	                orientation =
-//	                    ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
-//	                break;
-//	            case Surface.ROTATION_270:
-//	                orientation =
-//	                    ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
-//	                break;
-//	            default:
-//	           
-//	                orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-//	                break;              
-//	        }
-//	    }
-//	    // if the device's natural orientation is landscape or if the device
-//	    // is square:
-//	    else {
-//	        switch(rotation) {
-//	            case Surface.ROTATION_0:
-//	                orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-//	                break;
-//	            case Surface.ROTATION_90:
-//	                orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-//	                break;
-//	            case Surface.ROTATION_180:
-//	                orientation =
-//	                    ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
-//	                break;
-//	            case Surface.ROTATION_270:
-//	                orientation =
-//	                    ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
-//	                break;
-//	            default:
-//	       
-//	                orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-//	                break;              
-//	        }
-//	    }
-//
-//	    return orientation;
-//	}
+
+	//	private int getScreenOrientation() {
+	//	    Display = getContext().getSystemService(Context.WINDOW_SERVICE);
+	//		int rotation = getContext().getSystemService(Context.WINDOW_SERVICE).getDefaultDisplay().getRotation();
+	//	    DisplayMetrics dm = new DisplayMetrics();
+	//	    getWindowManager().getDefaultDisplay().getMetrics(dm);
+	//	    int width = dm.widthPixels;
+	//	    int height = dm.heightPixels;
+	//	    int orientation;
+	//	    // if the device's natural orientation is portrait:
+	//	    if ((rotation == Surface.ROTATION_0
+	//	            || rotation == Surface.ROTATION_180) && height > width ||
+	//	        (rotation == Surface.ROTATION_90
+	//	            || rotation == Surface.ROTATION_270) && width > height) {
+	//	        switch(rotation) {
+	//	            case Surface.ROTATION_0:
+	//	                orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+	//	                break;
+	//	            case Surface.ROTATION_90:
+	//	                orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+	//	                break;
+	//	            case Surface.ROTATION_180:
+	//	                orientation =
+	//	                    ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
+	//	                break;
+	//	            case Surface.ROTATION_270:
+	//	                orientation =
+	//	                    ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
+	//	                break;
+	//	            default:
+	//	           
+	//	                orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+	//	                break;              
+	//	        }
+	//	    }
+	//	    // if the device's natural orientation is landscape or if the device
+	//	    // is square:
+	//	    else {
+	//	        switch(rotation) {
+	//	            case Surface.ROTATION_0:
+	//	                orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+	//	                break;
+	//	            case Surface.ROTATION_90:
+	//	                orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+	//	                break;
+	//	            case Surface.ROTATION_180:
+	//	                orientation =
+	//	                    ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
+	//	                break;
+	//	            case Surface.ROTATION_270:
+	//	                orientation =
+	//	                    ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
+	//	                break;
+	//	            default:
+	//	       
+	//	                orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+	//	                break;              
+	//	        }
+	//	    }
+	//
+	//	    return orientation;
+	//	}
 
 }
