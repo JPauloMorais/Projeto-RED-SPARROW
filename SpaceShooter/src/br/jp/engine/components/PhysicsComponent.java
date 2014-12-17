@@ -36,8 +36,15 @@ public class PhysicsComponent extends Component implements Updatable{
 
 		gl.glTranslatef(object.getX(), object.getY(), object.getLayer());	
 
-		if(object.getCurMessage().getMessage() instanceof Float) 
+		switch (object.getCurMessage().getOperation()) {
+		case "ROT":
 			mRotation = (float) object.getCurMessage().getMessage();
+			break;
+
+		default:
+			
+			break;
+		} 	
 
 		gl.glRotatef(mRotation, 0.0f, 0.0f, 0.1f);
 

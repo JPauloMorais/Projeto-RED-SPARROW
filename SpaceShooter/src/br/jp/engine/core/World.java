@@ -5,9 +5,9 @@ import java.util.List;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.util.Log;
 import br.jp.engine.components.PhysicsComponent;
 import br.jp.engine.physics.Physics;
-import android.util.Log;
 
 public class World {
 
@@ -24,6 +24,8 @@ public class World {
 		toCheck = new ArrayList<GameObject>();
 
 	}
+	
+	
 
 	public synchronized void loop(GL10 gl){
 		if(!mObjects.isEmpty()){ 
@@ -31,14 +33,11 @@ public class World {
 			for (GameObject object : mObjects) {
 				try {
 					message = mMessageList.get(mObjects.indexOf(object));
-					if(message != null) {
-						object.recieveMessage(message);
-						mMessageList.remove(message);
-					}
+					
 				} catch (Exception e) {
 					//					e.printStackTrace();
 					//TODO: Admin. correta da falta de mensagem
-					message = new Message(0, -1);
+					message = new Message(0, "", "");
 				}
 				if(message != null) {
 					object.recieveMessage(message);

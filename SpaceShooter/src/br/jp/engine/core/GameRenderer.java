@@ -108,9 +108,9 @@ public class GameRenderer implements Renderer {
 		//TODO Calculo correto da rotacao
 		//TODO Rotacao a partir do centro do objeto 
 		
-		if(values[0]<0) mWorld.sendMessage(new Message(0, 90f));
-		if(values[0]>0) mWorld.sendMessage(new Message(0, 270f));
-		if(values[1]>0) mWorld.sendMessage(new Message(0, 180f));
+		if(values[0]<0) mWorld.sendMessage(new Message(0, "ROT", 0f));
+		if(values[0]>0) mWorld.sendMessage(new Message(0, "ROT", 0f));
+		if(values[1]>0) mWorld.sendMessage(new Message(0, "ROT", 0f));
 		
 		
 	}
