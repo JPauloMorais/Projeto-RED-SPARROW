@@ -41,7 +41,6 @@ public class PhysicsComponent extends Component implements Updatable{
 
 		gl.glRotatef(mRotation, 0.0f, 0.0f, 0.1f);
 
-		//		mRotation += 10.5f;
 	}
 
 	public float getVelX() {
