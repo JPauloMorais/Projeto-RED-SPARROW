@@ -24,8 +24,6 @@ public class World {
 		toCheck = new ArrayList<GameObject>();
 
 	}
-	
-	
 
 	public synchronized void loop(GL10 gl){
 		if(!mObjects.isEmpty()){ 
@@ -33,9 +31,7 @@ public class World {
 			for (GameObject object : mObjects) {
 				try {
 					message = mMessageList.get(mObjects.indexOf(object));
-					
 				} catch (Exception e) {
-					//					e.printStackTrace();
 					//TODO: Admin. correta da falta de mensagem
 					message = new Message(0, "", "");
 				}

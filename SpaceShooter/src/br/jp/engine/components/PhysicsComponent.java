@@ -16,8 +16,8 @@ public class PhysicsComponent extends Component implements Updatable{
 
 	public PhysicsComponent() {
 		super("PhysicsComponent");
-		velX = 0.001f;
-		velY = 0.001f;
+		velX = 0.0f;
+		velY = 0.0f;
 		mRotation = 0.0f;
 	}
 
@@ -34,17 +34,23 @@ public class PhysicsComponent extends Component implements Updatable{
 		//		else if(velY<MIN_VEL_Y) velY += 0.005f;
 		//		else velY += 0.005f;
 
-		gl.glTranslatef(object.getX(), object.getY(), object.getLayer());	
-
 		switch (object.getCurMessage().getOperation()) {
 		case "ROT":
 			mRotation = (float) object.getCurMessage().getMessage();
 			break;
+		case "MOVEX":
+			object.setX(object.getX()+ (float) object.getCurMessage().getMessage());
+			break;
+		case "MOVEY":
+			object.setY(object.getY()+ (float) object.getCurMessage().getMessage());
+			break;
 
 		default:
-			
+
 			break;
 		} 	
+
+		gl.glTranslatef(object.getX(), object.getY(), object.getLayer());	
 
 		gl.glRotatef(mRotation, 0.0f, 0.0f, 0.1f);
 

@@ -19,31 +19,31 @@ import br.jp.spaceshooter.ObjectFactory.ObjectType;
 public class GameRenderer implements Renderer {
 
 	private float mWidth, mHeight;
-//	private Context mContext;
+	//	private Context mContext;
 
 	private GameObject mPlayer;
 	private World mWorld;
-	
+
 	private FPSCounter log;
 
 	public GameRenderer(Context context) {
 
-//		mContext = context;
+		//		mContext = context;
 		mWidth = 180;
 		mHeight = 320;
-		
+
 		log = new FPSCounter();
-		
+
 		mPlayer = ObjectFactory.createObject(context, ObjectType.PLAYER, -1.5f, -1.5f,1,0,0,1);
 		mWorld = new World();
-		
+
 		mWorld.addObject(mPlayer);
-				
+
 		for (int i = 0; i < 30; i++) {			
 			mWorld.addObject(ObjectFactory.createObject(context, ObjectType.DEFAULT, -0.5f + i/10, -0.5f + i/10,
 					1,0,0,1));
 		}
-		
+
 	}
 
 	@Override
@@ -67,11 +67,11 @@ public class GameRenderer implements Renderer {
 		if(height == 0) { 						
 			height = 1; 						
 		}
-		
+
 		//Obtendo novas dimensoes da tela
 		this.mWidth  = width;
 		this.mHeight = height;
-		
+
 		gl.glViewport(0, 0, width, height); 	
 		gl.glMatrixMode(GL_PROJECTION); 	
 		gl.glLoadIdentity(); 					
@@ -89,9 +89,9 @@ public class GameRenderer implements Renderer {
 		gl.glLoadIdentity();					
 
 		mWorld.loop(gl);
-		
+
 		log.logFrame();
-		
+
 	}
 
 	public void handleTouchPress(float normalizedX, float normalizedY) {
@@ -103,16 +103,17 @@ public class GameRenderer implements Renderer {
 		// TODO Auto-generated method stub
 		if(LogConfig.IS_DEBUGGING) Log.i("INPUT", "TouchDrag");
 	}
-	
+
 	public void handleSensorChange(float[] values) {
 		//TODO Calculo correto da rotacao
 		//TODO Rotacao a partir do centro do objeto 
-		
-		if(values[0]<0) mWorld.sendMessage(new Message(0, "ROT", 0f));
-		if(values[0]>0) mWorld.sendMessage(new Message(0, "ROT", 0f));
-		if(values[1]>0) mWorld.sendMessage(new Message(0, "ROT", 0f));
-		
-		
+
+		if(values[0]<0) mWorld.sendMessage(new Message(0, "MOVEX",  0.055f));
+		if(values[0]>0) mWorld.sendMessage(new Message(0, "MOVEX", -0.055f));
+		if(values[1]<0) mWorld.sendMessage(new Message(0, "MOVEY",  0.055f));
+		if(values[1]>0) mWorld.sendMessage(new Message(0, "MOVEY", -0.055f));
+
+
 	}
 
 	public float getWidth() {
