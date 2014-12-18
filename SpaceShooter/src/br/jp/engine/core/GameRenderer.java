@@ -104,15 +104,25 @@ public class GameRenderer implements Renderer {
 		if(LogConfig.IS_DEBUGGING) Log.i("INPUT", "TouchDrag");
 	}
 
+	float[] move = {0.0f,0.0f};
 	public void handleSensorChange(float[] values) {
 		//TODO Calculo correto da rotacao
 		//TODO Rotacao a partir do centro do objeto 
 
-		if(values[0]<0) mWorld.sendMessage(new Message(0, "MOVEX",  0.055f));
-		if(values[0]>0) mWorld.sendMessage(new Message(0, "MOVEX", -0.055f));
-		if(values[1]<0) mWorld.sendMessage(new Message(0, "MOVEY",  0.055f));
-		if(values[1]>0) mWorld.sendMessage(new Message(0, "MOVEY", -0.055f));
-
+		if(values[0]<0) {
+			move[0] = 0.055f;
+		}
+		else if(values[0]>0) {
+			move[0] = -0.055f;
+		}
+		if(values[1]<0) {
+			move[1] = 0.055f;	
+		}
+		else if(values[1]>0) {
+			move[1] = -0.055f;
+		}
+		
+		mWorld.sendMessage(new Message(0, "MOVE",  move));
 
 	}
 

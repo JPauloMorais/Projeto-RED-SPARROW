@@ -38,11 +38,10 @@ public class PhysicsComponent extends Component implements Updatable{
 		case "ROT":
 			mRotation = (float) object.getCurMessage().getMessage();
 			break;
-		case "MOVEX":
-			object.setX(object.getX()+ (float) object.getCurMessage().getMessage());
-			break;
-		case "MOVEY":
-			object.setY(object.getY()+ (float) object.getCurMessage().getMessage());
+		case "MOVE":
+			float[] move = (float[]) object.getCurMessage().getMessage(); 
+			object.setX(object.getX() + move[0]);
+			object.setY(object.getY() + move[1]);
 			break;
 
 		default:
