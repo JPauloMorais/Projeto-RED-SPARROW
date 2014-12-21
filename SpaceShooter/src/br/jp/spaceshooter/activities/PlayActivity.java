@@ -8,6 +8,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -106,6 +107,7 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 		final SensorEvent se = event;
+		
 		if(event.values!=null) mGlSView.queueEvent(new Runnable() {
 			@Override
 			public void run() {

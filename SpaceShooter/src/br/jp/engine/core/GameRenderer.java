@@ -34,15 +34,15 @@ public class GameRenderer implements Renderer {
 
 		log = new FPSCounter();
 
-		mPlayer = ObjectFactory.createObject(context, ObjectType.PLAYER, -1.5f, -1.5f,1,0,0,1);
+		mPlayer = ObjectFactory.createObject(context, ObjectType.PLAYER, -0.5f, -0.5f, 1,0,0,1);
 		mWorld = new World();
 
 		mWorld.addObject(mPlayer);
 
-		for (int i = 0; i < 30; i++) {			
-			mWorld.addObject(ObjectFactory.createObject(context, ObjectType.DEFAULT, -0.5f + i/10, -0.5f + i/10,
-					1,0,0,1));
-		}
+//		for (int i = 0; i < 30; i++) {			
+//			mWorld.addObject(ObjectFactory.createObject(context, ObjectType.DEFAULT, -0.5f + i/10, -0.5f + i/10,
+//					1,0,0,1));
+//		}
 
 	}
 
@@ -59,7 +59,7 @@ public class GameRenderer implements Renderer {
 		//setando cor de limpeza da tela
 		gl.glClearColor(0.2f, 0.2f, 0.2f, 1f);
 		//destivando teste para 3a dimensao
-		gl.glDisable(GL_DEPTH_TEST); 	
+//		gl.glDisable(GL_DEPTH_TEST); 	
 	}
 
 	@Override
@@ -105,24 +105,44 @@ public class GameRenderer implements Renderer {
 	}
 
 	float[] move = {0.0f,0.0f};
+	float rot  = 0.0f;
 	public void handleSensorChange(float[] values) {
 		//TODO Calculo correto da rotacao
 		//TODO Rotacao a partir do centro do objeto 
 
-		if(values[0]<0) {
-			move[0] = 0.055f;
+		
+		if(values[0] < -2.0f) {
+			move[0] = 0.55f;
 		}
-		else if(values[0]>0) {
-			move[0] = -0.055f;
+		else if(values[0] > 2.0f) {
+			move[0] = -0.55f;
+		}else {
+			move[0] = 0.0f;
 		}
-		if(values[1]<0) {
-			move[1] = 0.055f;	
+		
+		if(values[1] < -2.0f) {
+			move[1] = 0.55f;	
 		}
-		else if(values[1]>0) {
-			move[1] = -0.055f;
+		else if(values[1] > 2.0f) {
+			move[1] = -0.55f;
+		}else {
+			move[1] = 0.0f;
 		}
 		
 		mWorld.sendMessage(new Message(0, "MOVE",  move));
+		
+//		if((values[0] > 1.5f || values[0] < -1.5f) &&
+//				(values[1] > 1.5f || values[1] < -1.5f) ){			
+//			
+//			rot = (float) Math.toDegrees(Math.asin((values[0])/
+//					Math.sqrt(Math.pow(values[0], 2)+Math.pow(values[1], 2))));
+//			if(rot<0) rot = (rot * -1) + 180.0f;
+//			
+//		}
+//		
+//		Log.i("ANGLE", "A: " + rot);		
+//		
+//		mWorld.sendMessage(new Message(0, "ROT",  rot));
 
 	}
 

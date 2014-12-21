@@ -12,14 +12,15 @@ public class PhysicsComponent extends Component implements Updatable{
 	//	private final float MAX_VEL_X = 0.05f;
 	//	private final float MAX_VEL_Y = 0.05f;
 	private float velX, velY;
-	private float mRotation;
+	private float mTargetRotation, mCurRotation;
 
 	public PhysicsComponent() {
 		super("PhysicsComponent");
 		velX = 0.0f;
 		velY = 0.0f;
-		mRotation = 0.0f;
-	}
+		mTargetRotation = 0.0f;
+		mCurRotation = 0.0f;
+		}
 
 	@Override
 	public void update(GL10 gl, GameObject object) {
@@ -36,7 +37,7 @@ public class PhysicsComponent extends Component implements Updatable{
 
 		switch (object.getCurMessage().getOperation()) {
 		case "ROT":
-			mRotation = (float) object.getCurMessage().getMessage();
+			mTargetRotation = (float) object.getCurMessage().getMessage();
 			break;
 		case "MOVE":
 			float[] move = (float[]) object.getCurMessage().getMessage(); 
@@ -49,9 +50,11 @@ public class PhysicsComponent extends Component implements Updatable{
 			break;
 		} 	
 
-		gl.glTranslatef(object.getX(), object.getY(), object.getLayer());	
+		gl.glTranslatef(object.getCenterX(), object.getCenterY(), object.getLayer());	
 
-		gl.glRotatef(mRotation, 0.0f, 0.0f, 0.1f);
+		gl.glRotatef(mCurRotation, 0.0f, 0.0f, 1.0f);
+		if(mCurRotation < mTargetRotation) mCurRotation += mTargetRotation/20f;
+		else mCurRotation = mTargetRotation;
 
 	}
 

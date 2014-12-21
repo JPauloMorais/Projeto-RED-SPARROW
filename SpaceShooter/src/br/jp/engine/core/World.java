@@ -39,7 +39,9 @@ public class World {
 					object.recieveMessage(message);
 					mMessageList.remove(message);
 				}
+				
 				object.update(gl);
+				
 				toCheck = grid.getLikelyToInteract(object);
 				if(!toCheck.isEmpty()){
 					for (GameObject object2 : toCheck) {

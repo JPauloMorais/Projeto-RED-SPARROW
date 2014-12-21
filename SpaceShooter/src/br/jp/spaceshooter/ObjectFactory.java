@@ -26,7 +26,7 @@ public class ObjectFactory {
 		case DEFAULT:
 
 			object = new GameObject(context,x, y, 1, 1, components);
-			object.setLayer(2);
+			object.setLayer(1);
 
 			object.addComponent(new SpriteComponent(object, r, g, b, a));
 			object.addComponent(new PhysicsComponent());
@@ -35,7 +35,7 @@ public class ObjectFactory {
 		case PLAYER:
 
 			object = new GameObject(context,x, y, 1, 1, components);
-			object.setLayer(0);
+			object.setLayer(2);
 
 			object.addComponent(new SpriteComponent(object, .5f, .5f, 1f, 1));
 			object.addComponent(new PhysicsComponent());

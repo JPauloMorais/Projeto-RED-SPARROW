@@ -5,6 +5,7 @@ import java.util.List;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
+import android.opengl.GLSurfaceView;
 import br.jp.engine.components.Renderable;
 import br.jp.engine.components.Updatable;
 
@@ -12,6 +13,7 @@ import br.jp.engine.components.Updatable;
 
 public class GameObject{
 
+	private Context mContext;
 	private float mX; 
 	private float mY;
 	private float mWidth;
@@ -27,6 +29,7 @@ public class GameObject{
 
 	public GameObject(Context context, float x, float y, float width, float height, List<Component> components) {
 
+		mContext = context;
 		setX(x);
 		setY(y);
 		setWidth(width);
@@ -41,12 +44,12 @@ public class GameObject{
 		setCurMessage(message);
 	}
 
-	public synchronized void update(GL10 gl) {
+	public  void update(GL10 gl) {
 		for (Component component : mComponents) {
 			if(component instanceof Updatable) ((Updatable) component).update(gl, this);
 		}
 	}
-	public synchronized void render(GL10 gl) {
+	public  void render(GL10 gl) {
 		for (Component component : mComponents) {
 			if(component instanceof Renderable) {
 				((Renderable) component).render(gl, this);
@@ -117,7 +120,7 @@ public class GameObject{
 	}
 
 	public void setLayer(float mLayer) {
-		this.mLayer = (byte) ((mLayer + 8.5f) * -1);
+		this.mLayer = (byte) ((mLayer + 6.5f) * -1);
 	}
 
 	public float getRotation() {
