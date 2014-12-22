@@ -99,21 +99,23 @@ public class GameRenderer implements Renderer {
 	}
 
 	public void handleTouchPress(float normalizedX, float normalizedY) {
-		// TODO Auto-generated method stub		
-		if(LogConfig.IS_DEBUGGING) Log.i("INPUT", "TouchPress");
+		
 	}
 
 	public void handleTouchDrag(float normalizedX, float normalizedY) {
-		// TODO Auto-generated method stub
-		if(LogConfig.IS_DEBUGGING) Log.i("INPUT", "TouchDrag");
+		//TODO Movimentacao correta
+		move[0] = normalizedX/1000;
+		move[1] = normalizedY/1000;
+		mMessage.add(new Message(0, "MOVE",  move));
+		
 	}
 
 	float[] move = {0.0f,0.0f};
 	float rot  = 0.0f;
 	public void handleSensorChange(float[] values) {
-		//TODO Calculo correto da rotacao
-		//TODO Rotacao a partir do centro do objeto 
-		//TODO Checagem de existencia da mensagem
+		//TODO: Calculo correto da rotacao
+		//TODO: Rotacao a partir do centro do objeto 
+		//TODO: Checagem de existencia da mensagem
 
 		
 		if(values[0] < -1.0f) {
