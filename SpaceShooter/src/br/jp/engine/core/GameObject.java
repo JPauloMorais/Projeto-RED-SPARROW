@@ -5,7 +5,6 @@ import java.util.List;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
-import android.opengl.GLSurfaceView;
 import br.jp.engine.components.Renderable;
 import br.jp.engine.components.Updatable;
 
@@ -13,7 +12,7 @@ import br.jp.engine.components.Updatable;
 
 public class GameObject{
 
-	private Context mContext;
+//	private Context mContext;
 	private float mX; 
 	private float mY;
 	private float mWidth;
@@ -21,7 +20,7 @@ public class GameObject{
 	private float mRotation;
 	private byte mLayer;
 	private List<Component> mComponents;
-	private Message curMessage;
+	private List<Message> curMessages;
 
 	public GameObject(Context context,float x, float y, float size){ this(context,x, y, size, size); }
 
@@ -29,7 +28,7 @@ public class GameObject{
 
 	public GameObject(Context context, float x, float y, float width, float height, List<Component> components) {
 
-		mContext = context;
+//		mContext = context;
 		setX(x);
 		setY(y);
 		setWidth(width);
@@ -38,10 +37,6 @@ public class GameObject{
 		setLayer(0);
 		mComponents = components;
 
-	}
-
-	public void recieveMessage(Message message){
-		setCurMessage(message);
 	}
 
 	public  void update(GL10 gl) {
@@ -131,13 +126,25 @@ public class GameObject{
 		this.mRotation = mRotation;
 	}
 
-	public Message getCurMessage() {
-		return curMessage;
+	public List<Message> getCurMessages() {
+		return curMessages;
 	}
 
-	public void setCurMessage(Message curMessage) {
-		this.curMessage = curMessage;
+	public void setCurMessages(List<Message> messages) {
+		this.curMessages = messages;
 	}
-
+	
+	public void recieveMessage(List<Message> message){
+		setCurMessages(message);
+	}
+	
+	public void removeMessage(Message message){
+		try {
+			curMessages.remove(message);
+		} catch (Exception e) {
+			e.printStackTrace();
+			removeMessage(message);
+		}
+	}
 
 }

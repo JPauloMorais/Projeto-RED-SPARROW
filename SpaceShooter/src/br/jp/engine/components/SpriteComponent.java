@@ -40,18 +40,14 @@ public class SpriteComponent extends Component implements Renderable {
 		mB = b;
 		mA = a;
 
-		// vertices para 2 triangulos (x,y,z)
-//		float v[] = { 
-//				parent.getX(), parent.getY(), 0.0f, //Bottom Left
-//				parent.getX() + parent.getWidth(), parent.getY(), 0.0f, 	//Bottom Right
-//				parent.getX(), parent.getY() + parent.getHeight(), 0.0f, 	//Top Left
-//				parent.getX() + parent.getWidth(), parent.getY() + parent.getHeight(), 0.0f 	//Top Right
-//		};
+//		 vertices para 2 triangulos (x,y,z)
 		float v[] = { 
-				0.0f, 1.0f, 0.0f, 	//Top
-				-1.0f, -1.0f, 0.0f, //Bottom Left
-				1.0f, -1.0f, 0.0f 	//Bottom Right
-								};
+				parent.getX(), parent.getY(), 0.0f, //Bottom Left
+				parent.getX() + parent.getWidth(), parent.getY(), 0.0f, 	//Bottom Right
+				parent.getX(), parent.getY() + parent.getHeight(), 0.0f, 	//Top Left
+				parent.getX() + parent.getWidth(), parent.getY() + parent.getHeight(), 0.0f 	//Top Right
+		};
+		
 		vertices = v;
 
 		ByteBuffer byteBuf = ByteBuffer.allocateDirect(vertices.length * 4);

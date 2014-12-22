@@ -4,6 +4,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import br.jp.engine.core.Component;
 import br.jp.engine.core.GameObject;
+import br.jp.engine.core.Message;
 
 public class PhysicsComponent extends Component implements Updatable{
 
@@ -34,21 +35,25 @@ public class PhysicsComponent extends Component implements Updatable{
 		//		if(velY>MAX_VEL_Y) velY -= 0.005f;
 		//		else if(velY<MIN_VEL_Y) velY += 0.005f;
 		//		else velY += 0.005f;
-
-		switch (object.getCurMessage().getOperation()) {
-		case "ROT":
-			mTargetRotation = (float) object.getCurMessage().getMessage();
-			break;
-		case "MOVE":
-			float[] move = (float[]) object.getCurMessage().getMessage(); 
-			object.setX(object.getX() + move[0]);
-			object.setY(object.getY() + move[1]);
-			break;
-
-		default:
-
-			break;
-		} 	
+		for (Message message : object.getCurMessages()) {			
+			
+			switch (message.getOperation()) {
+			
+			case "ROT":
+				mTargetRotation = (float) message.getMessage();
+				break;
+			case "MOVE":
+				float[] move = (float[]) message.getMessage(); 
+				object.setX(object.getX() + move[0]);
+				object.setY(object.getY() + move[1]);
+				
+				break;
+			default:
+				
+				break;
+			}
+			
+		}
 
 		gl.glTranslatef(object.getCenterX(), object.getCenterY(), object.getLayer());	
 

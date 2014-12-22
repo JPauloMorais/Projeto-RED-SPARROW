@@ -14,11 +14,11 @@ public class World {
 	private Grid grid;
 	private List<GameObject> mObjects;
 	private List<GameObject> toCheck;
-	private List<Message> mMessageList;
+	private List<ArrayList<Message>> mMessageList;
 
 	public World(){
 
-		mMessageList = new ArrayList<Message>();
+		mMessageList = new ArrayList<ArrayList<Message>>();
 		mObjects = new ArrayList<GameObject>();
 		grid = new Grid(64000, 64000, 64);
 		toCheck = new ArrayList<GameObject>();
@@ -27,17 +27,17 @@ public class World {
 
 	public synchronized void loop(GL10 gl){
 		if(!mObjects.isEmpty()){ 
-			Message message;
+			ArrayList<Message> messages;
 			for (GameObject object : mObjects) {
 				try {
-					message = mMessageList.get(mObjects.indexOf(object));
+					messages = mMessageList.get(mObjects.indexOf(object));
 				} catch (Exception e) {
 					//TODO: Admin. correta da falta de mensagem
-					message = new Message(0, "", "");
+					messages = new ArrayList<Message>();
 				}
-				if(message != null) {
-					object.recieveMessage(message);
-					mMessageList.remove(message);
+				if(messages != null) {
+					object.recieveMessage(messages);
+					mMessageList.remove(messages);
 				}
 				
 				object.update(gl);
@@ -81,8 +81,8 @@ public class World {
 		else return null;
 	}
 
-	public void sendMessage(Message message){
-		//uma mensagem por vez para cada objeto
-		mMessageList.add(message.getObjectId(),message);	
+	public void sendMessages(ArrayList<Message> messages){
+		//adiciona mensagens ao id correspondente ao objeto destino
+		mMessageList.add(messages.get(0).getObjectId(),messages);	
 	}
 }

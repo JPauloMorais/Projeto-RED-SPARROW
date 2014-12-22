@@ -1,9 +1,10 @@
 package br.jp.engine.core;
 
 import static javax.microedition.khronos.opengles.GL10.GL_COLOR_BUFFER_BIT;
-import static javax.microedition.khronos.opengles.GL10.GL_DEPTH_TEST;
 import static javax.microedition.khronos.opengles.GL10.GL_MODELVIEW;
 import static javax.microedition.khronos.opengles.GL10.GL_PROJECTION;
+
+import java.util.ArrayList;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -23,6 +24,7 @@ public class GameRenderer implements Renderer {
 
 	private GameObject mPlayer;
 	private World mWorld;
+	private ArrayList<Message> mMessage; 
 
 	private FPSCounter log;
 
@@ -38,6 +40,8 @@ public class GameRenderer implements Renderer {
 		mWorld = new World();
 
 		mWorld.addObject(mPlayer);
+		
+		mMessage = new ArrayList<Message>();
 
 //		for (int i = 0; i < 30; i++) {			
 //			mWorld.addObject(ObjectFactory.createObject(context, ObjectType.DEFAULT, -0.5f + i/10, -0.5f + i/10,
@@ -109,41 +113,43 @@ public class GameRenderer implements Renderer {
 	public void handleSensorChange(float[] values) {
 		//TODO Calculo correto da rotacao
 		//TODO Rotacao a partir do centro do objeto 
+		//TODO Checagem de existencia da mensagem
 
 		
-		if(values[0] < -2.0f) {
-			move[0] = 0.55f;
+		if(values[0] < -1.0f) {
+			move[0] = 0.00075f;
 		}
-		else if(values[0] > 2.0f) {
-			move[0] = -0.55f;
+		else if(values[0] > 1.0f) {
+			move[0] = -0.00075f;
 		}else {
 			move[0] = 0.0f;
 		}
 		
-		if(values[1] < -2.0f) {
-			move[1] = 0.55f;	
+		if(values[1] < -1.0f) {
+			move[1] = 0.00075f;	
 		}
-		else if(values[1] > 2.0f) {
-			move[1] = -0.55f;
+		else if(values[1] > 1.0f) {
+			move[1] = -0.00075f;
 		}else {
 			move[1] = 0.0f;
 		}
 		
-		mWorld.sendMessage(new Message(0, "MOVE",  move));
+		mMessage.add(new Message(0, "MOVE",  move));
+				
+		if((values[0] > 1.5f || values[0] < -1.5f) &&
+				(values[1] > 1.5f || values[1] < -1.5f) ){			
+			
+			rot = (float) Math.toDegrees(Math.asin((values[0])/
+					Math.sqrt(Math.pow(values[0], 2)+Math.pow(values[1], 2))));
+			if(rot<0) rot = (rot * -1) + 180.0f;
+			
+		}
 		
-//		if((values[0] > 1.5f || values[0] < -1.5f) &&
-//				(values[1] > 1.5f || values[1] < -1.5f) ){			
-//			
-//			rot = (float) Math.toDegrees(Math.asin((values[0])/
-//					Math.sqrt(Math.pow(values[0], 2)+Math.pow(values[1], 2))));
-//			if(rot<0) rot = (rot * -1) + 180.0f;
-//			
-//		}
-//		
-//		Log.i("ANGLE", "A: " + rot);		
-//		
-//		mWorld.sendMessage(new Message(0, "ROT",  rot));
+		Log.i("ANGLE", "A: " + rot);		
+		
+		mMessage.add(new Message(0, "ROT",  rot));
 
+		mWorld.sendMessages(mMessage);
 	}
 
 	public float getWidth() {

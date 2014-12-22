@@ -3,7 +3,7 @@ package br.jp.engine.core;
 
 public abstract class Component {
 	
-	public static String mName;
+	private String mName;
 	
 	public Component(String name){
 		setName(name);
