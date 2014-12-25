@@ -10,27 +10,34 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
+import android.os.Vibrator;
 import android.util.Log;
 import br.jp.engine.util.FPSCounter;
 import br.jp.spaceshooter.ObjectFactory;
+import br.jp.spaceshooter.R;
 import br.jp.spaceshooter.ObjectFactory.ObjectType;
 
 public class GameRenderer implements Renderer {
 
 	private float mWidth, mHeight;
-	//	private Context mContext;
+	private Context mContext;
 
 	private GameObject mPlayer;
 	private World mWorld;
-	private ArrayList<Message> mMessage; 
+	private ArrayList<Message> mMessage;
+	private Vibrator mVibrator;
+	MediaPlayer mp;
 
 	private FPSCounter log;
 
 	public GameRenderer(Context context) {
 
-		//		mContext = context;
+		mContext = context;
+		mVibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+		
 		mWidth = 180;
 		mHeight = 320;
 
@@ -99,7 +106,9 @@ public class GameRenderer implements Renderer {
 	}
 
 	public void handleTouchPress(float normalizedX, float normalizedY) {
-		
+		mVibrator.vibrate(100);
+		mp = MediaPlayer.create(mContext, R.raw.test_shot);
+		mp.start();
 	}
 
 	public void handleTouchDrag(float normalizedX, float normalizedY) {
