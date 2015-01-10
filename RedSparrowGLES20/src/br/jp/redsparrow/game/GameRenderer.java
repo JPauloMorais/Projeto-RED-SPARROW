@@ -79,9 +79,9 @@ public class GameRenderer implements Renderer {
 		
 		mDbgBackground = ObjectFactory.createObject(mContext, OBJ_TYPE.DBG_BG, 0, 0, 100, 100);
 		World.init(mContext);
-		World.setPlayer(ObjectFactory.createObject(mContext, OBJ_TYPE.PLAYER, 0f, 0f, 1f, 1f));
+		World.setPlayer(ObjectFactory.createObject(mContext, OBJ_TYPE.PLAYER, 0f, 0f, 2f, 2f));
 		for (int i = 0; i < 30; i++) {
-			World.addObject(ObjectFactory.createObject(mContext, OBJ_TYPE.TEST, 0 + (i/100), 0 + (i/10), 1f, 1f));
+			World.addObject(ObjectFactory.createObject(mContext, OBJ_TYPE.B_ENEMY, 0 + (i/100), 0 + (i/10), 1f, 1f));
 		}
 
 

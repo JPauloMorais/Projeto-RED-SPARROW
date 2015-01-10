@@ -25,16 +25,13 @@ public class ObjectFactory {
 
 		case TEST:
 
-			obj.addComponent(new PhysicsComponent(obj));
-			obj.addComponent(new SpriteComponent( context, R.drawable.ship_test ));
-
 			break;
 
 		case PLAYER:
 
 
 			obj.addComponent(new PhysicsComponent(obj));
-			obj.addComponent(new SpriteComponent( context, R.drawable.player_ship_test ));
+			obj.addComponent(new SpriteComponent( context, R.drawable.player_ship ));
 
 			ArrayList<MediaPlayer> sounds = new ArrayList<MediaPlayer>();
 			sounds.add(MediaPlayer.create(context, R.raw.test_rocket));
@@ -45,6 +42,9 @@ public class ObjectFactory {
 			break;
 
 		case B_ENEMY:
+			
+			obj.addComponent(new PhysicsComponent(obj));
+			obj.addComponent(new SpriteComponent( context, R.drawable.enemy_ship ));
 
 			break;
 		
