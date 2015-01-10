@@ -14,7 +14,7 @@ public class AnimatedSpriteComponent extends SpriteComponent implements Updatabl
 
 		mFrameCount = frameCount;
 		
-		parent.updateVerts(parent.getPosition().getX(), parent.getPosition().getY(), 
+		parent.updateVertsData(parent.getPosition().getX(), parent.getPosition().getY(), 
 							((1/frameCount)*curFrame)-(1/frameCount)/2, 0.5f, 
 							(1/frameCount), 1);
 		
@@ -30,7 +30,7 @@ public class AnimatedSpriteComponent extends SpriteComponent implements Updatabl
 
 		updateAnimation();
 		
-		parent.updateVerts(parent.getPosition().getX(), parent.getPosition().getY(), 
+		parent.updateVertsData(parent.getPosition().getX(), parent.getPosition().getY(), 
 							((1/mFrameCount)*curFrame)-(1/mFrameCount)/2, 0.5f, 
 							(1/mFrameCount), 1);
 		

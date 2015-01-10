@@ -5,16 +5,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
-import br.jp.redsparrow.engine.core.util.TextFileReader;
-
 import br.jp.redsparrow.R;
+import br.jp.redsparrow.engine.core.util.TextFileReader;
 
 public class Tilemap implements Renderable {
 
+	@SuppressWarnings("unused")
 	private Tile[][] mTiles;
 
 	public Tilemap(final Context context, final int src){
-		new Runnable() {
+		new Thread(new Runnable() {
 			public void run() {
 				try {
 					JSONObject jObj = new JSONObject(TextFileReader.readTextFromFile(context, src));
@@ -55,7 +55,7 @@ public class Tilemap implements Renderable {
 					e.printStackTrace();
 				}
 			}
-		}.run();
+		}).start();
 	}
 
 	@Override

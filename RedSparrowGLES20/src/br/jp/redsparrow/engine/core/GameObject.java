@@ -2,7 +2,6 @@ package br.jp.redsparrow.engine.core;
 
 import java.util.ArrayList;
 
-import android.opengl.Matrix;
 import br.jp.redsparrow.engine.core.components.Component;
 
 public class GameObject {
@@ -13,6 +12,7 @@ public class GameObject {
 	private float mWidth;
 	private float mHeight;
 
+	private float[] mVerts;
 	private VertexArray mVertexArray;
 
 	private ArrayList<Component> mUpdatableComponents;
@@ -37,7 +37,8 @@ public class GameObject {
 		mWidth = width;
 		mHeight = height;
 
-		updateVerts(x, y);
+		mVerts = new float[8];
+		updateVertsData(x, y);
 
 	}
 
@@ -58,16 +59,21 @@ public class GameObject {
 	}
 
 	//Redefine vertices
-	public void updateVerts(float x, float y){
+	public void updateVertsData(float x, float y){
+		//   X                                  Y
+		mVerts[0] = x+((mWidth/2) *-1);    mVerts[1] = y+(mHeight/2);
+		mVerts[2] = x+(mWidth/2);          mVerts[3] = y+(mHeight/2);
+		mVerts[4] = x+(mWidth/2);          mVerts[5] = y+((mHeight/2) *-1);
+		mVerts[6] = x+((mWidth/2) *-1);    mVerts[7] = y+((mHeight/2) *-1);
 
 		float[] tmp = {
 				//   X   ,  Y   ,     S   , T
-				x, y,                                     0.5f, 0.5f, //centro
-				x+((mWidth/2) *-1), y+((mHeight/2) *-1),  0f  , 1f  ,
-				x+(mWidth/2)      , y+((mHeight/2) *-1),  1f  , 1f  ,
-				x+(mWidth/2)      , y+(mHeight/2)      ,  1f  , 0f  ,
-				x+((mWidth/2) *-1), y+(mHeight/2)      ,  0f  , 0f  ,
-				x+((mWidth/2) *-1), y+((mHeight/2) *-1),  0f  , 1f 
+				x, y,                  0.5f, 0.5f, //centro
+				mVerts[6], mVerts[7],  0f  , 1f  ,
+				mVerts[4], mVerts[5],  1f  , 1f  ,
+				mVerts[2], mVerts[3],  1f  , 0f  ,
+				mVerts[0], mVerts[1],  0f  , 0f  ,
+				mVerts[6], mVerts[7],  0f  , 1f 
 
 		};
 
@@ -76,16 +82,22 @@ public class GameObject {
 	}
 
 	//Redefine vertices e mapeamento da textura
-	public void updateVerts(float x, float y, int s, float t, float width, float height) {
+	public void updateVertsData(float x, float y, int s, float t, float width, float height) {  
+		//   X                                  Y
+		mVerts[0] = x+((mWidth/2) *-1);    mVerts[1] = y+(mHeight/2);
+		mVerts[2] = x+(mWidth/2);          mVerts[3] = y+(mHeight/2);
+		mVerts[4] = x+(mWidth/2);          mVerts[5] = y+((mHeight/2) *-1);
+		mVerts[6] = x+((mWidth/2) *-1);    mVerts[7] = y+((mHeight/2) *-1);
+
 		//atualmente suporta apenas sheets com uma linha
 		float[] tmp = {
 				// X                 , Y                  ,    S          , T
-				x                 , y                  ,    s          , t     , //centro
-				x+((mWidth/2) *-1), y+((mHeight/2) *-1),    s-(width/2), height, //inf. esq.
-				x+(mWidth/2)      , y+((mHeight/2) *-1),    s+(width/2), height, //inf. dir.
-				x+(mWidth/2)      , y+(mHeight/2)      ,    s+(width/2), 0f    , //sup. dir.
-				x+((mWidth/2) *-1), y+(mHeight/2)      ,    s-(width/2), 0f    , //sup. esq.  
-				x+((mWidth/2) *-1), y+((mHeight/2) *-1),    s-(width/2), height  //inf. esq.
+				x        , y        ,          s          , t     , //centro
+				mVerts[6], mVerts[7],          s-(width/2), height, //inf. esq.
+				mVerts[4], mVerts[5],          s+(width/2), height, //inf. dir.
+				mVerts[2], mVerts[3],          s+(width/2), 0f    , //sup. dir.
+				mVerts[0], mVerts[1],          s-(width/2), 0f    , //sup. esq.  
+				mVerts[6], mVerts[7],          s-(width/2), height  //inf. esq.
 
 		};
 
@@ -183,6 +195,14 @@ public class GameObject {
 
 	public ArrayList<Message> getMessages() {
 		return mCurMessages;
+	}
+
+	public float[] getVertices() {
+		return mVerts;
+	}
+
+	public void setVertices(float[] mVerts) {
+		this.mVerts = mVerts;
 	}
 
 }

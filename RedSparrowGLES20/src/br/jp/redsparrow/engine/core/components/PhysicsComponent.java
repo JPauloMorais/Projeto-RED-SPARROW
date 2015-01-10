@@ -31,7 +31,7 @@ public class PhysicsComponent extends Component implements Updatable {
 		
 		parent.setPosition(new Vector2f( curX, curY));
 		
-		parent.updateVerts(curX, curY);
+		parent.updateVertsData(curX, curY);
 
 
 	}

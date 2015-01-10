@@ -20,25 +20,27 @@ import br.jp.redsparrow.engine.core.Tilemap;
 import br.jp.redsparrow.engine.core.World;
 import br.jp.redsparrow.engine.core.components.PhysicsComponent;
 import br.jp.redsparrow.engine.core.components.SoundComponent;
+import br.jp.redsparrow.engine.core.missions.MissionSystem;
+import br.jp.redsparrow.engine.core.missions.TestMission;
 import br.jp.redsparrow.engine.core.util.FPSCounter;
 import br.jp.redsparrow.engine.core.util.LogConfig;
 import br.jp.redsparrow.engine.core.util.MatrixUtil;
 import br.jp.redsparrow.game.ObjectFactory.OBJ_TYPE;
-
 import br.jp.redsparrow.R;
 
 @SuppressWarnings("unused")
 public class GameRenderer implements Renderer {
 
-	private final Context mContext;
+	private static Context mContext;
 
 	private Vibrator mVibrator;
 
 	private int mScreenWidth;	
 	private int mScreenHeight;
 
-	private GameObject mDbgBG;
-
+	private GameObject mDbgBackground;
+	private TestMission mTestMission;
+	
 	private final float[] projectionMatrix = new float[16];
 	private final float[] modelMatrix = new float[16];
 
@@ -55,6 +57,10 @@ public class GameRenderer implements Renderer {
 		mVibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 
 		Tilemap tilemap = new Tilemap(context, R.raw.tilemap_test);
+		
+		MissionSystem.init();
+		mTestMission = new TestMission(5, 5);
+		new Thread(mTestMission).start();
 
 	}
 
@@ -70,8 +76,8 @@ public class GameRenderer implements Renderer {
 		//ativando e definindo alpha blending
 		GLES20.glEnable(GLES20.GL_BLEND);
 		GLES20.glBlendFunc( GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA );
-
-		mDbgBG = ObjectFactory.createObject(mContext, OBJ_TYPE.DBG_BG, 0, 0, 100, 100);
+		
+		mDbgBackground = ObjectFactory.createObject(mContext, OBJ_TYPE.DBG_BG, 0, 0, 100, 100);
 		World.init(mContext);
 		World.setPlayer(ObjectFactory.createObject(mContext, OBJ_TYPE.PLAYER, 0f, 0f, 1f, 1f));
 		for (int i = 0; i < 30; i++) {
@@ -129,7 +135,7 @@ public class GameRenderer implements Renderer {
 
 		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
-		mDbgBG.render(projectionMatrix);
+		mDbgBackground.render(projectionMatrix);
 		World.loop(projectionMatrix);
 
 		//------------TESTE
@@ -154,6 +160,10 @@ public class GameRenderer implements Renderer {
 		World.getPlayer().recieveMessages(mCurMessage);
 
 		if(LogConfig.ON) fps.logFrame();
+	}
+
+	public static Context getContext() {
+		return mContext;
 	}
 
 	float[] move = {0.0f,0.0f};
@@ -222,12 +232,12 @@ public class GameRenderer implements Renderer {
 		//
 		//		}
 
-		float azimuth = Math.round(values[0]) % 0.2f;
-		float pitch = Math.round(values[1]);
-		float roll = Math.round(values[2]);
-
-		String out = "AZ: " + azimuth;
-		Log.i("ROT", out);
+//		float azimuth = Math.round(values[0]) % 0.2f;
+//		float pitch = Math.round(values[1]);
+//		float roll = Math.round(values[2]);
+//
+//		String out = "AZ: " + azimuth;
+//		Log.i("ROT", out);
 
 
 		//		mCurMessage.add(new Message(0, "ROT",  rot));

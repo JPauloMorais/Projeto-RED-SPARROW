@@ -4,13 +4,9 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.media.MediaPlayer;
-
 import br.jp.redsparrow.R;
 
 public class World {
-
-	static Context mContext;
-	//	private static Intent updateIntent;
 
 	private static GameObject mPlayer;
 	private static ArrayList<GameObject> mGameObjects;
@@ -21,14 +17,10 @@ public class World {
 	private static final float mRENDERING_RANGE_Y = 15.0f;
 
 	static MediaPlayer bgMusic;
-	static MediaPlayer bgMusic1;
 	static float bgMusicRightVol = 0.04f;
 	static float bgMusicLeftVol = 0.04f;
 
 	public static void init(Context context){
-		mContext = context;
-
-		//		updateIntent = new Intent("UPDATE");
 
 		mPlayer = new GameObject();
 		mGameObjects = new ArrayList<GameObject>();
@@ -36,33 +28,31 @@ public class World {
 		bgMusic = MediaPlayer.create( context, R.raw.at_least_you_tried_greaf);
 		bgMusic.setVolume(bgMusicLeftVol, bgMusicRightVol);
 		bgMusic.setLooping(true);
-		//		bgMusic.start();
-
-		//		bgMusic1 = MediaPlayer.create( context, R.raw.test_shot);
-		//		bgMusic1.setLooping(true);
-		//		bgMusic1.start();
+		
 	}
 
 	public static void loop(float[] projectionMatrix){
 		if (true) {
 			//------LOOP DOS OBJETOS-----------
 			if (mGameObjects != null ) {
-				for (GameObject gameObject : mGameObjects) {
-					//Realiza updates e renders somente qdo objeto se encontra no alcance definido
-					if(gameObject.getPosition().getX() < getPlayer().getPosition().getX()+mUPDATE_RANGE_X &&
-							gameObject.getPosition().getX() > getPlayer().getPosition().getX()-mUPDATE_RANGE_X &&
-							gameObject.getPosition().getY() < getPlayer().getPosition().getY()+mUPDATE_RANGE_Y &&
-							gameObject.getPosition().getY() > getPlayer().getPosition().getY()-mUPDATE_RANGE_Y)
+				for (int i = 0; i < mGameObjects.size(); i++) {
+					//Realiza updates e renders somente qdo objeto se encontra no limite definido
+					//
+					//
+					if(mGameObjects.get(i).getPosition().getX() < getPlayer().getPosition().getX()+mUPDATE_RANGE_X &&
+							mGameObjects.get(i).getPosition().getX() > getPlayer().getPosition().getX()-mUPDATE_RANGE_X &&
+							mGameObjects.get(i).getPosition().getY() < getPlayer().getPosition().getY()+mUPDATE_RANGE_Y &&
+							mGameObjects.get(i).getPosition().getY() > getPlayer().getPosition().getY()-mUPDATE_RANGE_Y)
 					{
-						gameObject.update();
+						mGameObjects.get(i).update();
 					}
-					
-					if(gameObject.getPosition().getX() < getPlayer().getPosition().getX()+mRENDERING_RANGE_X &&
-							gameObject.getPosition().getX() > getPlayer().getPosition().getX()-mRENDERING_RANGE_X &&
-							gameObject.getPosition().getY() < getPlayer().getPosition().getY()+mRENDERING_RANGE_Y &&
-							gameObject.getPosition().getY() > getPlayer().getPosition().getY()-mRENDERING_RANGE_Y)
+
+					if(mGameObjects.get(i).getPosition().getX() < getPlayer().getPosition().getX()+mRENDERING_RANGE_X &&
+							mGameObjects.get(i).getPosition().getX() > getPlayer().getPosition().getX()-mRENDERING_RANGE_X &&
+							mGameObjects.get(i).getPosition().getY() < getPlayer().getPosition().getY()+mRENDERING_RANGE_Y &&
+							mGameObjects.get(i).getPosition().getY() > getPlayer().getPosition().getY()-mRENDERING_RANGE_Y)
 					{
-						gameObject.render(projectionMatrix);
+						mGameObjects.get(i).render(projectionMatrix);
 					}
 
 				}
@@ -138,15 +128,9 @@ public class World {
 	}
 
 	public static void sendMessages(final int objectId, final ArrayList<Message> curMessages) {
-		new Runnable() {
-			public void run() {
-				try {
-					getObject(objectId).recieveMessages(curMessages);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}.run();
+		try {
+			getObject(objectId).recieveMessages(curMessages);
+		} catch (Exception e) {	}
 	}
 
 }
