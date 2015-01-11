@@ -18,11 +18,6 @@ public class PhysicsComponent extends Component implements Updatable {
 	public void update(GameObject parent) {			
 
 		try {
-<<<<<<< HEAD
-			newVel = (float[]) parent.getMessage("MOVE").getMessage();
-=======
-			newVel = (float[]) parent.getMessageByOperation("MOVE").getMessage();
->>>>>>> d5d0451bb12a9e70ba3b465314a37e64836bdd2f
 			
 			curVel = newVel;
 
