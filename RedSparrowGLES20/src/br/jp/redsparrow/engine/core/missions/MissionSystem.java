@@ -2,7 +2,11 @@ package br.jp.redsparrow.engine.core.missions;
 
 import java.util.ArrayList;
 
+<<<<<<< HEAD
 import br.jp.redsparrow.engine.core.messages.Message;
+=======
+import br.jp.redsparrow.engine.core.Message;
+>>>>>>> d5d0451bb12a9e70ba3b465314a37e64836bdd2f
 
 public class MissionSystem {
 
@@ -34,8 +38,13 @@ public class MissionSystem {
 		//adiciona as msg a lista de retorno e as remove da lista do sistema de missoes
 		for (Message message : mEventMessages) {
 			if( message.getObjectId() == missionId ) {
+<<<<<<< HEAD
 				toReturn.add(message);
 				 mEventMessages.remove( mEventMessages.indexOf(message) );
+=======
+				mEventMessages.remove( mEventMessages.indexOf(message) );
+				toReturn.add(message);
+>>>>>>> d5d0451bb12a9e70ba3b465314a37e64836bdd2f
 			}
 		}
 		
