@@ -1,6 +1,7 @@
 package br.jp.redsparrow.engine.core.components;
 
 public class Component {
+	
 	private final String mNAME;
 	
 	public Component(String name){

@@ -3,34 +3,36 @@ package br.jp.redsparrow.game;
 import static android.opengl.GLES20.glViewport;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
-import android.media.MediaPlayer;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.Matrix;
 import android.os.Vibrator;
-import android.util.Log;
+import br.jp.redsparrow.R;
 import br.jp.redsparrow.engine.core.GameObject;
-import br.jp.redsparrow.engine.core.Message;
 import br.jp.redsparrow.engine.core.Tilemap;
 import br.jp.redsparrow.engine.core.World;
-import br.jp.redsparrow.engine.core.components.PhysicsComponent;
 import br.jp.redsparrow.engine.core.components.SoundComponent;
+import br.jp.redsparrow.engine.core.messages.Message;
+import br.jp.redsparrow.engine.core.messages.MessagingSystem;
 import br.jp.redsparrow.engine.core.missions.MissionSystem;
 import br.jp.redsparrow.engine.core.missions.TestMission;
 import br.jp.redsparrow.engine.core.util.FPSCounter;
 import br.jp.redsparrow.engine.core.util.LogConfig;
 import br.jp.redsparrow.engine.core.util.MatrixUtil;
 import br.jp.redsparrow.game.ObjectFactory.OBJ_TYPE;
-import br.jp.redsparrow.R;
 
 @SuppressWarnings("unused")
 public class GameRenderer implements Renderer {
 
+	//Ativa e desativa controles por acelerometro
+	private boolean accelControls = false;
+	
 	private static Context mContext;
 
 	private Vibrator mVibrator;
@@ -40,11 +42,9 @@ public class GameRenderer implements Renderer {
 
 	private GameObject mDbgBackground;
 	private TestMission mTestMission;
-	
+
 	private final float[] projectionMatrix = new float[16];
 	private final float[] modelMatrix = new float[16];
-
-	private ArrayList<Message> mCurMessage;
 
 	private final FPSCounter fps = new FPSCounter();
 
@@ -52,12 +52,10 @@ public class GameRenderer implements Renderer {
 
 		mContext = context;
 
-		mCurMessage = new ArrayList<Message>();
-
 		mVibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 
 		Tilemap tilemap = new Tilemap(context, R.raw.tilemap_test);
-		
+
 		MissionSystem.init();
 		mTestMission = new TestMission(5, 5);
 		new Thread(mTestMission).start();
@@ -76,13 +74,21 @@ public class GameRenderer implements Renderer {
 		//ativando e definindo alpha blending
 		GLES20.glEnable(GLES20.GL_BLEND);
 		GLES20.glBlendFunc( GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA );
-		
+
 		mDbgBackground = ObjectFactory.createObject(mContext, OBJ_TYPE.DBG_BG, 0, 0, 100, 100);
 		World.init(mContext);
 		World.setPlayer(ObjectFactory.createObject(mContext, OBJ_TYPE.PLAYER, 0f, 0f, 2f, 2f));
+		//----TESTE----
+
+		int qd = 1; int qd2 = 1;
 		for (int i = 0; i < 30; i++) {
-			World.addObject(ObjectFactory.createObject(mContext, OBJ_TYPE.B_ENEMY, 0 + (i/100), 0 + (i/10), 1f, 1f));
+			float size = (random.nextFloat() + random.nextFloat()) * 2;
+			World.addObject(ObjectFactory.createObject(mContext, OBJ_TYPE.B_ENEMY, (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2,
+					size, size));
+			if(i%2==0) qd *= -1;
+			else qd2 *= -1;
 		}
+		//--------------
 
 
 	}
@@ -94,24 +100,26 @@ public class GameRenderer implements Renderer {
 		mScreenHeight = height;
 
 		glViewport(0, 0, width, height);
+
 		//criando e ajustando matriz de projecao
-		MatrixUtil.perspectiveM(projectionMatrix, 45, (float) width
-				/ (float) height, 1f, 100f);
+		MatrixUtil.perspectiveM(projectionMatrix, 45, (float) mScreenWidth
+				/ (float) mScreenHeight, 1f, 100f);
 
 		Matrix.setIdentityM(modelMatrix, 0);
-		Matrix.translateM(modelMatrix, 0, 0f, 0f, -3f);
+		Matrix.translateM(modelMatrix, 0, -World.getPlayer().getPosition().getX(), -World.getPlayer().getPosition().getY(), -20f);
 
 		final float[] temp = new float[16];
 		Matrix.multiplyMM(temp, 0, projectionMatrix, 0, modelMatrix, 0);
 		System.arraycopy(temp, 0, projectionMatrix, 0, temp.length);
 
-		Matrix.translateM(modelMatrix, 0, 0f, 0f, -2.5f);
-		Matrix.rotateM(modelMatrix, 0, -60f, 1f, 0f, 0f);
+		Matrix.translateM(modelMatrix, 0, 0 ,0 , -2.5f);
+		Matrix.rotateM(modelMatrix, 0, -60f + rot, 1f, 0f, 0f);
 	}
 
 	//------------TESTE
+	Random random = new Random();
 	int times = 0;
-	int objects = 0;
+	int objIds = -1;
 	int dir = 1;
 	//-----------------
 
@@ -133,31 +141,30 @@ public class GameRenderer implements Renderer {
 		Matrix.rotateM(modelMatrix, 0, -60f + rot, 1f, 0f, 0f);
 
 
-		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
+		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
 		mDbgBackground.render(projectionMatrix);
 		World.loop(projectionMatrix);
 
 		//------------TESTE
-		if(times < 50) times++;
+		if(times < 30) times++;
 		else {
 			times = 0;
 			try {
 
-				float[] moveO = {0.0f, ((objects + 0.00001f)/30)*dir };
-				ArrayList<Message> messages = new ArrayList<Message>();
-				messages.add(new Message(objects, "MOVE", moveO));
-				World.sendMessages(objects, messages);
+				float[] moveO = { 0.0f, ((random.nextFloat())/50)*dir };
+
+				MessagingSystem.sendMessagesToObject(objIds, new Message(objIds, "MOVE", moveO));
 
 			} catch (Exception e) {
-				objects = 0;
+				objIds = 0;
 				dir *= -1;
 			}
-			objects++;
+			objIds++;
 		}
 		//-------------------------------
-
-		World.getPlayer().recieveMessages(mCurMessage);
+		
+		World.getPlayer().recieveMessage(new Message(0, "MOVE",  move));
 
 		if(LogConfig.ON) fps.logFrame();
 	}
@@ -185,10 +192,11 @@ public class GameRenderer implements Renderer {
 	}
 
 	public void handleTouchDrag(float normalizedX, float normalizedY) {
-		//TODO Movimentacao correta
-		move[0] = normalizedX/10;
-		move[1] = normalizedY/10;
-		mCurMessage.add(new Message(0, "MOVE",  move));
+		if (!accelControls) {
+			//TODO Movimentacao correta
+			move[0] = normalizedX/10;
+			move[1] = normalizedY/10;
+		}
 
 	}
 
@@ -196,22 +204,21 @@ public class GameRenderer implements Renderer {
 		//TODO: Calculo correto da rotacao
 		//TODO: Rotacao a partir do centro do objeto 
 
-		if(values[0] < -1.0f) {
-			move[0] = 0.1f;
-		}
-		else if(values[0] > 1.0f) {
-			move[0] = -0.1f;
-		}else {
-			move[0] = 0.0f;
-		}
-
-		if(values[1] < -1.0f) {
-			move[1] = 0.1f;	
-		}
-		else if(values[1] > 1.0f) {
-			move[1] = -0.1f;
-		}else {
-			move[1] = 0.0f;
+		if (accelControls) {
+			if (values[0] < -1.0f) {
+				move[0] = 0.1f;
+			} else if (values[0] > 1.0f) {
+				move[0] = -0.1f;
+			} else {
+				move[0] = 0.0f;
+			}
+			if (values[1] < -1.0f) {
+				move[1] = 0.1f;
+			} else if (values[1] > 1.0f) {
+				move[1] = -0.1f;
+			} else {
+				move[1] = 0.0f;
+			}
 		}
 
 		//		try {
@@ -220,8 +227,6 @@ public class GameRenderer implements Renderer {
 		//					((SoundComponent) World.getPlayer().getComponent("Sound")).startSound(0, true);
 		//			}
 		//		} catch (Exception e) {	}
-
-		mCurMessage.add(new Message(0, "MOVE",  move));
 
 		//		if((values[0] > 1.5f || values[0] < -1.5f) &&
 		//				(values[1] > 1.5f || values[1] < -1.5f) ){			
@@ -232,19 +237,13 @@ public class GameRenderer implements Renderer {
 		//
 		//		}
 
-//		float azimuth = Math.round(values[0]) % 0.2f;
-//		float pitch = Math.round(values[1]);
-//		float roll = Math.round(values[2]);
-//
-//		String out = "AZ: " + azimuth;
-//		Log.i("ROT", out);
+		//		float azimuth = Math.round(values[0]) % 0.2f;
+		//		float pitch = Math.round(values[1]);
+		//		float roll = Math.round(values[2]);
+		//
+		//		String out = "AZ: " + azimuth;
+		//		Log.i("ROT", out);
 
-
-		//		mCurMessage.add(new Message(0, "ROT",  rot));
-
-		World.getPlayer().recieveMessages(mCurMessage);
-
-		//		mCurMessage.clear();
 
 	}
 

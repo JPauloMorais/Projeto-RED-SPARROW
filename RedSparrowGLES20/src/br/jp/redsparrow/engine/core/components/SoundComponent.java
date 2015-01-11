@@ -34,11 +34,13 @@ public class SoundComponent extends Component implements Updatable {
 	}
 
 	@Override
-	public void update(GameObject object) {
-//		for (MediaPlayer sound : mSounds) {
-//			//faz o release do som se nao estiver sendo excutado
-//			if(!sound.isPlaying()) mSounds.get(mSounds.indexOf(sound)).release();
-//		}
+	public void update(GameObject parent) {
+		try {
+			parent.getMessage("Collision").getOperation();
+			startSound(0, false);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 	
 	public void startSound(int soundIndex, boolean toLoop){
@@ -53,6 +55,10 @@ public class SoundComponent extends Component implements Updatable {
 	public void stopSound(int soundIndex){
 		mSounds.get(soundIndex).stop();
 	}
+	
+	public void releaseSound(int soundIndex){
+		mSounds.get(0).release();
+	}
 
 	public ArrayList<MediaPlayer> getSounds() {
 		return mSounds;
@@ -65,8 +71,6 @@ public class SoundComponent extends Component implements Updatable {
 	public void addSounds(ArrayList<MediaPlayer> sounds) {
 		mSounds.addAll(sounds);
 	}
-	
-	
 	
 	public void setSoundVolume(int soundIndex, float leftVolume, float rightVolume){
 		float curVols[] = { rightVolume, leftVolume };

@@ -25,7 +25,7 @@ public class TextureUtil {
 		final Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resourceId, options);
 		if (bitmap == null) {
 			if (LogConfig.ON) {
-				Log.w("TextureUtil", " Erro ao decodificar recurso: " + resourceId );
+				Log.w("TextureUtil", " Erro ao decodificar arquivo: " + resourceId );
 			}
 			GLES20.glDeleteTextures(1, textureObjectIds, 0);
 			return 0;
