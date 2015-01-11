@@ -20,8 +20,8 @@ public abstract class Mission extends GameObject implements Runnable {
 		
 		setStages(new ArrayList<MissionStage>());
 		
-
 		this.setId(MissionSystem.registerMission(this));
+
 	}
 
 	@Override

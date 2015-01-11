@@ -19,6 +19,8 @@ public class PhysicsComponent extends Component implements Updatable {
 
 		try {
 			
+			newVel = (float[]) parent.getMessage("MOVE").getMessage();
+			
 			curVel = newVel;
 
 		} catch (Exception e) {

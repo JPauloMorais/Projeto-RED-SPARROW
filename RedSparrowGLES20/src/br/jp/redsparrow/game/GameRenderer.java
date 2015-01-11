@@ -6,23 +6,28 @@ import java.util.ArrayList;
 import java.util.Random;
 
 
+
+
+
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
-
+import android.graphics.RectF;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.Matrix;
 import android.os.Vibrator;
+import android.util.Log;
 import br.jp.redsparrow.R;
+import br.jp.redsparrow.engine.core.Collision;
 import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.Tilemap;
 import br.jp.redsparrow.engine.core.World;
 import br.jp.redsparrow.engine.core.components.SoundComponent;
 import br.jp.redsparrow.engine.core.messages.Message;
 import br.jp.redsparrow.engine.core.messages.MessagingSystem;
-
 import br.jp.redsparrow.engine.core.missions.MissionSystem;
 import br.jp.redsparrow.engine.core.missions.TestMission;
 import br.jp.redsparrow.engine.core.util.FPSCounter;
@@ -145,6 +150,7 @@ public class GameRenderer implements Renderer {
 
 		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
+		mTestMission.render(projectionMatrix);
 		mDbgBackground.render(projectionMatrix);
 		World.loop(projectionMatrix);
 
