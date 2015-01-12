@@ -9,6 +9,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.opengl.GLES20;
+import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,7 +21,6 @@ import android.widget.Toast;
 import br.jp.redsparrow.engine.core.World;
 import br.jp.redsparrow.game.GameRenderer;
 import br.jp.redsparrow.game.GameView;
-
 import br.jp.redsparrow.R;
 
 
@@ -55,6 +56,7 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 			
 			mGameRenderer = new GameRenderer(this);
 			mGameView.setRenderer(mGameRenderer);
+			mGameView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
 //			rendererSet = true;
 
 		}else{

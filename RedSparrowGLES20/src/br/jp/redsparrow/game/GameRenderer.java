@@ -39,7 +39,7 @@ import br.jp.redsparrow.game.ObjectFactory.OBJ_TYPE;
 public class GameRenderer implements Renderer {
 
 	//Ativa e desativa controles por acelerometro
-	private boolean accelControls = false;
+	private boolean accelControls = true;
 
 	private static Context mContext;
 
@@ -87,8 +87,10 @@ public class GameRenderer implements Renderer {
 		World.init(mContext);
 		World.setPlayer(ObjectFactory.createObject(mContext, OBJ_TYPE.PLAYER, 0f, 0f, 2f, 2f));
 		//----TESTE----
-
 		int qd = 1; int qd2 = 1;
+//		World.addObject(ObjectFactory.createObject(mContext, OBJ_TYPE.B_ENEMY, (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2,
+//			size, size));
+		World.addObject(ObjectFactory.createObject(mContext, OBJ_TYPE.TEST, 1, 1, 1, 1));
 		for (int i = 0; i < 30; i++) {
 			float size = (random.nextFloat() + random.nextFloat()) * 2;
 			World.addObject(ObjectFactory.createObject(mContext, OBJ_TYPE.B_ENEMY, (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2,
@@ -147,34 +149,35 @@ public class GameRenderer implements Renderer {
 		Matrix.translateM(modelMatrix, 0, 0 ,0 , -2.5f);
 		Matrix.rotateM(modelMatrix, 0, -60f + rot, 1f, 0f, 0f);
 
-
+		
 		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
-
+		
+		World.getPlayer().recieveMessage(new Message(0, "MOVE",  move));
+		
 		mTestMission.render(projectionMatrix);
 		mDbgBackground.render(projectionMatrix);
 		World.loop(projectionMatrix);
 
 		//------------TESTE
-		if(times < 30) times++;
-
+		if(times < 50) times++;
 		else {
 			times = 0;
 			try {
-
+				
 				float[] moveO = { 0.0f, ((random.nextFloat())/50)*dir };
 
 				MessagingSystem.sendMessagesToObject(objIds, new Message(objIds, "MOVE", moveO));
 
 			} catch (Exception e) {
-				objIds = 0;
+				
+				
+				objIds = -1;
 				dir *= -1;
 			}
 			objIds++;
 		}
+		
 		//-------------------------------
-
-		World.getPlayer().recieveMessage(new Message(0, "MOVE",  move));
-
 
 		if(LogConfig.ON) fps.logFrame();
 	}

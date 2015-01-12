@@ -35,12 +35,8 @@ public class TestMission extends Mission {
 				this.getBounds())) {
 
 
-			try {
-				mSoundComp.startSound(0, false);
-				Thread.sleep(10000);
-				
-			} catch (InterruptedException e) {
-			}
+			mSoundComp.startSound(0, false);
+//				Thread.sleep(10000);
 
 
 			MissionSystem.sendEventMessage(new Message(this.getId(),

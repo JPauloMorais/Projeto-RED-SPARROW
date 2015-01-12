@@ -10,10 +10,12 @@ public class MessagingSystem {
 
 	private static final String TAG = "MessagingSystem";
 
+	private static Thread mMessagingSystemThread;
 	private static ArrayList<Message> mMessages;
 
 	public static void init(){
 		mMessages = new ArrayList<Message>();
+		mMessagingSystemThread = new Thread();
 	}
 
 	public static ArrayList<Message> getMessages(int id){
@@ -46,7 +48,7 @@ public class MessagingSystem {
 	public static void sendMessagesToObject(final int objectId, final Message ... messages) throws NullPointerException {
 		for (int i = 0; i < messages.length; i++) {
 			World.getObjectById(objectId).recieveMessage(messages[i]);
-			if(LogConfig.ON) Log.i(TAG, " MSG entegue a " + objectId);
+			if(LogConfig.ON) Log.i(TAG, " MSG entegue a obj de id: " + objectId);
 		}
 	}
 

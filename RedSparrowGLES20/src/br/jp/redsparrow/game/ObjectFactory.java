@@ -6,9 +6,9 @@ import android.content.Context;
 import android.media.MediaPlayer;
 import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.components.PhysicsComponent;
+import br.jp.redsparrow.engine.core.components.SolidColSpritecomponent;
 import br.jp.redsparrow.engine.core.components.SoundComponent;
 import br.jp.redsparrow.engine.core.components.SpriteComponent;
-
 import br.jp.redsparrow.R;
 
 public class ObjectFactory {
@@ -25,16 +25,19 @@ public class ObjectFactory {
 
 		case TEST:
 
+			obj.addComponent(new PhysicsComponent(obj));
+			obj.addComponent(new SolidColSpritecomponent(context));
+			
 			break;
 
 		case PLAYER:
 
 
 			obj.addComponent(new PhysicsComponent(obj));
-			obj.addComponent(new SpriteComponent( context, R.drawable.player_ship ));
+			obj.addComponent(new SpriteComponent( context, R.drawable.nova_nave ));
 
 			ArrayList<MediaPlayer> sounds = new ArrayList<MediaPlayer>();
-			sounds.add(MediaPlayer.create(context, R.raw.test_rocket));
+			sounds.add(MediaPlayer.create(context, R.raw.test_shot));
 			sounds.get(0).setVolume(0.005f, 0.005f);
 			obj.addComponent(new SoundComponent(context, sounds));
 			//			obj.addComponent(new AnimatedSpriteComponent(context, obj, R.drawable.nova_nave, 4));

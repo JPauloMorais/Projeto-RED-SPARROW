@@ -6,19 +6,31 @@ import br.jp.redsparrow.engine.core.messages.Message;
 
 public class MissionSystem {
 
-	private static volatile ArrayList<Mission> mMissions;
-	private static volatile ArrayList<Message> mEventMessages;
+	private static ArrayList<Mission> mMissions;
+	private static ArrayList<Message> mEventMessages;
+	
+	private static ThreadGroup mMissionTG;
+	private static ArrayList<Thread> mMissionThreads;
 
 	public static void init(){
 		mMissions = new ArrayList<Mission>();
 		mEventMessages = new ArrayList<Message>();
+		
+		mMissionThreads = new ArrayList<Thread>();
+		mMissionTG = new ThreadGroup("MissionTG");
+	
 	}
 
 	//adiciona a missao e retorna o id
 	public static int registerMission(Mission mission){
+		
 		mMissions.add(mission);
 
 		return mMissions.indexOf(mission);
+	}
+	
+	public static void update(){
+		
 	}
 
 	public static void removeMission(int id){

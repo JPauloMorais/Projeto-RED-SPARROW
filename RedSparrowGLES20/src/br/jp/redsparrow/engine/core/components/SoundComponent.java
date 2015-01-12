@@ -48,6 +48,39 @@ public class SoundComponent extends Component implements Updatable {
 		mSounds.get(soundIndex).start();
 	}
 	
+	public void fadeIn(final int soundIndex, final float[] targetVol, final int fadeVel, final boolean toLoop){
+		new Thread(new Runnable() {
+			public void run() {
+				startSound(soundIndex, toLoop);
+				setSoundVolume(soundIndex, 0, 0);
+				float curVols[] = mSoundVolumes.get(soundIndex);
+
+				while (curVols[0] < targetVol[0] && curVols[1] < targetVol[1]) {
+					curVols = mSoundVolumes.get(soundIndex);
+					setSoundVolume(soundIndex,(float) (curVols[0] + 0.0005*fadeVel),(float) (curVols[1] + 0.0005*fadeVel));
+				}
+				
+			}
+		}).start();
+	}
+	
+	public void fadeOut(final int soundIndex, final int fadeVel){
+		new Thread(new Runnable() {
+			public void run() {
+				
+				float curVols[] = mSoundVolumes.get(soundIndex);
+
+				while (curVols[0] > 0 && curVols[1] > 0) {
+					curVols = mSoundVolumes.get(soundIndex);
+					setSoundVolume(soundIndex,(float) (curVols[0] - 0.0005*fadeVel),(float) (curVols[1] - 0.0005*fadeVel));
+				}
+				
+				stopSound(0);
+				
+			}
+		}).start();
+	}
+	
 	public void pauseSound(int soundIndex){
 		mSounds.get(soundIndex).pause();
 	}
@@ -66,16 +99,22 @@ public class SoundComponent extends Component implements Updatable {
 
 	public void addSound(int soundFileId){
 		mSounds.add(MediaPlayer.create(mContext, soundFileId));
+		float curVols[] = { 1.0f, 1.0f };
+		mSoundVolumes.add(curVols);
 	}
 
 	public void addSounds(ArrayList<MediaPlayer> sounds) {
 		mSounds.addAll(sounds);
+		float curVols[] = { 1.0f, 1.0f };
+		for (int i = 0; i < sounds.size(); i++) {
+			mSoundVolumes.add(curVols);
+		}
 	}
 	
 	public void setSoundVolume(int soundIndex, float leftVolume, float rightVolume){
 		float curVols[] = { rightVolume, leftVolume };
 		mSoundVolumes.set(soundIndex, curVols);
-		mSounds.get(soundIndex).setVolume(leftVolume, rightVolume);
+		try { mSounds.get(soundIndex).setVolume(leftVolume, rightVolume); } catch (Exception e) {}
 	}
 	
 	

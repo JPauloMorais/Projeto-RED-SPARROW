@@ -1,15 +1,22 @@
 package br.jp.redsparrow.engine.core;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import android.content.Context;
 import android.util.Log;
 import br.jp.redsparrow.R;
+import br.jp.redsparrow.engine.core.components.PhysicsComponent;
 import br.jp.redsparrow.engine.core.components.SoundComponent;
 import br.jp.redsparrow.engine.core.messages.Message;
 import br.jp.redsparrow.engine.core.util.LogConfig;
 
-public class World {
+public class World implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	//TODO: Saveinstancestate stuff
 	private static final String TAG = "World";
 	private static boolean isRunning;
 
@@ -22,8 +29,8 @@ public class World {
 	private static final float mRENDERING_RANGE_Y = 15.0f;
 
 	private static SoundComponent bgmSoundComponent;
-	private static float bgMusicRightVol = 0.04f;
-	private static float bgMusicLeftVol = 0.04f;
+	private static float bgMusicRightVol = 0.5f;
+	private static float bgMusicLeftVol = 0.5f;
 
 	//	private static Thread physicsCheckT;
 
@@ -36,7 +43,6 @@ public class World {
 
 		bgmSoundComponent = new SoundComponent(context);
 		bgmSoundComponent.addSound(R.raw.at_least_you_tried_greaf);
-		bgmSoundComponent.getSounds().get(0).setVolume(bgMusicLeftVol, bgMusicRightVol);
 		bgmSoundComponent.addSound(R.raw.test_shot);
 
 		//		physicsCheckT = new Thread(new Runnable() {
@@ -44,13 +50,10 @@ public class World {
 		//				while (World.isRunning()) {
 		//					for (int i = 0; i < mGameObjects.size(); i++) {
 		//						for (int j = 0; j < mGameObjects.size(); j++) {
-		//							if(Collision.areIntersecting(mGameObjects.get(i).getVertices(), mGameObjects.get(j).getVertices())){
+		//							if(Collision.areIntersecting(mGameObjects.get(i).getBounds(), mGameObjects.get(j).getBounds())){
 		//								
-		//								ArrayList<Message> collisionMessages = new ArrayList<Message>();
-		//								collisionMessages.add(new Message(i, "Collided", ""));
-		//								
-		//								MessagingSystem.sendMessagesToObject(mGameObjects.get(i).getId(), collisionMessages);
-		//								MessagingSystem.sendMessagesToObject(mGameObjects.get(j).getId(), collisionMessages);
+		//								MessagingSystem.sendMessagesToObject(mGameObjects.get(i).getId(), new Message(i, "Collided", ""));
+		//								MessagingSystem.sendMessagesToObject(mGameObjects.get(j).getId(), new Message(i, "Collided", ""));
 		//
 		//							}
 		//						}
@@ -64,6 +67,8 @@ public class World {
 	private static void onStart(){
 		isRunning = true;
 		//		physicsCheckT.start();
+		float targetVol[] = { bgMusicLeftVol, bgMusicRightVol };
+		bgmSoundComponent.fadeIn(0, targetVol, 1, true);
 	}
 
 
@@ -71,35 +76,68 @@ public class World {
 		if (isRunning) {
 			//------LOOP DOS OBJETOS-----------
 			if (mGameObjects != null ) {
-				for (int i = 0; i < mGameObjects.size(); i++) {
+				for (GameObject obj1 : mGameObjects) {
 					//Realiza updates e renders somente qdo objeto se encontra no limite definido
-					//
-					//
-					if(mGameObjects.get(i).getPosition().getX() < getPlayer().getPosition().getX()+mUPDATE_RANGE_X &&
-							mGameObjects.get(i).getPosition().getX() > getPlayer().getPosition().getX()-mUPDATE_RANGE_X &&
-							mGameObjects.get(i).getPosition().getY() < getPlayer().getPosition().getY()+mUPDATE_RANGE_Y &&
-							mGameObjects.get(i).getPosition().getY() > getPlayer().getPosition().getY()-mUPDATE_RANGE_Y)
+
+//					for (GameObject obj2 : mGameObjects) {
+//						if(Collision.areIntersecting(obj1.getBounds(), obj2.getBounds())) {
+//							MessagingSystem.sendMessagesToObject(obj1.getId(), new Message(obj1.getId(), "Collision", ""));
+//							MessagingSystem.sendMessagesToObject(obj2.getId(), new Message(obj2.getId(), "Collision", ""));
+//						}
+//					}
+
+					if(obj1.getPosition().getX() < getPlayer().getPosition().getX()+mUPDATE_RANGE_X &&
+							obj1.getPosition().getX() > getPlayer().getPosition().getX()-mUPDATE_RANGE_X &&
+							obj1.getPosition().getY() < getPlayer().getPosition().getY()+mUPDATE_RANGE_Y &&
+							obj1.getPosition().getY() > getPlayer().getPosition().getY()-mUPDATE_RANGE_Y)
 					{
-						mGameObjects.get(i).update();
+						obj1.update();
 					}
 
-					if(mGameObjects.get(i).getPosition().getX() < getPlayer().getPosition().getX()+mRENDERING_RANGE_X &&
-							mGameObjects.get(i).getPosition().getX() > getPlayer().getPosition().getX()-mRENDERING_RANGE_X &&
-							mGameObjects.get(i).getPosition().getY() < getPlayer().getPosition().getY()+mRENDERING_RANGE_Y &&
-							mGameObjects.get(i).getPosition().getY() > getPlayer().getPosition().getY()-mRENDERING_RANGE_Y)
+
+					if(obj1.getPosition().getX() < getPlayer().getPosition().getX()+mRENDERING_RANGE_X &&
+							obj1.getPosition().getX() > getPlayer().getPosition().getX()-mRENDERING_RANGE_X &&
+							obj1.getPosition().getY() < getPlayer().getPosition().getY()+mRENDERING_RANGE_Y &&
+							obj1.getPosition().getY() > getPlayer().getPosition().getY()-mRENDERING_RANGE_Y)
 					{
-						mGameObjects.get(i).render(projectionMatrix);
+						obj1.render(projectionMatrix);
 					}
+
+					//					for (GameObject obj2 : mGameObjects) {
+					//
+					//						if(Collision.areIntersecting(obj1.getBounds(), obj2.getBounds())){
+					//							Log.i("Physics", "Collision");
+					//
+					//							//							MessagingSystem.sendMessagesToObject(mGameObjects.get(i).getId(), new Message(i, "Collided", ""));
+					//							//							MessagingSystem.sendMessagesToObject(mGameObjects.get(j).getId(), new Message(i, "Collided", ""));
+					//
+					//						}
+					//					}
 
 				}
 			}
 			//------LOOP DO PLAYER-------------
 			mPlayer.update();
 			mPlayer.render(projectionMatrix);
+			for (GameObject obj2 : mGameObjects) {
+				if(Collision.areIntersecting(mPlayer.getBounds(), obj2.getBounds())) {
+										
+					PhysicsComponent ppc = ((PhysicsComponent) mPlayer.getUpdatableComponent(0));
+					float[] vels = {
+							ppc.getVelX(), ppc.getVelY()
+					};
+					PhysicsComponent opc = ((PhysicsComponent) obj2.getUpdatableComponent(0));
+					float[] vels1 = {
+							opc.getVelX(), opc.getVelY()
+					};
+					
+					mPlayer.recieveMessage(new Message(mPlayer.getId(), "Collision", vels1));	
+					mGameObjects.get(mGameObjects.indexOf(obj2)).recieveMessage(new Message(obj2.getId(), "Collision", vels));
+				}
+			}
 
 		}else {
 			onStart();
-
 		}
 	}
 
@@ -126,6 +164,14 @@ public class World {
 		}
 	}
 
+	public static SoundComponent getBgmSoundComponent() {
+		return bgmSoundComponent;
+	}
+
+	public static void setBgmSoundComponent(SoundComponent bgmSoundComponent) {
+		World.bgmSoundComponent = bgmSoundComponent;
+	}
+
 	public static GameObject getPlayer() {
 		if(mPlayer!=null) return mPlayer;
 		else return new GameObject();
@@ -133,7 +179,6 @@ public class World {
 
 	public static void setPlayer(GameObject mPlayer) {
 		World.mPlayer = mPlayer;
-		bgmSoundComponent.startSound(0, true);
 	}
 
 	public static GameObject getObject(int index){
