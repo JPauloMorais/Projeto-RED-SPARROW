@@ -30,7 +30,8 @@ public final class R {
         public static final int player_ship=0x7f020005;
         public static final int player_ship_test=0x7f020006;
         public static final int ship_test=0x7f020007;
-        public static final int tileset_test=0x7f020008;
+        public static final int shot_test=0x7f020008;
+        public static final int tileset_test=0x7f020009;
     }
     public static final class id {
         public static final int action_settings=0x7f080000;

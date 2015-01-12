@@ -10,6 +10,7 @@ import java.util.Random;
 
 
 
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -25,6 +26,7 @@ import br.jp.redsparrow.engine.core.Collision;
 import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.Tilemap;
 import br.jp.redsparrow.engine.core.World;
+import br.jp.redsparrow.engine.core.components.PhysicsComponent;
 import br.jp.redsparrow.engine.core.components.SoundComponent;
 import br.jp.redsparrow.engine.core.messages.Message;
 import br.jp.redsparrow.engine.core.messages.MessagingSystem;
@@ -192,13 +194,19 @@ public class GameRenderer implements Renderer {
 	public void handleTouchPress(float normalizedX, float normalizedY) {
 		mVibrator.vibrate(100);
 		try {
-			((SoundComponent) World.getPlayer().getComponent("Sound")).startSound(0, true);
+			((SoundComponent) World.getPlayer().getUpdatableComponent(1)).startSound(0, false);
+			GameObject proj = ObjectFactory.createObject(mContext, OBJ_TYPE.PROJECTL, World.getPlayer().getPosition().getX(), World.getPlayer().getPosition().getY() + 0.55f,
+					0.1f, 0.2f);
+			((PhysicsComponent)proj.getUpdatableComponent(0)).setVelX(normalizedX);
+			((PhysicsComponent)proj.getUpdatableComponent(0)).setVelY(normalizedY);
+			World.addObject(proj);
+			
 		} catch (Exception e) {
 		}
 	}
 	public void handleTouchRelease(float normalizedX, float normalizedY) {
 		try {
-			((SoundComponent) World.getPlayer().getComponent("Sound")).pauseSound(0);
+//			((SoundComponent) World.getPlayer().getComponent("Sound")).pauseSound(0);
 		} catch (Exception e) {
 
 		}

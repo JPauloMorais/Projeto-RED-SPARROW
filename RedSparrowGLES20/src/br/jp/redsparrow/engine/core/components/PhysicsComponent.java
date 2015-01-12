@@ -16,33 +16,30 @@ public class PhysicsComponent extends Component implements Updatable {
 
 		float maxVels[] = { parent.getWidth()/2, parent.getHeight()/2 };
 		MAX_VELS = maxVels;
-		
+
 	}
 
 	@Override
 	public void update(GameObject parent) {			
 
-		try {
-
+		//Input de Movimentacao
+		try { 
 			newVel = (float[]) parent.getMessage("MOVE").getMessage();
+			curVel = newVel; } catch (Exception e) { }
 
-			curVel = newVel;
-
-		} catch (Exception e) { }
-
+		//Colisao
 		try {
-			
-			newVel = ((float[])parent.getMessage("Collision").getMessage());
-			
+			newVel = (float[]) parent.getMessage("Collision").getMessage();
+
 			curVel[0] += (newVel[0]/30);
-			curVel[1] += (newVel[1]/30);	
-			
-		} catch (Exception e) {}
+			curVel[1] += (newVel[1]/30); } catch (Exception e) {}
+
+		//TODO: friccao?
 		
-		//clamp
+		//Clamp de vel
 		if(curVel[0]>MAX_VELS[0]) curVel[0] = MAX_VELS[0];
 		if(curVel[1]>MAX_VELS[1]) curVel[1] = MAX_VELS[1];
-		
+
 		float curX = parent.getPosition().getX() + curVel[0];
 		float curY = parent.getPosition().getY() + curVel[1];
 

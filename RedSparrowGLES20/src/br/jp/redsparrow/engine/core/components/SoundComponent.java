@@ -36,8 +36,8 @@ public class SoundComponent extends Component implements Updatable {
 	@Override
 	public void update(GameObject parent) {
 		try {
-			parent.getMessage("Collision").getOperation();
-			startSound(0, false);
+//			parent.getMessage("Collision");
+//			startSound(0, false);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
@@ -45,6 +45,7 @@ public class SoundComponent extends Component implements Updatable {
 	
 	public void startSound(int soundIndex, boolean toLoop){
 		if(toLoop) mSounds.get(soundIndex).setLooping(true);
+		mSounds.get(soundIndex).seekTo(0);
 		mSounds.get(soundIndex).start();
 	}
 	

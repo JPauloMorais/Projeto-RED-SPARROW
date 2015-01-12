@@ -14,7 +14,7 @@ import br.jp.redsparrow.R;
 public class ObjectFactory {
 
 	public enum OBJ_TYPE{
-		PLAYER, B_ENEMY, TEST, DBG_BG
+		PLAYER, B_ENEMY, TEST, DBG_BG, PROJECTL
 	}
 
 	public static GameObject createObject(Context context, OBJ_TYPE type, float x, float y, float width, float height){
@@ -54,6 +54,13 @@ public class ObjectFactory {
 		case DBG_BG:
 			
 			obj.addComponent(new SpriteComponent(context, R.drawable.dbg_bg));			
+			
+			break;
+			
+		case PROJECTL:
+			
+			obj.addComponent(new PhysicsComponent(obj));
+			obj.addComponent(new SpriteComponent(context, R.drawable.shot_test));
 			
 			break;
 
