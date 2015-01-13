@@ -45,8 +45,9 @@ public class SoundComponent extends Component implements Updatable {
 	
 	public void startSound(int soundIndex, boolean toLoop){
 		if(toLoop) mSounds.get(soundIndex).setLooping(true);
-		mSounds.get(soundIndex).seekTo(0);
-		mSounds.get(soundIndex).start();
+		if(!mSounds.get(soundIndex).isPlaying()) mSounds.get(soundIndex).start();
+		else mSounds.get(soundIndex).seekTo(0);
+
 	}
 	
 	public void fadeIn(final int soundIndex, final float[] targetVol, final int fadeVel, final boolean toLoop){
@@ -58,7 +59,7 @@ public class SoundComponent extends Component implements Updatable {
 
 				while (curVols[0] < targetVol[0] && curVols[1] < targetVol[1]) {
 					curVols = mSoundVolumes.get(soundIndex);
-					setSoundVolume(soundIndex,(float) (curVols[0] + 0.0005*fadeVel),(float) (curVols[1] + 0.0005*fadeVel));
+					setSoundVolume(soundIndex,(float) (curVols[0] + 0.005*fadeVel),(float) (curVols[1] + 0.005*fadeVel));
 				}
 				
 			}
@@ -73,7 +74,7 @@ public class SoundComponent extends Component implements Updatable {
 
 				while (curVols[0] > 0 && curVols[1] > 0) {
 					curVols = mSoundVolumes.get(soundIndex);
-					setSoundVolume(soundIndex,(float) (curVols[0] - 0.0005*fadeVel),(float) (curVols[1] - 0.0005*fadeVel));
+					setSoundVolume(soundIndex,(float) (curVols[0] - 0.005*fadeVel),(float) (curVols[1] - 0.005*fadeVel));
 				}
 				
 				stopSound(0);

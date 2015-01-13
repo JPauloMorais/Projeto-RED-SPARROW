@@ -11,6 +11,7 @@ import java.util.Random;
 
 
 
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -27,6 +28,7 @@ import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.Tilemap;
 import br.jp.redsparrow.engine.core.World;
 import br.jp.redsparrow.engine.core.components.PhysicsComponent;
+import br.jp.redsparrow.engine.core.components.ProjectilePhysicsComponent;
 import br.jp.redsparrow.engine.core.components.SoundComponent;
 import br.jp.redsparrow.engine.core.messages.Message;
 import br.jp.redsparrow.engine.core.messages.MessagingSystem;
@@ -90,9 +92,13 @@ public class GameRenderer implements Renderer {
 		World.setPlayer(ObjectFactory.createObject(mContext, OBJ_TYPE.PLAYER, 0f, 0f, 2f, 2f));
 		//----TESTE----
 		int qd = 1; int qd2 = 1;
+//		float size = (random.nextFloat() + random.nextFloat()) * 2;
 //		World.addObject(ObjectFactory.createObject(mContext, OBJ_TYPE.B_ENEMY, (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2,
 //			size, size));
-		World.addObject(ObjectFactory.createObject(mContext, OBJ_TYPE.TEST, 1, 1, 1, 1));
+//		World.addObject(ObjectFactory.createObject(mContext, OBJ_TYPE.B_ENEMY, (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2,
+//				size, size));
+//		World.addObject(ObjectFactory.createObject(mContext, OBJ_TYPE.B_ENEMY, (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2,
+//				size, size));
 		for (int i = 0; i < 30; i++) {
 			float size = (random.nextFloat() + random.nextFloat()) * 2;
 			World.addObject(ObjectFactory.createObject(mContext, OBJ_TYPE.B_ENEMY, (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2,
@@ -142,7 +148,7 @@ public class GameRenderer implements Renderer {
 				/ (float) mScreenHeight, 1f, 100f);
 
 		Matrix.setIdentityM(modelMatrix, 0);
-		Matrix.translateM(modelMatrix, 0, -World.getPlayer().getPosition().getX(), -World.getPlayer().getPosition().getY(), -20f);
+		Matrix.translateM(modelMatrix, 0, -World.getPlayer().getPosition().getX(), -World.getPlayer().getPosition().getY(), -35f);
 
 		final float[] temp = new float[16];
 		Matrix.multiplyMM(temp, 0, projectionMatrix, 0, modelMatrix, 0);
@@ -152,7 +158,7 @@ public class GameRenderer implements Renderer {
 		Matrix.rotateM(modelMatrix, 0, -60f + rot, 1f, 0f, 0f);
 
 		
-		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 		
 		World.getPlayer().recieveMessage(new Message(0, "MOVE",  move));
 		
@@ -190,6 +196,7 @@ public class GameRenderer implements Renderer {
 
 	float[] move = {0.0f,0.0f};
 	float rot  = 0.0f;
+	float[] moveP = {0.5f, 0.5f};
 
 	public void handleTouchPress(float normalizedX, float normalizedY) {
 		mVibrator.vibrate(100);
@@ -197,9 +204,16 @@ public class GameRenderer implements Renderer {
 			((SoundComponent) World.getPlayer().getUpdatableComponent(1)).startSound(0, false);
 			GameObject proj = ObjectFactory.createObject(mContext, OBJ_TYPE.PROJECTL, World.getPlayer().getPosition().getX(), World.getPlayer().getPosition().getY() + 0.55f,
 					0.1f, 0.2f);
-			((PhysicsComponent)proj.getUpdatableComponent(0)).setVelX(normalizedX);
-			((PhysicsComponent)proj.getUpdatableComponent(0)).setVelY(normalizedY);
+			((ProjectilePhysicsComponent) proj.getComponent("Physics")).setShooterType(OBJ_TYPE.PLAYER);
+			
 			World.addObject(proj);
+
+			Log.i("Input", " Touch em: (" + normalizedX + ", " + normalizedY + ")");
+			moveP[0] = normalizedX;
+			moveP[1] = normalizedY;
+			
+			MessagingSystem.sendMessagesToObject(proj.getId(), new Message(proj.getId(), "MOVE", moveP));
+			
 			
 		} catch (Exception e) {
 		}

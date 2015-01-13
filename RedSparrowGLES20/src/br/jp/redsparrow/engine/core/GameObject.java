@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import android.graphics.RectF;
 import br.jp.redsparrow.engine.core.components.Component;
 import br.jp.redsparrow.engine.core.messages.Message;
+import br.jp.redsparrow.game.ObjectFactory.OBJ_TYPE;
 
 public class GameObject {
 
+	private OBJ_TYPE type;
 	private int mId = -2;
 
 	private Vector2f mPosition;
@@ -18,6 +20,8 @@ public class GameObject {
 
 	private float[] mVertsData;
 
+	private boolean isDead = false;
+
 	//	private Vector2f mTexturePosition;
 
 	private VertexArray mVertexArray;
@@ -26,6 +30,7 @@ public class GameObject {
 	private ArrayList<Component> mRenderableComponents;
 
 	private ArrayList<Message> mCurMessages;
+	private ArrayList<Message> mMessagesToRemove;
 
 	public GameObject(){
 		this(0,0,0,0);
@@ -38,6 +43,7 @@ public class GameObject {
 	public GameObject(float x, float y, float width, float height){
 
 		mCurMessages = new ArrayList<Message>();
+		mMessagesToRemove = new ArrayList<Message>();
 
 		mUpdatableComponents = new ArrayList<Component>();
 		mRenderableComponents = new ArrayList<Component>();
@@ -47,7 +53,7 @@ public class GameObject {
 		mHeight = height;
 		mBounds = new RectF(x, y, x+width, x+height);
 
-		mColOffset = new Vector2f(-0.1f, -0.1f);
+		mColOffset = new Vector2f(-0.3f, -0.5f);
 
 		//		mTexturePosition = new Vector2f(0,0);
 
@@ -64,6 +70,7 @@ public class GameObject {
 			((Updatable) component).update(this);
 		}
 
+		removeRecievedMessages();
 
 	}
 
@@ -73,6 +80,16 @@ public class GameObject {
 			((Renderable) component).render(mVertexArray, projectionMatrix);
 		}
 
+	}
+
+	private void removeRecievedMessages(){
+		mMessagesToRemove.clear();
+		for (int i = 0; i < mCurMessages.size(); i++) {
+			if (mCurMessages.get(i).hasBeenRecieved()) {
+				mMessagesToRemove.add(mCurMessages.get(i));
+			}
+		}
+		mCurMessages.removeAll(mMessagesToRemove);
 	}
 
 	//Redefine vertices
@@ -140,11 +157,11 @@ public class GameObject {
 	public void setId(int mId) {
 		this.mId = mId;
 	}
-	
+
 	public Component getUpdatableComponent(int id){
 		return mUpdatableComponents.get(id);
 	}
-	
+
 	public Component getRenderableComponent(int id){
 		return mRenderableComponents.get(id);
 	}
@@ -231,7 +248,7 @@ public class GameObject {
 
 		for (Message message : mCurMessages) {
 			if(message.getOperation().equals(operation)) {
-				mCurMessages.remove(mCurMessages.indexOf(message));
+				message.recieve();
 				return message;
 			}
 		}
@@ -245,11 +262,27 @@ public class GameObject {
 
 	public RectF getBounds() {
 		return new RectF(mBounds.left - mColOffset.getX(), mBounds.top - mColOffset.getY(), mBounds.right + mColOffset.getX(), mBounds.bottom + mColOffset.getY());
-//		return mBounds;
+		//		return mBounds;
 	}
 
 	public void setBounds(RectF bounds) {
 		this.mBounds = bounds;
+	}
+
+	public OBJ_TYPE getType() {
+		return type;
+	}
+
+	public void setType(OBJ_TYPE type) {
+		this.type = type;
+	}
+
+	public boolean isDead() {
+		return isDead;
+	}
+
+	public void die() {
+		isDead = true;
 	}
 
 }

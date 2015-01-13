@@ -29,9 +29,10 @@ public final class R {
         public static final int nova_nave=0x7f020004;
         public static final int player_ship=0x7f020005;
         public static final int player_ship_test=0x7f020006;
-        public static final int ship_test=0x7f020007;
-        public static final int shot_test=0x7f020008;
-        public static final int tileset_test=0x7f020009;
+        public static final int quad_dbg=0x7f020007;
+        public static final int ship_test=0x7f020008;
+        public static final int shot_test=0x7f020009;
+        public static final int tileset_test=0x7f02000a;
     }
     public static final class id {
         public static final int action_settings=0x7f080000;
@@ -43,12 +44,13 @@ public final class R {
         public static final int at_least_you_tried_greaf=0x7f030000;
         public static final int simple_fragment=0x7f030001;
         public static final int simple_vertex=0x7f030002;
-        public static final int test_rocket=0x7f030003;
-        public static final int test_shot=0x7f030004;
-        public static final int texture_fragment=0x7f030005;
-        public static final int texture_vertex=0x7f030006;
-        public static final int tilemap_test=0x7f030007;
-        public static final int tilemap_test_1=0x7f030008;
+        public static final int test_missionaccomplished=0x7f030003;
+        public static final int test_rocket=0x7f030004;
+        public static final int test_shot=0x7f030005;
+        public static final int texture_fragment=0x7f030006;
+        public static final int texture_vertex=0x7f030007;
+        public static final int tilemap_test=0x7f030008;
+        public static final int tilemap_test_1=0x7f030009;
     }
     public static final class string {
         public static final int action_settings=0x7f050001;

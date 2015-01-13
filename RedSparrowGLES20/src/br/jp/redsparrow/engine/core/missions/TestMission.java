@@ -17,10 +17,9 @@ public class TestMission extends Mission {
 		super("Test Mission",x, y, 5f);
 
 		mSoundComp = new SoundComponent(GameRenderer.getContext());
-		mSoundComp.addSound(R.raw.test_shot);
+		mSoundComp.addSound(R.raw.test_missionaccomplished);
 		this.addComponent(mSoundComp);
 		
-		mSpriteComponent = new SpriteComponent(GameRenderer.getContext(), R.drawable.player_ship_test);
 		this.addComponent(mSpriteComponent);
 
 		this.addStage(new MissionStage("Do Nothing For 10 Seconds"));
@@ -37,7 +36,6 @@ public class TestMission extends Mission {
 
 			mSoundComp.startSound(0, false);
 //				Thread.sleep(10000);
-
 
 			MissionSystem.sendEventMessage(new Message(this.getId(),
 					"Completed", ""));

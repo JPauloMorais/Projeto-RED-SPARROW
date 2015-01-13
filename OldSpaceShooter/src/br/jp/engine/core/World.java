@@ -115,11 +115,9 @@ public class World implements Updatable, Renderable {
 		}
 		try {
 			entities.removeAll(toRemove);
-		} catch (Exception e) {
+		} catch (ConcurrentModificationException e) {
 			e.printStackTrace();
-			if(e instanceof java.util.ConcurrentModificationException){
-				removeDeadEntities();
-			}
+			removeDeadEntities();
 		}
 	}
 
@@ -138,11 +136,9 @@ public class World implements Updatable, Renderable {
 			entities.add(entity);
 			entities.get(entities.size()-1).setId(View.generateViewId());
 			entities.get(entities.size()-1).setWorldItBelongs(this);
-		} catch (Exception e) {
+		} catch (ConcurrentModificationException e) {
 			e.printStackTrace();
-			if(e instanceof java.util.ConcurrentModificationException) {
-				addEntity(entity);
-			}
+			addEntity(entity);
 		}
 	}
 

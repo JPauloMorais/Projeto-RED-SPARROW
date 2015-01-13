@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.media.MediaPlayer;
 import br.jp.redsparrow.engine.core.GameObject;
+import br.jp.redsparrow.engine.core.components.LifeComponent;
 import br.jp.redsparrow.engine.core.components.PhysicsComponent;
+import br.jp.redsparrow.engine.core.components.ProjectilePhysicsComponent;
 import br.jp.redsparrow.engine.core.components.SolidColSpritecomponent;
 import br.jp.redsparrow.engine.core.components.SoundComponent;
 import br.jp.redsparrow.engine.core.components.SpriteComponent;
@@ -31,7 +33,8 @@ public class ObjectFactory {
 			break;
 
 		case PLAYER:
-
+			
+			obj.setType(OBJ_TYPE.PLAYER);
 
 			obj.addComponent(new PhysicsComponent(obj));
 			obj.addComponent(new SpriteComponent( context, R.drawable.nova_nave ));
@@ -46,6 +49,8 @@ public class ObjectFactory {
 
 		case B_ENEMY:
 			
+			obj.setType(OBJ_TYPE.B_ENEMY);
+			
 			obj.addComponent(new PhysicsComponent(obj));
 			obj.addComponent(new SpriteComponent( context, R.drawable.enemy_ship ));
 
@@ -53,13 +58,19 @@ public class ObjectFactory {
 		
 		case DBG_BG:
 			
+			obj.setType(OBJ_TYPE.DBG_BG);
+			
 			obj.addComponent(new SpriteComponent(context, R.drawable.dbg_bg));			
 			
 			break;
 			
 		case PROJECTL:
 			
-			obj.addComponent(new PhysicsComponent(obj));
+			obj.setType(OBJ_TYPE.PROJECTL);
+			
+			obj.addComponent(new ProjectilePhysicsComponent());
+			obj.addComponent(new LifeComponent(obj));
+			
 			obj.addComponent(new SpriteComponent(context, R.drawable.shot_test));
 			
 			break;

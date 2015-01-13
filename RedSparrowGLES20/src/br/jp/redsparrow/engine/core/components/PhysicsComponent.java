@@ -25,17 +25,36 @@ public class PhysicsComponent extends Component implements Updatable {
 		//Input de Movimentacao
 		try { 
 			newVel = (float[]) parent.getMessage("MOVE").getMessage();
-			curVel = newVel; } catch (Exception e) { }
+			curVel = newVel; 
+			} catch (Exception e) {
+			}
 
 		//Colisao
 		try {
 			newVel = (float[]) parent.getMessage("Collision").getMessage();
 
-			curVel[0] += (newVel[0]/30);
-			curVel[1] += (newVel[1]/30); } catch (Exception e) {}
+			curVel[0] += (newVel[0]/10);
+			curVel[1] += (newVel[1]/10); 
+			
+		} catch (Exception e) {
 
-		//TODO: friccao?
-		
+			//Friccao
+			
+			if(curVel[0] > 0.000000001f){
+				curVel[0] -= 0.005f;
+			}else if (curVel[0] < -0.000000001f){
+				curVel[0] += 0.005f;
+			}
+			
+			if(curVel[1] > 0.000000001f){
+				curVel[1] -= 0.005f;
+			}else if (curVel[1] < -0.0000000001f){
+				curVel[1] += 0.005f;
+			}
+
+		}
+
+
 		//Clamp de vel
 		if(curVel[0]>MAX_VELS[0]) curVel[0] = MAX_VELS[0];
 		if(curVel[1]>MAX_VELS[1]) curVel[1] = MAX_VELS[1];

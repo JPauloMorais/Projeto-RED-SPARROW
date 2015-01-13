@@ -3,7 +3,9 @@ package br.jp.redsparrow.engine.core.missions;
 import java.util.ArrayList;
 
 import android.util.Log;
+import android.widget.Toast;
 import br.jp.redsparrow.engine.core.GameObject;
+import br.jp.redsparrow.game.GameRenderer;
 
 public abstract class Mission extends GameObject implements Runnable {
 
@@ -31,15 +33,17 @@ public abstract class Mission extends GameObject implements Runnable {
 				
 				update();
 				
-				if(MissionSystem.getMessages(this.getId()).get(0).getOperation()=="Completed") {
+				if(MissionSystem.getMessages(this.getId()).get(0).getOperation().equals("Completed")) {
 					Log.i("MissionSystem", mName + " Completed!");
 					completed = true;
+					Toast.makeText(GameRenderer.getContext(), mName + " Accomplished!", Toast.LENGTH_LONG).show();
 				}
 
 			} catch (Exception e) {
 
 			}
 		}
+
 	}
 	
 	@Override
