@@ -1,21 +1,28 @@
 package br.jp.redsparrow.engine.core.components;
 
+import android.util.Log;
 import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.Updatable;
 import br.jp.redsparrow.engine.core.Vector2f;
 
 public class PhysicsComponent extends Component implements Updatable {
 
-	private final float[] MAX_VELS;
+	private final Vector2f MAX_VELS;
 
-	private float[] newVel = { 0.0f, 0.0f};
-	private float[] curVel = { 0.0f, 0.0f};
+	private Vector2f mPosition; 
+	private Vector2f mVelocity = new Vector2f(0f, 0f);
+	private Vector2f fric = new Vector2f(0f, 0f);
+
+	private float mMass;
 
 	public PhysicsComponent(GameObject parent) {
 		super("Physics");
 
-		float maxVels[] = { parent.getWidth()/2, parent.getHeight()/2 };
-		MAX_VELS = maxVels;
+		mPosition = parent.getPosition();
+
+		MAX_VELS = new Vector2f(parent.getWidth()/10, parent.getHeight()/10);
+
+		mMass = parent.getWidth()+parent.getHeight();
 
 	}
 
@@ -24,62 +31,79 @@ public class PhysicsComponent extends Component implements Updatable {
 
 		//Input de Movimentacao
 		try { 
-			newVel = (float[]) parent.getMessage("MOVE").getMessage();
-			curVel = newVel; 
-			} catch (Exception e) {
-			}
+
+			mVelocity = mVelocity.add((Vector2f) (((Vector2f) parent.getMessage("MOVE").getMessage()).length() > 0.01f ? ((Vector2f) parent.getMessage("MOVE").getMessage()) : 0));
+//			applyForce((Vector2f) parent.getMessage("MOVE").getMessage());
+
+			//			mPosition.add(mVelocity);
+		} catch (Exception e) {
+		}
+		
+		fric.setX(0);
+		fric.setY(0);
 
 		//Colisao
 		try {
-			newVel = (float[]) parent.getMessage("Collision").getMessage();
 
-			curVel[0] += (newVel[0]/10);
-			curVel[1] += (newVel[1]/10); 
-			
+			//			mVelocity = mVelocity.add((Vector2f) parent.getMessage("Collision").getMessage());
+			applyForce((Vector2f) parent.getMessage("Collision").getMessage());
+			//			mPosition.setX(mPosition.getX() + mVelocity.getX()/10);
+			//			mPosition.setY( mPosition.getY() + mVelocity.getY()/10);
+
+			fric.setX(0.009f);
+			fric.setY(0.009f);
+
 		} catch (Exception e) {
 
+			fric.setX(0.009f);
+			fric.setY(0.009f);
 			//Friccao
-			
-			if(curVel[0] > 0.000000001f){
-				curVel[0] -= 0.005f;
-			}else if (curVel[0] < -0.000000001f){
-				curVel[0] += 0.005f;
-			}
-			
-			if(curVel[1] > 0.000000001f){
-				curVel[1] -= 0.005f;
-			}else if (curVel[1] < -0.0000000001f){
-				curVel[1] += 0.005f;
+
+			if(mVelocity.getX() > 0.000000001f){
+				mVelocity.setX(mVelocity.getX() - fric.getX());
+			}else if (mVelocity.getX() < -0.000000001f){
+				mVelocity.setX(mVelocity.getX() + fric.getX());
 			}
 
+			if(mVelocity.getY() > 0.000000001f){
+				mVelocity.setY(mVelocity.getY() - fric.getY());
+			}else if (mVelocity.getY() < -0.0000000001f){
+				mVelocity.setY(mVelocity.getY() + fric.getY());
+			}
+			
+			mPosition = mPosition.add(mVelocity);
+			
 		}
 
-
 		//Clamp de vel
-		if(curVel[0]>MAX_VELS[0]) curVel[0] = MAX_VELS[0];
-		if(curVel[1]>MAX_VELS[1]) curVel[1] = MAX_VELS[1];
+		if( mVelocity.getX() > MAX_VELS.getX() ) mVelocity.setX(MAX_VELS.getX());
+		else if(mVelocity.getX() < -MAX_VELS.getX()) mVelocity.setX(-MAX_VELS.getX());
 
-		float curX = parent.getPosition().getX() + curVel[0];
-		float curY = parent.getPosition().getY() + curVel[1];
+		if( mVelocity.getY() > MAX_VELS.getY() ) mVelocity.setY(MAX_VELS.getY());
+		else if(mVelocity.getY() < -MAX_VELS.getY()) mVelocity.setY(-MAX_VELS.getY());
 
-		parent.setPosition(new Vector2f( curX, curY));
+		mPosition = mPosition.add(mVelocity);
+
+		parent.setPosition( mPosition );
 
 	}
 
-	public float getVelX() {
-		return curVel[0];
+	public void applyForce(float force){
+
+		force /= mMass;
+		mVelocity = mVelocity.add(force);
+
 	}
 
-	public void setVelX(float velX) {
-		this.curVel[0] = velX;
+	public void applyForce(Vector2f force){
+
+		force = force.div(mMass);
+		mVelocity = mVelocity.add(force);
+
 	}
 
-	public float getVelY() {
-		return curVel[1];
-	}
-
-	public void setVelY(float velY) {
-		this.curVel[1] = velY;
+	public Vector2f getVelocity(){
+		return mVelocity;
 	}
 
 }

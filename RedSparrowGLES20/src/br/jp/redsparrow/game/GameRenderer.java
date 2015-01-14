@@ -12,6 +12,9 @@ import java.util.Random;
 
 
 
+
+
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -26,7 +29,9 @@ import br.jp.redsparrow.R;
 import br.jp.redsparrow.engine.core.Collision;
 import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.Tilemap;
+import br.jp.redsparrow.engine.core.Vector2f;
 import br.jp.redsparrow.engine.core.World;
+import br.jp.redsparrow.engine.core.components.GunComponent;
 import br.jp.redsparrow.engine.core.components.PhysicsComponent;
 import br.jp.redsparrow.engine.core.components.ProjectilePhysicsComponent;
 import br.jp.redsparrow.engine.core.components.SoundComponent;
@@ -44,6 +49,10 @@ public class GameRenderer implements Renderer {
 
 	//Ativa e desativa controles por acelerometro
 	private boolean accelControls = true;
+
+	Vector2f playerMoveVel = new Vector2f(0, 0);
+	//	float rot  = 0.0f;
+	Vector2f projMoveVel = new Vector2f(0.5f, 0.5f);
 
 	private static Context mContext;
 
@@ -92,17 +101,16 @@ public class GameRenderer implements Renderer {
 		World.setPlayer(ObjectFactory.createObject(mContext, OBJ_TYPE.PLAYER, 0f, 0f, 2f, 2f));
 		//----TESTE----
 		int qd = 1; int qd2 = 1;
-//		float size = (random.nextFloat() + random.nextFloat()) * 2;
-//		World.addObject(ObjectFactory.createObject(mContext, OBJ_TYPE.B_ENEMY, (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2,
-//			size, size));
-//		World.addObject(ObjectFactory.createObject(mContext, OBJ_TYPE.B_ENEMY, (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2,
-//				size, size));
-//		World.addObject(ObjectFactory.createObject(mContext, OBJ_TYPE.B_ENEMY, (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2,
-//				size, size));
+//				float size = (random.nextFloat() + random.nextFloat()) * 2;
+		
+		//		World.addObject(ObjectFactory.createObject(mContext, OBJ_TYPE.B_ENEMY, (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2,
+		//				size, size));
+		//		World.addObject(ObjectFactory.createObject(mContext, OBJ_TYPE.B_ENEMY, (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2,
+		//				size, size));
 		for (int i = 0; i < 30; i++) {
-			float size = (random.nextFloat() + random.nextFloat()) * 2;
 			World.addObject(ObjectFactory.createObject(mContext, OBJ_TYPE.B_ENEMY, (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2,
-					size, size));
+					2f, 2f), 
+					1);
 			if(i%2==0) qd *= -1;
 			else qd2 *= -1;
 		}
@@ -130,7 +138,7 @@ public class GameRenderer implements Renderer {
 		System.arraycopy(temp, 0, projectionMatrix, 0, temp.length);
 
 		Matrix.translateM(modelMatrix, 0, 0 ,0 , -2.5f);
-		Matrix.rotateM(modelMatrix, 0, -60f + rot, 1f, 0f, 0f);
+		Matrix.rotateM(modelMatrix, 0, -60f, 1f, 0f, 0f);
 	}
 
 	//------------TESTE
@@ -143,49 +151,65 @@ public class GameRenderer implements Renderer {
 	@Override
 	public void onDrawFrame(GL10 gl) {
 
-		//criando e ajustando matriz de projecao
-		MatrixUtil.perspectiveM(projectionMatrix, 45, (float) mScreenWidth
-				/ (float) mScreenHeight, 1f, 100f);
+//		Matrix.rotateM(modelMatrix, 0, -45f, 1f, 0f, 0f);
+
+
+		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
 		Matrix.setIdentityM(modelMatrix, 0);
 		Matrix.translateM(modelMatrix, 0, -World.getPlayer().getPosition().getX(), -World.getPlayer().getPosition().getY(), -35f);
 
-		final float[] temp = new float[16];
-		Matrix.multiplyMM(temp, 0, projectionMatrix, 0, modelMatrix, 0);
-		System.arraycopy(temp, 0, projectionMatrix, 0, temp.length);
-
-		Matrix.translateM(modelMatrix, 0, 0 ,0 , -2.5f);
-		Matrix.rotateM(modelMatrix, 0, -60f + rot, 1f, 0f, 0f);
-
-		
-		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
-		
-		World.getPlayer().recieveMessage(new Message(0, "MOVE",  move));
-		
 		mTestMission.render(projectionMatrix);
 		mDbgBackground.render(projectionMatrix);
 		World.loop(projectionMatrix);
 
+		//criando e ajustando matriz de projecao
+		MatrixUtil.perspectiveM(projectionMatrix, 45, (float) mScreenWidth
+				/ (float) mScreenHeight, 1f, 100f);
+		
+		
+		final float[] temp = new float[16];
+		Matrix.multiplyMM(temp, 0, projectionMatrix, 0, modelMatrix, 0);
+		System.arraycopy(temp, 0, projectionMatrix, 0, temp.length);
+		
+		Matrix.translateM(modelMatrix, 0, 0 ,0 , -2.5f);
 		//------------TESTE
 		if(times < 50) times++;
 		else {
 			times = 0;
-			try {
-				
-				float[] moveO = { 0.0f, ((random.nextFloat())/50)*dir };
 
-				MessagingSystem.sendMessagesToObject(objIds, new Message(objIds, "MOVE", moveO));
+			if ( objIds < World.getObjectCount() ) {
 
-			} catch (Exception e) {
-				
-				
+				try {
+					if( World.getObjectById(objIds).getType().equals(OBJ_TYPE.B_ENEMY) ){
+						
+						Vector2f moveO = new Vector2f(0f,
+								((random.nextFloat()) / 10) * dir);
+						MessagingSystem.sendMessagesToObject(objIds, new Message(
+								objIds, "MOVE", moveO));
+						((SoundComponent) World.getObjectById(objIds)
+								.getUpdatableComponent(1)).startSound(0, false);
+						((GunComponent) World.getObjectById(objIds)
+								.getUpdatableComponent(2)).shoot(new Vector2f(0f, -0.5f));
+
+						objIds++;
+					}
+				} catch (NullPointerException e) {
+					// TODO Auto-generated catch block
+				}
+
+			}else{
 				objIds = -1;
 				dir *= -1;
 			}
-			objIds++;
+
+
+
+
 		}
-		
+
 		//-------------------------------
+		World.getPlayer().recieveMessage(new Message(0, "MOVE",  playerMoveVel));
 
 		if(LogConfig.ON) fps.logFrame();
 	}
@@ -194,33 +218,39 @@ public class GameRenderer implements Renderer {
 		return mContext;
 	}
 
-	float[] move = {0.0f,0.0f};
-	float rot  = 0.0f;
-	float[] moveP = {0.5f, 0.5f};
-
 	public void handleTouchPress(float normalizedX, float normalizedY) {
 		mVibrator.vibrate(100);
 		try {
-			((SoundComponent) World.getPlayer().getUpdatableComponent(1)).startSound(0, false);
-			GameObject proj = ObjectFactory.createObject(mContext, OBJ_TYPE.PROJECTL, World.getPlayer().getPosition().getX(), World.getPlayer().getPosition().getY() + 0.55f,
-					0.1f, 0.2f);
-			((ProjectilePhysicsComponent) proj.getComponent("Physics")).setShooterType(OBJ_TYPE.PLAYER);
-			
-			World.addObject(proj);
 
 			Log.i("Input", " Touch em: (" + normalizedX + ", " + normalizedY + ")");
-			moveP[0] = normalizedX;
-			moveP[1] = normalizedY;
-			
-			MessagingSystem.sendMessagesToObject(proj.getId(), new Message(proj.getId(), "MOVE", moveP));
-			
-			
+
+			projMoveVel.setX(normalizedX);
+			projMoveVel.setY(normalizedY);
+//			if(normalizedX > 0.1f){
+//				projMoveVel.setX(0.5f);
+//			}else if (normalizedX < -0.1f){
+//				projMoveVel.setX(-0.5f);
+//			}else {
+//				projMoveVel.setX(0f);
+//			}
+//
+//			if(normalizedY > 0.1f){
+//				projMoveVel.setY(0.5f);
+//			}else if (normalizedY < -0.1f){
+//				projMoveVel.setY(-0.5f);
+//			}else {
+//				projMoveVel.setY(0f);
+//			}
+
+			((SoundComponent) World.getPlayer().getUpdatableComponent(1)).startSound(0, false);
+			((GunComponent) World.getPlayer().getUpdatableComponent(2)).shoot(projMoveVel);
+
 		} catch (Exception e) {
 		}
 	}
 	public void handleTouchRelease(float normalizedX, float normalizedY) {
 		try {
-//			((SoundComponent) World.getPlayer().getComponent("Sound")).pauseSound(0);
+			//			((SoundComponent) World.getPlayer().getComponent("Sound")).pauseSound(0);
 		} catch (Exception e) {
 
 		}
@@ -229,8 +259,8 @@ public class GameRenderer implements Renderer {
 	public void handleTouchDrag(float normalizedX, float normalizedY) {
 		if (!accelControls) {
 			//TODO Movimentacao correta
-			move[0] = normalizedX/10;
-			move[1] = normalizedY/10;
+			playerMoveVel.setX(normalizedX/10);
+			playerMoveVel.setY(normalizedY/10);
 		}
 
 	}
@@ -240,20 +270,23 @@ public class GameRenderer implements Renderer {
 		//TODO: Rotacao a partir do centro do objeto 
 
 		if (accelControls) {
-			if (values[0] < -1.0f) {
-				move[0] = 0.1f;
-			} else if (values[0] > 1.0f) {
-				move[0] = -0.1f;
-			} else {
-				move[0] = 0.0f;
-			}
-			if (values[1] < -1.0f) {
-				move[1] = 0.1f;
-			} else if (values[1] > 1.0f) {
-				move[1] = -0.1f;
-			} else {
-				move[1] = 0.0f;
-			}
+
+			playerMoveVel.setX(-values[0]/101f);
+			playerMoveVel.setY(-values[1]/101f);
+//			if (values[0] < -1.0f) {
+//				playerMoveVel.setX(0.1f);
+//			} else if (values[0] > 1.0f) {
+//				playerMoveVel.setX(-0.1f);
+//			} else {
+//				playerMoveVel.setX(0f);
+//			}
+//			if (values[1] < -1.0f) {
+//				playerMoveVel.setY(0.1f);
+//			} else if (values[1] > 1.0f) {
+//				playerMoveVel.setY(-0.1f);
+//			} else {
+//				playerMoveVel.setY(0f);
+//			}
 
 		}
 

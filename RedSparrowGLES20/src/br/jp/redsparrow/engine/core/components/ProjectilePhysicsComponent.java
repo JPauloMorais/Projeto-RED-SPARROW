@@ -8,9 +8,10 @@ import br.jp.redsparrow.game.ObjectFactory.OBJ_TYPE;
 public class ProjectilePhysicsComponent extends Component implements Updatable {
 
 	private OBJ_TYPE mShooterType;
+	private boolean shot = false;
 
-	private float[] newVel = { 0.0f, 0.0f};
-	private float[] curVel = { 0.0f, 0.0f};
+	private Vector2f mVelocity = new Vector2f(0f, 0f);
+	//	private Vector2f location = new Vector2f(0f, 0f); 
 
 	private boolean hitTarget;
 
@@ -25,15 +26,32 @@ public class ProjectilePhysicsComponent extends Component implements Updatable {
 	public void update(GameObject parent) {			
 
 		if (!hitTarget) {
-			//Input de Movimentacao
-			try {
-				newVel = (float[]) parent.getMessage("MOVE").getMessage();
-				curVel = newVel;
-			} catch (Exception e) {
-			}
-			parent.setPosition(new Vector2f( parent.getPosition().getX() + curVel[0], parent.getPosition().getY() + curVel[1]));
 
-		}else ((LifeComponent) parent.getUpdatableComponent(1)).die();
+			if (!shot) {
+				//Input de Movimentacao
+				try {
+
+					mVelocity = (Vector2f) parent.getMessage("MOVE").getMessage();
+					shot = true;
+
+				} catch (Exception e) {
+				}
+
+			}
+
+			parent.setPosition(	parent.getPosition().add(mVelocity) );
+
+		}else parent.die();
+		//			((LifeComponent) parent.getUpdatableComponent(1)).die();
+	}
+
+	public boolean wasShot() {
+		return shot;
+	}
+
+	public void shoot(Vector2f velocity) {
+		mVelocity = velocity;
+		shot = true;
 	}
 
 	public boolean hasHitTarget() {

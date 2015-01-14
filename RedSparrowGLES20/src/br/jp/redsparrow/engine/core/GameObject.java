@@ -82,16 +82,7 @@ public class GameObject {
 
 	}
 
-	private void removeRecievedMessages(){
-		mMessagesToRemove.clear();
-		for (int i = 0; i < mCurMessages.size(); i++) {
-			if (mCurMessages.get(i).hasBeenRecieved()) {
-				mMessagesToRemove.add(mCurMessages.get(i));
-			}
-		}
-		mCurMessages.removeAll(mMessagesToRemove);
-	}
-
+	//-------RENDERIZACAO----------
 	//Redefine vertices
 	public void updateVertsData(float x, float y){
 		if (mBounds.centerX() != x || mBounds.centerY() != y) {
@@ -149,15 +140,9 @@ public class GameObject {
 		}
 
 	}
+	//------------------------------
 
-	public int getId() {
-		return mId;
-	}
-
-	public void setId(int mId) {
-		this.mId = mId;
-	}
-
+	//--------COMPONENTS------------
 	public Component getUpdatableComponent(int id){
 		return mUpdatableComponents.get(id);
 	}
@@ -211,7 +196,9 @@ public class GameObject {
 			component.setId(mRenderableComponents.indexOf(component));
 		}
 	}
+	//---------------------------
 
+	//-------POSICIONAMENTO------
 	public Vector2f getPosition() {
 		return mPosition;
 	}
@@ -234,6 +221,27 @@ public class GameObject {
 
 	public void setHeight(float height) {
 		this.mHeight = height;
+	}
+
+	public RectF getBounds() {
+				return new RectF(mBounds.left - mColOffset.getX(), mBounds.top - mColOffset.getY(), mBounds.right + mColOffset.getX(), mBounds.bottom + mColOffset.getY());
+//		return mBounds;
+	}
+
+	public void setBounds(RectF bounds) {
+		this.mBounds = bounds;
+	}
+	//-----------------------------
+
+	//------MESSAGES---------------
+	private void removeRecievedMessages(){
+		mMessagesToRemove.clear();
+		for (int i = 0; i < mCurMessages.size(); i++) {
+			if (mCurMessages.get(i).hasBeenRecieved()) {
+				mMessagesToRemove.add(mCurMessages.get(i));
+			}
+		}
+		mCurMessages.removeAll(mMessagesToRemove);
 	}
 
 	public void recieveMessage(Message message) {
@@ -259,14 +267,14 @@ public class GameObject {
 	public ArrayList<Message> getMessages() {
 		return mCurMessages;
 	}
+	//-----------------------------
 
-	public RectF getBounds() {
-		return new RectF(mBounds.left - mColOffset.getX(), mBounds.top - mColOffset.getY(), mBounds.right + mColOffset.getX(), mBounds.bottom + mColOffset.getY());
-		//		return mBounds;
+	public int getId() {
+		return mId;
 	}
 
-	public void setBounds(RectF bounds) {
-		this.mBounds = bounds;
+	public void setId(int mId) {
+		this.mId = mId;
 	}
 
 	public OBJ_TYPE getType() {

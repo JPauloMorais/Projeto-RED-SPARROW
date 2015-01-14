@@ -20,12 +20,16 @@ public class World implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	//TODO: Saveinstancestate stuff
+
 	private static final String TAG = "World";
 	private static boolean isRunning;
 
 	private static GameObject mPlayer;
 	private static ArrayList<GameObject> mGameObjects;
 	private static ArrayList<GameObject> mToRemove;
+
+	private static ArrayList<Integer> mLayers;
+
 	private static ArrayList<GameObject> mToCheck;
 	private static Quadtree mQuadTree;
 
@@ -38,6 +42,9 @@ public class World implements Serializable{
 	private static float bgMusicRightVol = 0.05f;
 	private static float bgMusicLeftVol = 0.05f;
 
+	private static PhysicsComponent physComp;
+	private static Vector2f vels;
+
 	public static void init(Context context){
 
 		isRunning = false;
@@ -45,8 +52,11 @@ public class World implements Serializable{
 		mPlayer = new GameObject();
 		mGameObjects = new ArrayList<GameObject>();
 		mToRemove = new ArrayList<GameObject>();
+
 		mToCheck = new ArrayList<GameObject>();
 		mQuadTree = new Quadtree(0, new RectF(-100, -100, 100, 100));
+
+		mLayers = new ArrayList<Integer>();
 
 		bgmSoundComponent = new SoundComponent(context);
 		bgmSoundComponent.addSound(R.raw.at_least_you_tried_greaf);
@@ -76,46 +86,21 @@ public class World implements Serializable{
 						mGameObjects.get(k).getPosition().getY() > getPlayer().getPosition().getY()-mUPDATE_RANGE_Y)
 				{
 					mQuadTree.add(mGameObjects.get(k));
-				}
+				}else if(mGameObjects.get(k).getType().equals(OBJ_TYPE.PROJECTL)) mGameObjects.get(k).die();
 			}
-			
+
 			//------LOOP DOS OBJETOS-----------
 			if(mGameObjects!=null && !mGameObjects.isEmpty()){
 				for (int i=0; i < mGameObjects.size(); i++) {
-//					mToCheck.clear();
-//					mQuadTree.getToCheck(mToCheck, mGameObjects.get(i).getBounds());
+					mToCheck.clear();
+					mQuadTree.getToCheck(mToCheck, mGameObjects.get(i).getBounds());
 
 					//CHECANDO COLISAO
-//					for (int j=0; j < mToCheck.size(); j++) {
-//						if(Collision.areIntersecting( mGameObjects.get(i).getBounds(), mToCheck.get(j).getBounds()) ){
-//
-//							try {
-//								PhysicsComponent pc = ((PhysicsComponent) mToCheck.get(i).getUpdatableComponent(0));
-//								float[] Tvels = {
-//										pc.getVelX(), pc.getVelY()
-//								};
-//								pc = ((PhysicsComponent) mToCheck.get(j).getUpdatableComponent(0));
-//								float[] Ovels = {
-//										pc.getVelX(), pc.getVelY()
-//								};
-//								mToCheck.get(j).recieveMessage(new Message(mToCheck.get(j).getId(), "Collision", Ovels));
-//
-//							} catch (Exception e) {
-//
-//								try {
-//									if(((ProjectilePhysicsComponent) mToCheck.get(j).getUpdatableComponent(0)).getShooterType()!=mGameObjects.get(i).getType())
-//									{
-//										mToCheck.get(i).die();
-//										mToCheck.get(j).die();
-//									}
-//								} catch (Exception e1) {
-//									// TODO Auto-generated catch block
-//									e1.printStackTrace();
-//								}
-//
-//							}
-//						}
-//					}
+					for (int j=0; j < mToCheck.size(); j++) {
+						if (i!=j) {
+
+						}	
+					}			
 
 					//Update e Render se dentro limite
 					if(mGameObjects.get(i).getPosition().getX() < getPlayer().getPosition().getX()+mUPDATE_RANGE_X &&
@@ -140,29 +125,30 @@ public class World implements Serializable{
 			//------LOOP DO PLAYER-------------
 			mToCheck.clear();
 			mQuadTree.getToCheck(mToCheck, mPlayer.getBounds());
-			
+
 			for (int i = 0; i < mToCheck.size(); i++) {
 				if(Collision.areIntersecting(mPlayer.getBounds(), mToCheck.get(i).getBounds())){
-					try {
 
-						PhysicsComponent pc = ((PhysicsComponent) mPlayer.getUpdatableComponent(0));
-						float[] Pvels = {
-								pc.getVelX(), pc.getVelY()
-						};
+					if (mToCheck.get(i).getType().equals(OBJ_TYPE.PROJECTL)==false) {
 
-						pc = ((PhysicsComponent) mToCheck.get(i).getUpdatableComponent(0));
-						float[] Ovels = {
-								pc.getVelX(), pc.getVelY()
-						};
+						physComp = ((PhysicsComponent) mPlayer
+								.getUpdatableComponent(0));
+						vels = physComp.getVelocity();
+						mToCheck.get(i).recieveMessage(
+								new Message(-2, "Collision", vels));
 
-						mPlayer.recieveMessage(new Message(-2, "Collision", Ovels));
-						mToCheck.get(i).recieveMessage(new Message(-2, "Collision", Pvels));
+						if (vels.length()==0) {
+							physComp = ((PhysicsComponent) mToCheck.get(i)
+									.getUpdatableComponent(0));
+							vels = physComp.getVelocity().div(2).mult(-1);
+							mPlayer.recieveMessage(new Message(-2, "Collision",
+									vels));
+						}
 
-					} catch (Exception e) { 
-
+					}else{
 						if(((ProjectilePhysicsComponent) mToCheck.get(i).getUpdatableComponent(0)).getShooterType()!=OBJ_TYPE.PLAYER)
 							mPlayer.die();
-							mToCheck.get(i).die();
+						mToCheck.get(i).die();
 					}
 
 				}
@@ -239,12 +225,16 @@ public class World implements Serializable{
 
 	}
 
-	public static void addObject(GameObject object){
+	public static void addObject(GameObject object, int layer){
+
+		mLayers.add(layer);
+
+		// estabelece o tamando de acordo com a layer
+		object.setWidth(object.getWidth()*layer);
+		object.setHeight(object.getHeight()*layer);
 
 		//TODO: sistema eficiente de atribuicao de ids
 		//Se id ja nao foi estabelecido, atribuir baseado em posicao no array
-
-
 		if(object.getId() == -2) { 
 			object.setId(mGameObjects.size()-1);
 		}
@@ -254,19 +244,35 @@ public class World implements Serializable{
 		if(LogConfig.ON) Log.i(TAG, "Objeto de id " + object.getId() + " add em " + object.getPosition().toString());
 	}
 
-	public static void addObjects(GameObject ... objects){
+	public static void addObjects(int layer, GameObject ... objects){
 		for (int i = 0; i < objects.length; i++) {
-			World.addObject(objects[i]);
+			World.addObject(objects[i], layer);
 		}
+	}
+
+	public static int getObjectCount(){
+		return mGameObjects.size();
+	}
+
+	public static int getObjectLayer(int indx){
+		return mLayers.get(indx);
 	}
 
 	private static void removeDead(){
 		mToRemove.clear();
 		for (int i = 0; i < mGameObjects.size(); i++) {
-			if(mGameObjects.get(i).isDead()) mToRemove.add(mGameObjects.get(i));
+			if(mGameObjects.get(i).isDead()) {
+				mToRemove.add(mGameObjects.get(i));
+			}
 		}
+
 		if(LogConfig.ON && mToRemove.size() > 0) Log.i(TAG, mToRemove.size() + " objeto(s) morto(s) removido(s)");
 		mGameObjects.removeAll(mToRemove);
+		
+		if(mPlayer.isDead() && !mGameObjects.isEmpty()) {
+			World.setPlayer(mGameObjects.get(0));
+			mGameObjects.remove(0);
+		}
 	}
 
 	public static void removeObject(int index){
