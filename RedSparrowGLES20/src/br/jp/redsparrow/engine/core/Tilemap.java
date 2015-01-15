@@ -33,7 +33,7 @@ public class Tilemap implements Renderable {
 							switch (jArr.getJSONArray(0).getInt(dataIndex)) {
 							case 0:
 
-								textureSrc = R.drawable.tileset_test;
+								textureSrc = R.drawable.spaaace_6;
 
 								break;
 

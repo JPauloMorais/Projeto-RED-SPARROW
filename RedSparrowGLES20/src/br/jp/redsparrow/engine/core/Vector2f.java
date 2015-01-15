@@ -10,6 +10,10 @@ public class Vector2f {
 		setY(y);
 	}
 	
+	public Vector2f copy(){
+		return new Vector2f(mX, mY);
+	}
+	
 	public float length(){
 		return (float) Math.sqrt((mX*mX) + (mY*mY));
 	}

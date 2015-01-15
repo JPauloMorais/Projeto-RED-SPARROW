@@ -1,6 +1,5 @@
 package br.jp.redsparrow.engine.core.components;
 
-import android.util.Log;
 import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.Updatable;
 import br.jp.redsparrow.engine.core.Vector2f;
@@ -32,16 +31,16 @@ public class PhysicsComponent extends Component implements Updatable {
 		//Input de Movimentacao
 		try { 
 
-			mVelocity = mVelocity.add((Vector2f) (((Vector2f) parent.getMessage("MOVE").getMessage()).length() > 0.01f ? ((Vector2f) parent.getMessage("MOVE").getMessage()) : 0));
-//			applyForce((Vector2f) parent.getMessage("MOVE").getMessage());
+//			mVelocity = mVelocity.add((Vector2f) (((Vector2f) parent.getMessage("MOVE").getMessage()).length() > 0.01f ? ((Vector2f) parent.getMessage("MOVE").getMessage()) : 0));
+			applyForce((Vector2f) (((Vector2f) parent.getMessage("MOVE").getMessage()).length() > 0.01f ? ((Vector2f) parent.getMessage("MOVE").getMessage()) : 0));
 
 			//			mPosition.add(mVelocity);
+			fric.setX(0);
+			fric.setY(0);
+			
 		} catch (Exception e) {
 		}
 		
-		fric.setX(0);
-		fric.setY(0);
-
 		//Colisao
 		try {
 
@@ -50,28 +49,25 @@ public class PhysicsComponent extends Component implements Updatable {
 			//			mPosition.setX(mPosition.getX() + mVelocity.getX()/10);
 			//			mPosition.setY( mPosition.getY() + mVelocity.getY()/10);
 
-			fric.setX(0.009f);
-			fric.setY(0.009f);
+			fric.setX(0.005f);
+			fric.setY(0.005f);
 
 		} catch (Exception e) {
-
-			fric.setX(0.009f);
-			fric.setY(0.009f);
+			
 			//Friccao
 
-			if(mVelocity.getX() > 0.000000001f){
+			if(mVelocity.getX() > 0.0000001f){
 				mVelocity.setX(mVelocity.getX() - fric.getX());
-			}else if (mVelocity.getX() < -0.000000001f){
+			}else if (mVelocity.getX() < -0.0000001f){
 				mVelocity.setX(mVelocity.getX() + fric.getX());
 			}
 
-			if(mVelocity.getY() > 0.000000001f){
+			if(mVelocity.getY() > 0.0000001f){
 				mVelocity.setY(mVelocity.getY() - fric.getY());
-			}else if (mVelocity.getY() < -0.0000000001f){
+			}else if (mVelocity.getY() < -0.00000001f){
 				mVelocity.setY(mVelocity.getY() + fric.getY());
 			}
 			
-			mPosition = mPosition.add(mVelocity);
 			
 		}
 

@@ -8,10 +8,13 @@ import android.graphics.RectF;
 import android.util.Log;
 import br.jp.redsparrow.R;
 import br.jp.redsparrow.engine.core.components.PhysicsComponent;
+import br.jp.redsparrow.engine.core.components.PlayerPhysicsComponent;
 import br.jp.redsparrow.engine.core.components.ProjectilePhysicsComponent;
 import br.jp.redsparrow.engine.core.components.SoundComponent;
 import br.jp.redsparrow.engine.core.messages.Message;
 import br.jp.redsparrow.engine.core.util.LogConfig;
+import br.jp.redsparrow.game.GameRenderer;
+import br.jp.redsparrow.game.ObjectFactory;
 import br.jp.redsparrow.game.ObjectFactory.OBJ_TYPE;
 
 public class World implements Serializable{
@@ -35,14 +38,15 @@ public class World implements Serializable{
 
 	private static final float mUPDATE_RANGE_X = 16.0f;
 	private static final float mUPDATE_RANGE_Y = 20.0f;
-	private static final float mRENDERING_RANGE_X = 10.0f;
-	private static final float mRENDERING_RANGE_Y = 16.0f;
+	private static final float mRENDERING_RANGE_X = 20.0f;
+	private static final float mRENDERING_RANGE_Y = 26.0f;
 
 	private static SoundComponent bgmSoundComponent;
 	private static float bgMusicRightVol = 0.05f;
 	private static float bgMusicLeftVol = 0.05f;
 
 	private static PhysicsComponent physComp;
+	private static PlayerPhysicsComponent playerPhysComp;
 	private static Vector2f vels;
 
 	public static void init(Context context){
@@ -115,7 +119,7 @@ public class World implements Serializable{
 							mGameObjects.get(i).getPosition().getX() > getPlayer().getPosition().getX()-mRENDERING_RANGE_X &&
 							mGameObjects.get(i).getPosition().getY() < getPlayer().getPosition().getY()+mRENDERING_RANGE_Y &&
 							mGameObjects.get(i).getPosition().getY() > getPlayer().getPosition().getY()-mRENDERING_RANGE_Y)
-					{
+					{						
 						mGameObjects.get(i).render(projectionMatrix);
 					}
 
@@ -131,9 +135,9 @@ public class World implements Serializable{
 
 					if (mToCheck.get(i).getType().equals(OBJ_TYPE.PROJECTL)==false) {
 
-						physComp = ((PhysicsComponent) mPlayer
+						playerPhysComp = ((PlayerPhysicsComponent) mPlayer
 								.getUpdatableComponent(0));
-						vels = physComp.getVelocity();
+						vels = playerPhysComp.getVelocity();
 						mToCheck.get(i).recieveMessage(
 								new Message(-2, "Collision", vels));
 
@@ -270,7 +274,10 @@ public class World implements Serializable{
 		mGameObjects.removeAll(mToRemove);
 		
 		if(mPlayer.isDead() && !mGameObjects.isEmpty()) {
+			//-----Teste------
+			mGameObjects.set(0, ObjectFactory.createObject(GameRenderer.getContext(), OBJ_TYPE.PLAYER, 0f, 0f, 2f, 2f));
 			World.setPlayer(mGameObjects.get(0));
+			//------------------
 			mGameObjects.remove(0);
 		}
 	}

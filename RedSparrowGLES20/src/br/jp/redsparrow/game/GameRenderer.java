@@ -15,6 +15,8 @@ import java.util.Random;
 
 
 
+
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -22,6 +24,7 @@ import android.content.Context;
 import android.graphics.RectF;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView.Renderer;
+import android.opengl.GLUtils;
 import android.opengl.Matrix;
 import android.os.Vibrator;
 import android.util.Log;
@@ -39,6 +42,7 @@ import br.jp.redsparrow.engine.core.messages.Message;
 import br.jp.redsparrow.engine.core.messages.MessagingSystem;
 import br.jp.redsparrow.engine.core.missions.MissionSystem;
 import br.jp.redsparrow.engine.core.missions.TestMission;
+import br.jp.redsparrow.engine.core.particles.Particle;
 import br.jp.redsparrow.engine.core.util.FPSCounter;
 import br.jp.redsparrow.engine.core.util.LogConfig;
 import br.jp.redsparrow.engine.core.util.MatrixUtil;
@@ -62,12 +66,19 @@ public class GameRenderer implements Renderer {
 	private int mScreenHeight;
 
 	private GameObject mDbgBackground;
+	private GameObject mDbgBackground1;
 	private TestMission mTestMission;
 
+	private final float[] viewMatrix = new float[16];
+	private final float[] viewProjectionMatrix = new float[16];
+	private final float[] modelViewProjectionMatrix = new float[16];
+	
 	private final float[] projectionMatrix = new float[16];
 	private final float[] modelMatrix = new float[16];
 
 	private final FPSCounter fps = new FPSCounter();
+
+	Particle particle;
 
 	public GameRenderer(Context context) {
 
@@ -96,13 +107,15 @@ public class GameRenderer implements Renderer {
 		GLES20.glEnable(GLES20.GL_BLEND);
 		GLES20.glBlendFunc( GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA );
 
-		mDbgBackground = ObjectFactory.createObject(mContext, OBJ_TYPE.DBG_BG, 0, 0, 100, 100);
+		mDbgBackground = ObjectFactory.createObject(mContext, OBJ_TYPE.DBG_BG, 0, 0, 50, 50);
+		mDbgBackground1 = ObjectFactory.createObject(mContext, OBJ_TYPE.DBG_BG1, 0, 0, 50, 50);
+		
 		World.init(mContext);
 		World.setPlayer(ObjectFactory.createObject(mContext, OBJ_TYPE.PLAYER, 0f, 0f, 2f, 2f));
 		//----TESTE----
 		int qd = 1; int qd2 = 1;
-//				float size = (random.nextFloat() + random.nextFloat()) * 2;
-		
+		//				float size = (random.nextFloat() + random.nextFloat()) * 2;
+
 		//		World.addObject(ObjectFactory.createObject(mContext, OBJ_TYPE.B_ENEMY, (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2,
 		//				size, size));
 		//		World.addObject(ObjectFactory.createObject(mContext, OBJ_TYPE.B_ENEMY, (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2,
@@ -127,18 +140,19 @@ public class GameRenderer implements Renderer {
 		glViewport(0, 0, width, height);
 
 		//criando e ajustando matriz de projecao
-		MatrixUtil.perspectiveM(projectionMatrix, 45, (float) mScreenWidth
-				/ (float) mScreenHeight, 1f, 100f);
+		MatrixUtil.perspectiveM(projectionMatrix, 45, (float) width
+				/ (float) height, 1f, 100f);
+		Matrix.setLookAtM(viewMatrix, 0, 0f, 0f, 10f, 0f, 0f, 0f, 0f, 0f, 1f);
 
-		Matrix.setIdentityM(modelMatrix, 0);
-		Matrix.translateM(modelMatrix, 0, -World.getPlayer().getPosition().getX(), -World.getPlayer().getPosition().getY(), -20f);
-
-		final float[] temp = new float[16];
-		Matrix.multiplyMM(temp, 0, projectionMatrix, 0, modelMatrix, 0);
-		System.arraycopy(temp, 0, projectionMatrix, 0, temp.length);
-
-		Matrix.translateM(modelMatrix, 0, 0 ,0 , -2.5f);
-		Matrix.rotateM(modelMatrix, 0, -60f, 1f, 0f, 0f);
+//		Matrix.setIdentityM(modelMatrix, 0);
+//		Matrix.translateM(modelMatrix, 0, -World.getPlayer().getPosition().getX(), -World.getPlayer().getPosition().getY(), -35f);
+//
+//		final float[] temp = new float[16];
+//		Matrix.multiplyMM(temp, 0, projectionMatrix, 0, modelMatrix, 0);
+//		System.arraycopy(temp, 0, projectionMatrix, 0, temp.length);
+//
+//		Matrix.translateM(modelMatrix, 0, 0 ,0 , -2.5f);
+//		Matrix.rotateM(modelMatrix, 0, -60f, 1f, 0f, 0f);
 	}
 
 	//------------TESTE
@@ -146,33 +160,49 @@ public class GameRenderer implements Renderer {
 	int times = 0;
 	int objIds = -1;
 	int dir = 1;
+
 	//-----------------
 
 	@Override
 	public void onDrawFrame(GL10 gl) {
 
-//		Matrix.rotateM(modelMatrix, 0, -45f, 1f, 0f, 0f);
+		//		Matrix.rotateM(modelMatrix, 0, -45f, 1f, 0f, 0f);
 
 
 		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
-		Matrix.setIdentityM(modelMatrix, 0);
-		Matrix.translateM(modelMatrix, 0, -World.getPlayer().getPosition().getX(), -World.getPlayer().getPosition().getY(), -35f);
-
-		mTestMission.render(projectionMatrix);
-		mDbgBackground.render(projectionMatrix);
-		World.loop(projectionMatrix);
-
+		
+		Matrix.multiplyMM(viewProjectionMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
+		
+		Matrix.setLookAtM(viewMatrix, 0, World.getPlayer().getPosition().getX(), World.getPlayer().getPosition().getY(), 55f, 0f, 0f, 0f, 0f, 1f, 0f);
+		
+		Matrix.translateM(viewProjectionMatrix, 0, -World.getPlayer().getPosition().getX(), -World.getPlayer().getPosition().getY(), 0f);
+		
 		//criando e ajustando matriz de projecao
-		MatrixUtil.perspectiveM(projectionMatrix, 45, (float) mScreenWidth
-				/ (float) mScreenHeight, 1f, 100f);
+//		MatrixUtil.perspectiveM(projectionMatrix, 45, (float) mScreenWidth
+//				/ (float) mScreenHeight, 1f, 100f);
+//		Matrix.setIdentityM(modelMatrix, 0);
+//		Matrix.translateM(modelMatrix, 0, -World.getPlayer().getPosition().getX(), -World.getPlayer().getPosition().getY(), -35f);
+//		final float[] temp = new float[16];
+//		Matrix.multiplyMM(temp, 0, projectionMatrix, 0, modelMatrix, 0);
+//		System.arraycopy(temp, 0, projectionMatrix, 0, temp.length);
+//		
+//		Matrix.translateM(modelMatrix, 0, 0 ,0 , -2.5f);
+
+		mTestMission.render(viewProjectionMatrix);
 		
+		mDbgBackground.render(viewProjectionMatrix);
 		
-		final float[] temp = new float[16];
-		Matrix.multiplyMM(temp, 0, projectionMatrix, 0, modelMatrix, 0);
-		System.arraycopy(temp, 0, projectionMatrix, 0, temp.length);
+		Matrix.translateM(viewProjectionMatrix, 0, 0, 0, 10f);
+
+		mDbgBackground1.render(viewProjectionMatrix);
 		
-		Matrix.translateM(modelMatrix, 0, 0 ,0 , -2.5f);
+		Matrix.translateM(viewProjectionMatrix, 0, 0, 0, 5f);
+
+		World.loop(viewProjectionMatrix);
+
+
+
 		//------------TESTE
 		if(times < 50) times++;
 		else {
@@ -182,7 +212,7 @@ public class GameRenderer implements Renderer {
 
 				try {
 					if( World.getObjectById(objIds).getType().equals(OBJ_TYPE.B_ENEMY) ){
-						
+
 						Vector2f moveO = new Vector2f(0f,
 								((random.nextFloat()) / 10) * dir);
 						MessagingSystem.sendMessagesToObject(objIds, new Message(
@@ -226,21 +256,21 @@ public class GameRenderer implements Renderer {
 
 			projMoveVel.setX(normalizedX);
 			projMoveVel.setY(normalizedY);
-//			if(normalizedX > 0.1f){
-//				projMoveVel.setX(0.5f);
-//			}else if (normalizedX < -0.1f){
-//				projMoveVel.setX(-0.5f);
-//			}else {
-//				projMoveVel.setX(0f);
-//			}
-//
-//			if(normalizedY > 0.1f){
-//				projMoveVel.setY(0.5f);
-//			}else if (normalizedY < -0.1f){
-//				projMoveVel.setY(-0.5f);
-//			}else {
-//				projMoveVel.setY(0f);
-//			}
+			//			if(normalizedX > 0.1f){
+			//				projMoveVel.setX(0.5f);
+			//			}else if (normalizedX < -0.1f){
+			//				projMoveVel.setX(-0.5f);
+			//			}else {
+			//				projMoveVel.setX(0f);
+			//			}
+			//
+			//			if(normalizedY > 0.1f){
+			//				projMoveVel.setY(0.5f);
+			//			}else if (normalizedY < -0.1f){
+			//				projMoveVel.setY(-0.5f);
+			//			}else {
+			//				projMoveVel.setY(0f);
+			//			}
 
 			((SoundComponent) World.getPlayer().getUpdatableComponent(1)).startSound(0, false);
 			((GunComponent) World.getPlayer().getUpdatableComponent(2)).shoot(projMoveVel);
@@ -271,22 +301,22 @@ public class GameRenderer implements Renderer {
 
 		if (accelControls) {
 
-			playerMoveVel.setX(-values[0]/101f);
-			playerMoveVel.setY(-values[1]/101f);
-//			if (values[0] < -1.0f) {
-//				playerMoveVel.setX(0.1f);
-//			} else if (values[0] > 1.0f) {
-//				playerMoveVel.setX(-0.1f);
-//			} else {
-//				playerMoveVel.setX(0f);
-//			}
-//			if (values[1] < -1.0f) {
-//				playerMoveVel.setY(0.1f);
-//			} else if (values[1] > 1.0f) {
-//				playerMoveVel.setY(-0.1f);
-//			} else {
-//				playerMoveVel.setY(0f);
-//			}
+			playerMoveVel.setX(-values[0]/110f);
+			playerMoveVel.setY(-values[1]/110f);
+			//			if (values[0] < -1.0f) {
+			//				playerMoveVel.setX(0.1f);
+			//			} else if (values[0] > 1.0f) {
+			//				playerMoveVel.setX(-0.1f);
+			//			} else {
+			//				playerMoveVel.setX(0f);
+			//			}
+			//			if (values[1] < -1.0f) {
+			//				playerMoveVel.setY(0.1f);
+			//			} else if (values[1] > 1.0f) {
+			//				playerMoveVel.setY(-0.1f);
+			//			} else {
+			//				playerMoveVel.setY(0f);
+			//			}
 
 		}
 
