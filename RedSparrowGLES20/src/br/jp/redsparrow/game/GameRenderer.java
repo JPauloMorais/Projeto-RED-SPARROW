@@ -91,7 +91,7 @@ public class GameRenderer implements Renderer {
 		GLES20.glEnable(GLES20.GL_BLEND);
 		GLES20.glBlendFunc( GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA );
 
-		TiledBackground.init(mContext, 10, 10, 40, R.drawable.spaaace_1, R.drawable.spaace_2,R.drawable.spaace_3,R.drawable.spaace_4,R.drawable.spaace_5,R.drawable.spaaace_6,R.drawable.spaace_7,R.drawable.spaace_8,R.drawable.spaace_9,R.drawable.spaace_10,R.drawable.spaace_11,R.drawable.spaace_12,R.drawable.spaace_13,R.drawable.spaace_14,R.drawable.spaace_15);
+		TiledBackground.init(mContext, 10, 10, 40, R.drawable.points_test_1, R.drawable.points_test_2, R.drawable.points_test_3, R.drawable.points_test_4);
 
 		World.init(mContext);
 		World.setPlayer(ObjectFactory.createObject(mContext, OBJ_TYPE.PLAYER, 0f, 0f, 2f, 2f));
