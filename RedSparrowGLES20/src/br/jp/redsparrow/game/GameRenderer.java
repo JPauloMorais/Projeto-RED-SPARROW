@@ -203,12 +203,17 @@ public class GameRenderer implements Renderer {
 
 			Log.i("Input", " Touch em: (" + normalizedX + ", " + normalizedY + ")");
 
-			projMoveVel.setX(normalizedX);
-			projMoveVel.setY(normalizedY);
-			((SoundComponent) World.getPlayer().getUpdatableComponent(1))
-			.startSound(0, false);
-			((GunComponent) World.getPlayer().getUpdatableComponent(2))
-			.shoot(projMoveVel);
+			try {
+				projMoveVel.setX(normalizedX);
+				projMoveVel.setY(normalizedY);
+				((SoundComponent) World.getPlayer().getUpdatableComponent(1))
+				.startSound(0, false);
+				((GunComponent) World.getPlayer().getUpdatableComponent(2))
+				.shoot(projMoveVel);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		} catch (Exception e) {
 		}
@@ -238,7 +243,11 @@ public class GameRenderer implements Renderer {
 			playerMoveVel.setX(-values[0]/110f);
 			playerMoveVel.setY(-values[1]/110f);
 
-			((PlayerPhysicsComponent) World.getPlayer().getUpdatableComponent(0)).move(playerMoveVel);
+			try {
+				((PlayerPhysicsComponent) World.getPlayer().getUpdatableComponent(0)).move(playerMoveVel);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 	}
