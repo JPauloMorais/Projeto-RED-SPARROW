@@ -10,7 +10,7 @@ import br.jp.redsparrow.engine.shaders.TextureShaderProg;
 
 public class SpriteComponent extends Component implements Renderable {
 
-	private static final int POSITION_COUNT = 2;
+	private static final int POSITION_COUNT = 3;
 	private static final int TEXTURE_COORDS_COUNT = 2;
 	private static final int STRIDE = (POSITION_COUNT
 			+ TEXTURE_COORDS_COUNT) * Constants.BYTES_PER_FLOAT;

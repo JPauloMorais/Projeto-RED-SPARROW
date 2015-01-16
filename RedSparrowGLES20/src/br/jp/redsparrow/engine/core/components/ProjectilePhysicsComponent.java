@@ -7,7 +7,7 @@ import br.jp.redsparrow.game.ObjectFactory.OBJ_TYPE;
 
 public class ProjectilePhysicsComponent extends Component implements Updatable {
 
-	private OBJ_TYPE mShooterType;
+	private OBJ_TYPE mTargetType;
 	private boolean shot = false;
 
 	private Vector2f mVelocity = new Vector2f(0f, 0f);
@@ -62,12 +62,12 @@ public class ProjectilePhysicsComponent extends Component implements Updatable {
 		this.hitTarget = true;
 	}
 
-	public OBJ_TYPE getShooterType() {
-		return mShooterType;
+	public OBJ_TYPE getTargetType() {
+		return mTargetType;
 	}
 
-	public void setShooterType(OBJ_TYPE shooterType) {
-		this.mShooterType = shooterType;
+	public void setTargetType(OBJ_TYPE shooterType) {
+		this.mTargetType = shooterType;
 	}
 
 }

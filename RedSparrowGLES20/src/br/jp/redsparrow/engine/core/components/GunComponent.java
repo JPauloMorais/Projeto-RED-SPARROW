@@ -12,9 +12,13 @@ public class GunComponent extends Component implements Updatable {
 
 	private boolean toShoot = false;
 	private Vector2f mMoveVel;
+	OBJ_TYPE mTargetType;
 	
-	public GunComponent() {
+	public GunComponent(OBJ_TYPE targetType) {
 		super("Gun");
+		
+		mTargetType = targetType;
+		
 	}
 
 	@Override
@@ -22,14 +26,14 @@ public class GunComponent extends Component implements Updatable {
 
 		if(toShoot){
 			
-			GameObject proj = ObjectFactory.createObject(GameRenderer.getContext(), OBJ_TYPE.PROJECTL, parent.getPosition().getX(), parent.getPosition().getY() + 0.55f,
+			GameObject proj = ObjectFactory.createObject(GameRenderer.getContext(), OBJ_TYPE.PROJECTL, parent.getPosition().getX(), parent.getPosition().getY(),
 					0.2f, 0.4f);
-			((ProjectilePhysicsComponent) proj.getUpdatableComponent(0)).setShooterType(parent.getType());
-			((ProjectilePhysicsComponent) proj.getUpdatableComponent(0)).shoot(mMoveVel);
 			
-			World.addObject(proj, 1);
+			((ProjectilePhysicsComponent) proj.getUpdatableComponent(0)).setTargetType(mTargetType);
+			((ProjectilePhysicsComponent) proj.getUpdatableComponent(0)).shoot(mMoveVel.copy());
+			
+			World.addObject(proj);
 
-			
 			toShoot = false;
 		}
 		

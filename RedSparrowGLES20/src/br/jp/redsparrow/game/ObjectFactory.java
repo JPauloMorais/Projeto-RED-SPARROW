@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.media.MediaPlayer;
+import br.jp.redsparrow.R;
 import br.jp.redsparrow.engine.core.GameObject;
+import br.jp.redsparrow.engine.core.components.EnemyPhysicsComponent;
 import br.jp.redsparrow.engine.core.components.GunComponent;
 import br.jp.redsparrow.engine.core.components.LifeComponent;
 import br.jp.redsparrow.engine.core.components.PhysicsComponent;
@@ -13,7 +15,6 @@ import br.jp.redsparrow.engine.core.components.ProjectilePhysicsComponent;
 import br.jp.redsparrow.engine.core.components.SolidColSpritecomponent;
 import br.jp.redsparrow.engine.core.components.SoundComponent;
 import br.jp.redsparrow.engine.core.components.SpriteComponent;
-import br.jp.redsparrow.R;
 
 public class ObjectFactory {
 
@@ -46,16 +47,16 @@ public class ObjectFactory {
 			sounds.get(0).setVolume(0.005f, 0.005f);
 			obj.addComponent(new SoundComponent(context, sounds));
 
-			obj.addComponent(new GunComponent());
+			obj.addComponent(new GunComponent(OBJ_TYPE.B_ENEMY));
 			//			obj.addComponent(new AnimatedSpriteComponent(context, obj, R.drawable.nova_nave, 4));
-
+			
 			break;
 
 		case B_ENEMY:
 
 			obj.setType(OBJ_TYPE.B_ENEMY);
 
-			obj.addComponent(new PhysicsComponent(obj));
+			obj.addComponent(new EnemyPhysicsComponent(obj));
 			obj.addComponent(new SpriteComponent( context, R.drawable.enemy_ship ));
 
 			ArrayList<MediaPlayer> soundsE = new ArrayList<MediaPlayer>();
@@ -63,7 +64,7 @@ public class ObjectFactory {
 			soundsE.get(0).setVolume(0.005f, 0.005f);
 			obj.addComponent(new SoundComponent(context, soundsE));
 
-			obj.addComponent(new GunComponent());
+			obj.addComponent(new GunComponent(OBJ_TYPE.PLAYER));
 
 			break;
 
@@ -71,7 +72,7 @@ public class ObjectFactory {
 
 			obj.setType(OBJ_TYPE.DBG_BG);
 
-			obj.addComponent(new SpriteComponent(context, R.drawable.spaaace_1));			
+			obj.addComponent(new SpriteComponent(context, R.drawable.dbg_bg));			
 
 			break;
 		case DBG_BG1:
@@ -90,7 +91,7 @@ public class ObjectFactory {
 			obj.addComponent(new LifeComponent(obj));
 
 			obj.addComponent(new SpriteComponent(context, R.drawable.shot_test));
-
+			
 			break;
 
 		default:

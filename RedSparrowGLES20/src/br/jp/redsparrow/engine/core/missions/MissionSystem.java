@@ -9,15 +9,11 @@ public class MissionSystem {
 	private static ArrayList<Mission> mMissions;
 	private static ArrayList<Message> mEventMessages;
 	
-	private static ThreadGroup mMissionTG;
-	private static ArrayList<Thread> mMissionThreads;
 
 	public static void init(){
+		
 		mMissions = new ArrayList<Mission>();
 		mEventMessages = new ArrayList<Message>();
-		
-		mMissionThreads = new ArrayList<Thread>();
-		mMissionTG = new ThreadGroup("MissionTG");
 	
 	}
 

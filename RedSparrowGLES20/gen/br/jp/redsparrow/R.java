@@ -33,6 +33,19 @@ public final class R {
         public static final int shot_test=0x7f020008;
         public static final int spaaace_1=0x7f020009;
         public static final int spaaace_6=0x7f02000a;
+        public static final int spaace_10=0x7f02000b;
+        public static final int spaace_11=0x7f02000c;
+        public static final int spaace_12=0x7f02000d;
+        public static final int spaace_13=0x7f02000e;
+        public static final int spaace_14=0x7f02000f;
+        public static final int spaace_15=0x7f020010;
+        public static final int spaace_2=0x7f020011;
+        public static final int spaace_3=0x7f020012;
+        public static final int spaace_4=0x7f020013;
+        public static final int spaace_5=0x7f020014;
+        public static final int spaace_7=0x7f020015;
+        public static final int spaace_8=0x7f020016;
+        public static final int spaace_9=0x7f020017;
     }
     public static final class id {
         public static final int action_settings=0x7f080000;

@@ -2,18 +2,20 @@ package br.jp.redsparrow.engine.core.util;
 
 import android.util.Log;
 
-
 public class FPSCounter {
-    long startTime = System.nanoTime();
+    
+	long startTime = System.nanoTime();
     int frames = 0;
 
     public void logFrame() {
         frames++;
         if(System.nanoTime() - startTime >= 1000000000) {
-//            System.out.println("FPS: " + frames);
+
         	Log.i("FPS", "Fps:" + frames);
             frames = 0;
             startTime = System.nanoTime();
+
         }
     }
+    
 }

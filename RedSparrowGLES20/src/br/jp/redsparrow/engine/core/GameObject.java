@@ -13,9 +13,12 @@ public class GameObject {
 	private int mId = -2;
 
 	private Vector2f mPosition;
+	//Z
+	private float mLayer;
 	private float mWidth;
 	private float mHeight;
 	private RectF mBounds;
+	private float mRotation;
 	private Vector2f mColOffset;
 
 	private float[] mVertsData;
@@ -49,15 +52,16 @@ public class GameObject {
 		mRenderableComponents = new ArrayList<Component>();
 
 		mPosition = new Vector2f(x, y);
+		mLayer = 1f;
 		mWidth = width;
 		mHeight = height;
 		mBounds = new RectF(x, y, x+width, x+height);
 
-		mColOffset = new Vector2f(-0.3f, -0.5f);
+		mColOffset = new Vector2f(-0.1f, -0.3f);
 
 		//		mTexturePosition = new Vector2f(0,0);
 
-		mVertsData = new float[24];
+		mVertsData = new float[30];
 		updateVertsData(x, y);
 
 	}
@@ -76,6 +80,8 @@ public class GameObject {
 
 	public void render(float[] projectionMatrix){
 
+//		Matrix.rotateM(projectionMatrix, 0, 20, 0, 0, 1);
+
 		for (Component component : mRenderableComponents) {
 			((Renderable) component).render(mVertexArray, projectionMatrix);
 		}
@@ -89,13 +95,13 @@ public class GameObject {
 			//                     left                 top            right         bottom  
 			mBounds.set( x-((mWidth/2)) , y-(mHeight/2), x+(mWidth/2), y+((mHeight/2)) );
 
-			//   X   ,  Y   ,     S   , T
-			mVertsData[0] = x;              mVertsData[1] =  y             ;     mVertsData[2] = 0.5f; mVertsData[3] = 0.5f; //centro
-			mVertsData[4] = mBounds.right;   mVertsData[5] = mBounds.top ;     mVertsData[6] = 0f  ; mVertsData[7] = 1f  ; //inf. esq.
-			mVertsData[8] = mBounds.left;  mVertsData[9] = mBounds.top ;     mVertsData[10] = 1f ; mVertsData[11] = 1f ; //inf. dir.
-			mVertsData[12] = mBounds.left; mVertsData[13] = mBounds.bottom   ;     mVertsData[14] = 1f ; mVertsData[15] =  0f; //sup. dir.
-			mVertsData[16] = mBounds.right ; mVertsData[17] = mBounds.bottom   ;     mVertsData[18] = 0f ; mVertsData[19] = 0f ; //sup. esq.
-			mVertsData[20] = mBounds.right ; mVertsData[21] = mBounds.top;     mVertsData[22] = 0f ; mVertsData[23] = 1f;    //inf. esq.
+			//   X   ,  Y   , Z,      S   , T
+			mVertsData[0] = x;  mVertsData[1] =  y ; mVertsData[2] = mLayer;                                  mVertsData[3] = 0.5f; mVertsData[4] = 0.5f; //centro
+			mVertsData[5] = mBounds.right;   mVertsData[6] = mBounds.top ; mVertsData[7] = mLayer;            mVertsData[8] = 0f  ; mVertsData[9] = 1f  ; //inf. esq.
+			mVertsData[10] = mBounds.left;  mVertsData[11] = mBounds.top ; mVertsData[12] = mLayer;           mVertsData[13] = 1f ; mVertsData[14] = 1f ; //inf. dir.
+			mVertsData[15] = mBounds.left; mVertsData[16] = mBounds.bottom   ; mVertsData[17] = mLayer;       mVertsData[18] = 1f ; mVertsData[19] =  0f; //sup. dir.
+			mVertsData[20] = mBounds.right ; mVertsData[21] = mBounds.bottom   ; mVertsData[22] = mLayer;     mVertsData[23] = 0f ; mVertsData[24] = 0f ; //sup. esq.
+			mVertsData[25] = mBounds.right ; mVertsData[26] = mBounds.top; mVertsData[27] = mLayer;           mVertsData[28] = 0f ; mVertsData[29] = 1f;    //inf. esq.
 
 			mVertexArray = new VertexArray(mVertsData);
 		}
@@ -207,6 +213,14 @@ public class GameObject {
 		this.mPosition = position;
 	}
 
+	public float getRotation() {
+		return mRotation;
+	}
+
+	public void setRotation(float mRotation) {
+		this.mRotation = mRotation;
+	}
+
 	public float getWidth() {
 		return mWidth;
 	}
@@ -224,14 +238,22 @@ public class GameObject {
 	}
 
 	public RectF getBounds() {
-				return new RectF(mBounds.left - mColOffset.getX(), mBounds.top - mColOffset.getY(), mBounds.right + mColOffset.getX(), mBounds.bottom + mColOffset.getY());
-//		return mBounds;
+		return new RectF(mBounds.left - mColOffset.getX(), mBounds.top - mColOffset.getY(), mBounds.right + mColOffset.getX(), mBounds.bottom + mColOffset.getY());
+		//		return mBounds;
 	}
 
 	public void setBounds(RectF bounds) {
 		this.mBounds = bounds;
 	}
 	//-----------------------------
+
+	public float getLayer() {
+		return mLayer;
+	}
+
+	public void setLayer(float mLayer) {
+		this.mLayer = mLayer;
+	}
 
 	//------MESSAGES---------------
 	private void removeRecievedMessages(){

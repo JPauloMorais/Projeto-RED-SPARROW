@@ -9,7 +9,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.Menu;
@@ -18,21 +17,20 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.Toast;
+import br.jp.redsparrow.R;
 import br.jp.redsparrow.engine.core.World;
 import br.jp.redsparrow.game.GameRenderer;
 import br.jp.redsparrow.game.GameView;
-import br.jp.redsparrow.R;
-
 
 public class PlayActivity extends Activity implements OnTouchListener, SensorEventListener {
 
 	private GameView mGameView;
 	private GameRenderer mGameRenderer;
-	
+
 	Sensor mSensorAccelerometer;
 	SensorManager mSensorManager;
 
-//	private boolean rendererSet;
+	//	private boolean rendererSet;
 
 	@SuppressLint("ClickableViewAccessibility")
 	@Override
@@ -48,16 +46,16 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 		if(supES2){
 
 			mGameView.setEGLContextClientVersion(2);
-			
+
 			mGameView.setOnTouchListener(this);
 			mSensorManager = (SensorManager) this.getSystemService(Context.SENSOR_SERVICE);
 			mSensorAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 			mSensorManager.registerListener(this, mSensorAccelerometer, SensorManager.SENSOR_DELAY_GAME);
-			
+
 			mGameRenderer = new GameRenderer(this);
 			mGameView.setRenderer(mGameRenderer);
 			mGameView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
-//			rendererSet = true;
+			//			rendererSet = true;
 
 		}else{
 			Toast.makeText(this, " Aparelho não suporta OpenGL ES 2.0 ", Toast.LENGTH_LONG).show();
@@ -142,7 +140,7 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 			final float normalizedX = (event.getX()/(float)v.getWidth())*2-1;
 			final float normalizedY = -((event.getY()/(float)v.getHeight())*2-1);
 
-			if(event.getAction()==MotionEvent.ACTION_DOWN){
+			if(event.getAction()==MotionEvent.ACTION_DOWN || event.getAction()==MotionEvent.ACTION_POINTER_DOWN){
 				mGameView.queueEvent(new Runnable() {
 					@Override
 					public void run() {
