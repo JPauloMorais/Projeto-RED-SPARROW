@@ -4,13 +4,10 @@ import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.Updatable;
 
 public class LifeComponent extends Component implements Updatable {
-
-	private GameObject mParent;
 	
 	public LifeComponent(GameObject parent) {
-		super("Life");
+		super("Life", parent);
 		
-		mParent = parent;
 	}
 	
 	@Override

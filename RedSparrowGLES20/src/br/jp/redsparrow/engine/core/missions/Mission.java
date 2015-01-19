@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import android.util.Log;
 import android.widget.Toast;
 import br.jp.redsparrow.engine.core.GameObject;
+import br.jp.redsparrow.engine.core.Vector2f;
+import br.jp.redsparrow.engine.core.physics.BCircle;
 import br.jp.redsparrow.game.GameRenderer;
 
 public abstract class Mission extends GameObject implements Runnable {
@@ -16,7 +18,7 @@ public abstract class Mission extends GameObject implements Runnable {
 	private boolean completed = false;
 
 	public Mission(String name, float x, float y, float range) {
-		super( x, y, range, range);
+		super(new BCircle(new Vector2f(x, y), range));
 		
 		mName = name;
 		

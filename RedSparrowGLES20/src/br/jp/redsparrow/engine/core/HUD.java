@@ -13,9 +13,20 @@ public class HUD {
 	public static void loop(float[] projectionMatrix){
 		
 		for (HUDitem hItem : mHudItems) {
-			hItem.update(null);
+			hItem.update();
+			hItem.render(projectionMatrix);
 		}
 		
+	}
+	
+	public static void addItem(HUDitem item) {
+		mHudItems.add(item);
+	}
+	
+	public static synchronized void move() {
+		for (HUDitem huDitem : mHudItems) {
+			huDitem.move();
+		}
 	}
 
 }

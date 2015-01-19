@@ -6,19 +6,16 @@ import br.jp.redsparrow.engine.core.Vector2f;
 import br.jp.redsparrow.engine.core.World;
 import br.jp.redsparrow.game.GameRenderer;
 import br.jp.redsparrow.game.ObjectFactory;
-import br.jp.redsparrow.game.ObjectFactory.OBJ_TYPE;
+import br.jp.redsparrow.game.ObjectFactory.OBJECT_TYPE;
+import br.jp.redsparrow.game.components.ProjectilePhysicsComponent;
 
 public class GunComponent extends Component implements Updatable {
 
 	private boolean toShoot = false;
 	private Vector2f mMoveVel;
-	OBJ_TYPE mTargetType;
 	
-	public GunComponent(OBJ_TYPE targetType) {
-		super("Gun");
-		
-		mTargetType = targetType;
-		
+	public GunComponent(GameObject parent) {
+		super("Gun", parent);		
 	}
 
 	@Override
@@ -26,10 +23,9 @@ public class GunComponent extends Component implements Updatable {
 
 		if(toShoot){
 			
-			GameObject proj = ObjectFactory.createObject(GameRenderer.getContext(), OBJ_TYPE.PROJECTL, parent.getPosition().getX(), parent.getPosition().getY(),
-					0.2f, 0.4f);
+			GameObject proj = ObjectFactory.createObject(GameRenderer.getContext(), OBJECT_TYPE.PROJECTILE, parent.getX(), parent.getY());
 			
-			((ProjectilePhysicsComponent) proj.getUpdatableComponent(0)).setTargetType(mTargetType);
+			((ProjectilePhysicsComponent) proj.getUpdatableComponent(0)).setShooterType(mParent.getType());
 			((ProjectilePhysicsComponent) proj.getUpdatableComponent(0)).shoot(mMoveVel.copy());
 			
 			World.addObject(proj);

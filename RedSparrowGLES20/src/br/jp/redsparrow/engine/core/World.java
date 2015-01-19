@@ -7,15 +7,17 @@ import android.content.Context;
 import android.graphics.RectF;
 import android.util.Log;
 import br.jp.redsparrow.R;
-import br.jp.redsparrow.engine.core.components.EnemyPhysicsComponent;
-import br.jp.redsparrow.engine.core.components.PlayerPhysicsComponent;
-import br.jp.redsparrow.engine.core.components.ProjectilePhysicsComponent;
 import br.jp.redsparrow.engine.core.components.SoundComponent;
 import br.jp.redsparrow.engine.core.messages.Message;
+import br.jp.redsparrow.engine.core.physics.AABB;
+import br.jp.redsparrow.engine.core.physics.Collision;
 import br.jp.redsparrow.engine.core.util.LogConfig;
 import br.jp.redsparrow.game.GameRenderer;
 import br.jp.redsparrow.game.ObjectFactory;
-import br.jp.redsparrow.game.ObjectFactory.OBJ_TYPE;
+import br.jp.redsparrow.game.ObjectFactory.OBJECT_TYPE;
+import br.jp.redsparrow.game.components.EnemyPhysicsComponent;
+import br.jp.redsparrow.game.components.PlayerPhysicsComponent;
+import br.jp.redsparrow.game.components.ProjectilePhysicsComponent;
 
 public class World implements Serializable{
 	/**
@@ -42,8 +44,8 @@ public class World implements Serializable{
 	private static final float mRENDERING_RANGE_Y = 20.0f;
 
 	private static SoundComponent bgmSoundComponent;
-	private static float bgMusicRightVol = 0.05f;
-	private static float bgMusicLeftVol = 0.05f;
+	private static float bgMusicRightVol = 0.1f;
+	private static float bgMusicLeftVol = 0.1f;
 
 	public static void init(Context context){
 
@@ -58,9 +60,8 @@ public class World implements Serializable{
 
 		mLayers = new ArrayList<Integer>();
 
-		bgmSoundComponent = new SoundComponent(context);
+		bgmSoundComponent = new SoundComponent(context, new GameObject());
 		bgmSoundComponent.addSound(R.raw.at_least_you_tried_greaf);
-		bgmSoundComponent.addSound(R.raw.test_shot);
 
 	}
 
@@ -86,7 +87,7 @@ public class World implements Serializable{
 						mGameObjects.get(k).getPosition().getY() > getPlayer().getPosition().getY()-mUPDATE_RANGE_Y)
 				{
 					mQuadTree.add(mGameObjects.get(k));
-				}else if(mGameObjects.get(k).getType().equals(OBJ_TYPE.PROJECTL)) mGameObjects.get(k).die();
+				}else if(mGameObjects.get(k).getType().equals(OBJECT_TYPE.PROJECTILE)) mGameObjects.get(k).die();
 			}
 
 			//------LOOP DOS OBJETOS-----------
@@ -98,36 +99,37 @@ public class World implements Serializable{
 					//CHECANDO COLISAO
 					for (int j=0; j < mToCheck.size(); j++) {
 
-						if (Collision.areIntersecting(mGameObjects.get(i).getBounds(), mToCheck.get(j).getBounds())){
+						if (Collision.areIntersecting((AABB) mGameObjects.get(i).getBounds(), (AABB) mToCheck.get(j).getBounds())){
 
-							if(!mGameObjects.get(i).getType().equals(OBJ_TYPE.PROJECTL) &&
-									!mToCheck.get(j).getType().equals(OBJ_TYPE.PROJECTL)){
+							if(!mGameObjects.get(i).getType().equals(OBJECT_TYPE.PROJECTILE) &&
+									!mToCheck.get(j).getType().equals(OBJECT_TYPE.PROJECTILE)){
 
-								if (((EnemyPhysicsComponent) mGameObjects.get(i).getUpdatableComponent(0)).getVelocity().length()==0) {
-									//Transfere a velocidade de um bojeto para outro
-									((EnemyPhysicsComponent) mToCheck.get(j)
-											.getUpdatableComponent(0))
-											.collide(((EnemyPhysicsComponent) mGameObjects
-													.get(i)
-													.getUpdatableComponent(0))
-													.getVelocity());
-								}
-
+								//								if (((EnemyPhysicsComponent) mGameObjects.get(i).getUpdatableComponent(0)).getVelocity().length()==0) {
+								//									//Transfere a velocidade de um bojeto para outro
+								//									((EnemyPhysicsComponent) mToCheck.get(j)
+								//											.getUpdatableComponent(0))
+								//											.collide(((EnemyPhysicsComponent) mGameObjects
+								//													.get(i)
+								//													.getUpdatableComponent(0))
+								//													.getVelocity());
+								//								}
+								//
 								((EnemyPhysicsComponent) mGameObjects.get(i).getUpdatableComponent(0)).collide(
 										((EnemyPhysicsComponent) mToCheck.get(j).getUpdatableComponent(0)).getVelocity().copy());
 
 
-							}else if(!mToCheck.get(j).getType().equals(OBJ_TYPE.PROJECTL)){
+							}else if(!mToCheck.get(j).getType().equals(OBJECT_TYPE.PROJECTILE)){
 
-								if(((ProjectilePhysicsComponent) mGameObjects.get(i).getUpdatableComponent(0)).getTargetType().equals(mToCheck.get(j).getType())){
+								if(!((ProjectilePhysicsComponent) mGameObjects.get(i).getUpdatableComponent(0))
+										.getShootertype().equals(mToCheck.get(j).getType())) {
 									mToCheck.get(j).die();
+									mGameObjects.get(i).die();
 								}
-								mGameObjects.get(i).die();
 
 							}else{
 
-								mGameObjects.get(i).die();
-								mToCheck.get(j).die();
+								//								mGameObjects.get(i).die();
+								//								mToCheck.get(j).die();
 
 							}
 
@@ -136,18 +138,18 @@ public class World implements Serializable{
 					}			
 
 					//Update e Render se dentro limite
-					if(mGameObjects.get(i).getPosition().getX() < getPlayer().getPosition().getX()+mUPDATE_RANGE_X &&
-							mGameObjects.get(i).getPosition().getX() > getPlayer().getPosition().getX()-mUPDATE_RANGE_X &&
-							mGameObjects.get(i).getPosition().getY() < getPlayer().getPosition().getY()+mUPDATE_RANGE_Y &&
-							mGameObjects.get(i).getPosition().getY() > getPlayer().getPosition().getY()-mUPDATE_RANGE_Y)
+					if(mGameObjects.get(i).getX() < getPlayer().getX()+mUPDATE_RANGE_X &&
+							mGameObjects.get(i).getX() > getPlayer().getX()-mUPDATE_RANGE_X &&
+							mGameObjects.get(i).getY() < getPlayer().getY()+mUPDATE_RANGE_Y &&
+							mGameObjects.get(i).getY() > getPlayer().getY()-mUPDATE_RANGE_Y)
 					{
 						mGameObjects.get(i).update();
 					}
 
-					if(mGameObjects.get(i).getPosition().getX() < getPlayer().getPosition().getX()+mRENDERING_RANGE_X &&
-							mGameObjects.get(i).getPosition().getX() > getPlayer().getPosition().getX()-mRENDERING_RANGE_X &&
-							mGameObjects.get(i).getPosition().getY() < getPlayer().getPosition().getY()+mRENDERING_RANGE_Y &&
-							mGameObjects.get(i).getPosition().getY() > getPlayer().getPosition().getY()-mRENDERING_RANGE_Y)
+					if(mGameObjects.get(i).getX() < getPlayer().getX()+mRENDERING_RANGE_X &&
+							mGameObjects.get(i).getX() > getPlayer().getX()-mRENDERING_RANGE_X &&
+							mGameObjects.get(i).getY() < getPlayer().getY()+mRENDERING_RANGE_Y &&
+							mGameObjects.get(i).getY() > getPlayer().getY()-mRENDERING_RANGE_Y)
 					{						
 						mGameObjects.get(i).render(projectionMatrix);
 					}
@@ -160,28 +162,30 @@ public class World implements Serializable{
 			mQuadTree.getToCheck(mToCheck, mPlayer.getBounds());
 
 			for (int i = 0; i < mToCheck.size(); i++) {
-				if(Collision.areIntersecting(mPlayer.getBounds(), mToCheck.get(i).getBounds())){
+				if(Collision.areIntersecting((AABB) mPlayer.getBounds(), (AABB) mToCheck.get(i).getBounds())){
 
-					Log.i("Physics", "Cool");
-					if(!mToCheck.get(i).getType().equals(OBJ_TYPE.PROJECTL)){
+					//					Log.i("Physics", "Cool");
+					if(!mToCheck.get(i).getType().equals(OBJECT_TYPE.PROJECTILE)){
 
 						//Transfere a velocidade de um bojeto para outro
 						//						vels = ((PlayerPhysicsComponent) mPlayer.getUpdatableComponent(0)).getVelocity();
 						//						mToCheck.get(i).recieveMessage(
 						//								new Message(-2, "Collision", vels));
-						//						((PlayerPhysicsComponent) mPlayer.getUpdatableComponent(0)).collide(
-						//								((EnemyPhysicsComponent) mToCheck.get(i).getUpdatableComponent(0)).getVelocity());
+						//												((PlayerPhysicsComponent) mPlayer.getUpdatableComponent(0)).collide(
+						//														((EnemyPhysicsComponent) mToCheck.get(i).getUpdatableComponent(0)).getVelocity());
 
 						//						if(vels.length()==0){							
 						//							vels = ((EnemyPhysicsComponent) mToCheck.get(i).getUpdatableComponent(0)).getVelocity();
 						//							mPlayer.recieveMessage(
 						//									new Message(-2, "Collision", vels));
 						//						}
+						//						
 						((EnemyPhysicsComponent) mToCheck.get(i).getUpdatableComponent(0)).collide(
 								((PlayerPhysicsComponent) mPlayer.getUpdatableComponent(0)).getVelocity());
 
 					}else {
-						if(((ProjectilePhysicsComponent) mToCheck.get(i).getUpdatableComponent(0)).getTargetType().equals(OBJ_TYPE.PLAYER)){
+						if(!((ProjectilePhysicsComponent) mToCheck.get(i).getUpdatableComponent(0))
+								.getShootertype().equals(OBJECT_TYPE.PLAYER)) {
 							mPlayer.die();
 							mToCheck.get(i).die();
 						}
@@ -260,11 +264,11 @@ public class World implements Serializable{
 		return null;
 
 	}
-	
+
 	public static Vector2f getUpdatingRange(){
 		return new Vector2f(mUPDATE_RANGE_X, mUPDATE_RANGE_Y);
 	}
-	
+
 	public static Vector2f getRenderingRange(){
 		return new Vector2f(mRENDERING_RANGE_X, mRENDERING_RANGE_X);
 	}
@@ -310,7 +314,7 @@ public class World implements Serializable{
 		if(mPlayer.isDead() && !mGameObjects.isEmpty()) {
 			//-----Teste------
 			//Isso e inevitavel Mr. Anderson.
-			mGameObjects.set(0, ObjectFactory.createObject(GameRenderer.getContext(), OBJ_TYPE.PLAYER, mGameObjects.get(0).getPosition().getX(), mGameObjects.get(0).getPosition().getY(), 2f, 2f));
+			mGameObjects.set(0, ObjectFactory.createObject(GameRenderer.getContext(), OBJECT_TYPE.PLAYER, mGameObjects.get(0).getX(), mGameObjects.get(0).getY()));
 			World.setPlayer(mGameObjects.get(0));
 			//------------------
 			mGameObjects.remove(0);

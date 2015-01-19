@@ -14,12 +14,12 @@ public class SoundComponent extends Component implements Updatable {
 	private ArrayList<MediaPlayer> mSounds;
 	private ArrayList<float[]> mSoundVolumes;
 
-	public SoundComponent(Context context){
-		this(context, new ArrayList<MediaPlayer>());
+	public SoundComponent(Context context, GameObject parent){
+		this(context, parent, new ArrayList<MediaPlayer>());
 	}
 	
-	public SoundComponent(Context context, ArrayList<MediaPlayer> sounds) {
-		super("Sound");
+	public SoundComponent(Context context, GameObject parent, ArrayList<MediaPlayer> sounds) {
+		super("Sound", parent);
 		mContext = context;
 		
 		mSounds = sounds;

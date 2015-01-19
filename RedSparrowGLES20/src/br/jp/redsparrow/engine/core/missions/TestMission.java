@@ -1,11 +1,12 @@
 package br.jp.redsparrow.engine.core.missions;
 
 import br.jp.redsparrow.R;
-import br.jp.redsparrow.engine.core.Collision;
 import br.jp.redsparrow.engine.core.World;
 import br.jp.redsparrow.engine.core.components.SoundComponent;
 import br.jp.redsparrow.engine.core.components.SpriteComponent;
 import br.jp.redsparrow.engine.core.messages.Message;
+import br.jp.redsparrow.engine.core.physics.AABB;
+import br.jp.redsparrow.engine.core.physics.Collision;
 import br.jp.redsparrow.game.GameRenderer;
 
 public class TestMission extends Mission {
@@ -16,7 +17,7 @@ public class TestMission extends Mission {
 	public TestMission(float x, float y) {
 		super("Test Mission",x, y, 5f);
 
-		mSoundComp = new SoundComponent(GameRenderer.getContext());
+		mSoundComp = new SoundComponent(GameRenderer.getContext(), this);
 		mSoundComp.addSound(R.raw.test_missionaccomplished);
 		this.addComponent(mSoundComp);
 		
@@ -30,8 +31,8 @@ public class TestMission extends Mission {
 	@Override
 	public void update() {
 		super.update();
-		if (Collision.areIntersecting(World.getPlayer().getBounds(),
-				this.getBounds())) {
+		if (Collision.areIntersecting((AABB)World.getPlayer().getBounds(),
+				(AABB)this.getBounds())) {
 
 
 			mSoundComp.startSound(0, false);

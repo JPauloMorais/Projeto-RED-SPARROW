@@ -4,22 +4,22 @@ import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.Updatable;
 import br.jp.redsparrow.engine.core.Vector2f;
 
-public class PhysicsComponent extends Component implements Updatable {
+public abstract class PhysicsComponent extends Component implements Updatable {
 
-	protected final Vector2f MAX_VELS;
+	protected Vector2f mMaxVels;
 
 	protected Vector2f mPosition; 
 	protected Vector2f mVelocity = new Vector2f(0f, 0f);
-	protected Vector2f fric = new Vector2f(0f, 0f);
+	protected Vector2f mFric = new Vector2f(0f, 0f);
 
 	protected float mMass;
 
 	public PhysicsComponent(GameObject parent) {
-		super("Physics");
+		super("Physics", parent);
 
 		mPosition = parent.getPosition();
 
-		MAX_VELS = new Vector2f(parent.getWidth()/10, parent.getHeight()/10);
+		mMaxVels = new Vector2f(parent.getWidth()/10, parent.getHeight()/10);
 
 		mMass = parent.getWidth()+parent.getHeight();
 
@@ -35,8 +35,8 @@ public class PhysicsComponent extends Component implements Updatable {
 			applyForce((Vector2f) (((Vector2f) parent.getMessage("MOVE").getMessage()).length() > 0.01f ? ((Vector2f) parent.getMessage("MOVE").getMessage()) : 0));
 
 			//			mPosition.add(mVelocity);
-			fric.setX(0);
-			fric.setY(0);
+			mFric.setX(0);
+			mFric.setY(0);
 			
 		} catch (Exception e) {
 		}
@@ -49,39 +49,41 @@ public class PhysicsComponent extends Component implements Updatable {
 			//			mPosition.setX(mPosition.getX() + mVelocity.getX()/10);
 			//			mPosition.setY( mPosition.getY() + mVelocity.getY()/10);
 
-			fric.setX(0.009f);
-			fric.setY(0.009f);
+			mFric.setX(0.009f);
+			mFric.setY(0.009f);
 
 		} catch (Exception e) {
 			
 			//Friccao
 
 			if(mVelocity.getX() > 0.0000001f){
-				mVelocity.setX(mVelocity.getX() - fric.getX());
+				mVelocity.setX(mVelocity.getX() - mFric.getX());
 			}else if (mVelocity.getX() < -0.0000001f){
-				mVelocity.setX(mVelocity.getX() + fric.getX());
+				mVelocity.setX(mVelocity.getX() + mFric.getX());
 			}
 
 			if(mVelocity.getY() > 0.0000001f){
-				mVelocity.setY(mVelocity.getY() - fric.getY());
+				mVelocity.setY(mVelocity.getY() - mFric.getY());
 			}else if (mVelocity.getY() < -0.00000001f){
-				mVelocity.setY(mVelocity.getY() + fric.getY());
+				mVelocity.setY(mVelocity.getY() + mFric.getY());
 			}
 			
 			
 		}
 
 		//Clamp de vel
-		if( mVelocity.getX() > MAX_VELS.getX() ) mVelocity.setX(MAX_VELS.getX());
-		else if(mVelocity.getX() < -MAX_VELS.getX()) mVelocity.setX(-MAX_VELS.getX());
+		if( mVelocity.getX() > mMaxVels.getX() ) mVelocity.setX(mMaxVels.getX());
+		else if(mVelocity.getX() < -mMaxVels.getX()) mVelocity.setX(-mMaxVels.getX());
 
-		if( mVelocity.getY() > MAX_VELS.getY() ) mVelocity.setY(MAX_VELS.getY());
-		else if(mVelocity.getY() < -MAX_VELS.getY()) mVelocity.setY(-MAX_VELS.getY());
+		if( mVelocity.getY() > mMaxVels.getY() ) mVelocity.setY(mMaxVels.getY());
+		else if(mVelocity.getY() < -mMaxVels.getY()) mVelocity.setY(-mMaxVels.getY());
 
-		mPosition = mPosition.add(mVelocity);
 
+	}
+	
+	public void addVel(GameObject parent){
+		mPosition = mPosition.add(mVelocity);		
 		parent.setPosition( mPosition );
-
 	}
 
 	public void applyForce(float force){

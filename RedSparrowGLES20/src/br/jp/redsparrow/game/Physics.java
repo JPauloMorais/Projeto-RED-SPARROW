@@ -1,10 +1,10 @@
 package br.jp.redsparrow.game;
 
-import br.jp.redsparrow.game.ObjectFactory.OBJ_TYPE;
+import br.jp.redsparrow.game.ObjectFactory.OBJECT_TYPE;
 
 public class Physics {
 
-	public static void triggerCollisionResponse(OBJ_TYPE obj1Type, OBJ_TYPE obj2Type){
+	public static void triggerCollisionResponse(OBJECT_TYPE obj1Type, OBJECT_TYPE obj2Type){
 		
 	}
 	
