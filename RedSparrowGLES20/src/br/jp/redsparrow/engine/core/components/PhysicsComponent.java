@@ -13,16 +13,17 @@ public abstract class PhysicsComponent extends Component implements Updatable {
 	protected Vector2f mFric = new Vector2f(0f, 0f);
 
 	protected float mMass;
+	
+	protected boolean mMoved;
+	protected boolean mCollided;
 
 	public PhysicsComponent(GameObject parent) {
 		super("Physics", parent);
 
 		mPosition = parent.getPosition();
-
-		mMaxVels = new Vector2f(parent.getWidth()/10, parent.getHeight()/10);
-
-		mMass = parent.getWidth()+parent.getHeight();
-
+		mMoved = false;
+		mCollided = false;
+		
 	}
 
 	@Override
@@ -97,6 +98,16 @@ public abstract class PhysicsComponent extends Component implements Updatable {
 
 		force = force.div(mMass);
 		mVelocity = mVelocity.add(force);
+
+	}
+	
+	public void collide(Vector2f otherVel){
+
+		applyForce(otherVel);
+		mCollided = true;
+
+		mFric.setX(0.01f);
+		mFric.setY(0.01f);
 
 	}
 

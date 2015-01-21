@@ -1,12 +1,20 @@
 package br.jp.redsparrow.engine.core;
 
+import android.opengl.GLES20;
 import br.jp.redsparrow.engine.shaders.ColorShaderProg;
 import br.jp.redsparrow.game.GameRenderer;
-import android.opengl.GLES20;
 
 public class Star {
 
+	private static final String A_COLOR = "a_Color";
+	private static final int POSITION_COMPONENT_COUNT = 3;
+	private static final int COLOR_COMPONENT_COUNT = 3;
+	private static final int STRIDE =
+	(POSITION_COMPONENT_COUNT + COLOR_COMPONENT_COUNT) * 4;
+	
+	private int aColorLocation;
 	private float[] mVertData;
+	private VertexArray mVertArray;
 	private ColorShaderProg mColShader;
 	
 	public Star(float x, float y, float z, float r, float g, float b) {
@@ -21,13 +29,19 @@ public class Star {
 		mVertData[4] = g;
 		mVertData[5] = b;
 		
+		mVertArray = new VertexArray(mVertData);
+	
 		mColShader = new ColorShaderProg(GameRenderer.getContext());
 		
 	}
 	
 	public void render(float[] projMatrix) {
 		
-		GLES20.glDrawArrays(GLES20.GL_POINTS, 0, 1);
+		mVertArray.setVertexAttribPointer(0, mColShader.getPositionAttributeLocation(), 3, 0);
+		mVertArray.setVertexAttribPointer(3, mColShader.getColorAttributeLocation(), 3, 0);
+		mColShader.useProgram();
+		
+		GLES20.glDrawArrays(GLES20.GL_POINTS, 0, 3);
 	}
 
 	public float[] getPosition() {

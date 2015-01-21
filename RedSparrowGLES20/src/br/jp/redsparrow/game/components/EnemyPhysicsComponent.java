@@ -23,7 +23,7 @@ public class EnemyPhysicsComponent extends PhysicsComponent {
 
 		MAX_VELS = new Vector2f(parent.getWidth()/10, parent.getHeight()/10);
 
-		mMass = parent.getWidth()+parent.getHeight();
+		mMass = (parent.getWidth()+parent.getHeight())*10;
 
 	}
 
@@ -56,7 +56,7 @@ public class EnemyPhysicsComponent extends PhysicsComponent {
 
 		//Friccao
 
-//		if (!mCollided) {
+		if (!mCollided) {
 
 			if (mVelocity.getX() > 0.0000001f) {
 				mVelocity.setX(mVelocity.getX() - fric.getX());
@@ -69,14 +69,14 @@ public class EnemyPhysicsComponent extends PhysicsComponent {
 				mVelocity.setY(mVelocity.getY() + fric.getY());
 			}
 
-//		}
+		}
 
 
 
 		//		}
 
 
-		if (mCollided) {
+//		if (!mCollided) {
 			//Clamp de vel
 			if (mVelocity.getX() > MAX_VELS.getX())
 				mVelocity.setX(MAX_VELS.getX());
@@ -87,7 +87,7 @@ public class EnemyPhysicsComponent extends PhysicsComponent {
 				mVelocity.setY(MAX_VELS.getY());
 			else if (mVelocity.getY() < -MAX_VELS.getY())
 				mVelocity.setY(-MAX_VELS.getY());
-		}
+//		}
 
 		mPosition = mPosition.add(mVelocity);
 

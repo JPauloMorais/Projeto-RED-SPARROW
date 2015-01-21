@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import br.jp.redsparrow.engine.core.components.Component;
 import br.jp.redsparrow.engine.core.messages.Message;
-import br.jp.redsparrow.engine.core.physics.BCircle;
+import br.jp.redsparrow.engine.core.physics.AABB;
 import br.jp.redsparrow.engine.core.physics.Bounds;
 import br.jp.redsparrow.game.ObjectFactory.OBJECT_TYPE;
 
@@ -15,6 +15,7 @@ public class GameObject {
 	private OBJECT_TYPE mType;
 	
 	private Bounds mBounds;
+	private float mRotation;
 
 	private ArrayList<Component> mUpdatableComponents;
 	private ArrayList<Component> mRenderableComponents;
@@ -23,12 +24,13 @@ public class GameObject {
 	private ArrayList<Message> mMessagesToRemove;
 	
 	public GameObject() {
-		this(new BCircle(new Vector2f(0, 0), 1));
+		this(new AABB(new Vector2f(0, 0), 0, 0));
 	}
 
 	public GameObject(Bounds bounds) {
 
 		mBounds = bounds;
+		setRotation(0);
 
 		mUpdatableComponents = new ArrayList<Component>();
 		mRenderableComponents = new ArrayList<Component>();
@@ -103,8 +105,16 @@ public class GameObject {
 	public void setBounds(Bounds mBounds) {
 		this.mBounds = mBounds;
 	}
-	//--------------------------------
 	
+	public float getRotation() {
+		return mRotation;
+	}
+	
+	public void setRotation(float mRotation) {
+		this.mRotation = mRotation;
+	}
+	//--------------------------------
+
 	//-----COMPONENTS-----------------
 	public void addComponent(Component component) {
 		if(component instanceof Updatable) mUpdatableComponents.add(component);

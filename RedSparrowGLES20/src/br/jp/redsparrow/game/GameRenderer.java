@@ -28,7 +28,6 @@ import br.jp.redsparrow.game.ObjectFactory.OBJECT_TYPE;
 import br.jp.redsparrow.game.components.EnemyPhysicsComponent;
 import br.jp.redsparrow.game.components.PlayerPhysicsComponent;
 
-@SuppressWarnings("unused")
 public class GameRenderer implements Renderer {
 
 	//Ativa e desativa controles por acelerometro
@@ -92,6 +91,7 @@ public class GameRenderer implements Renderer {
 //		TiledBackground.init(mContext, 10, 10, 40, R.drawable.points_test_1, R.drawable.points_test_2, R.drawable.points_test_3, R.drawable.points_test_4);
 		mDbgBackground = ObjectFactory.createObject(mContext, OBJECT_TYPE.DBG_BG, 0, 0);
 		mDbgBackground1 = ObjectFactory.createObject(mContext, OBJECT_TYPE.DBG_BG1, 0, 0);
+		obj = ObjectFactory.createObject(mContext, OBJECT_TYPE.PLAYER, 1, 1);
 		World.init(mContext);
 		World.setPlayer(ObjectFactory.createObject(mContext, OBJECT_TYPE.PLAYER, 0f, 0f));
 		//----TESTE----
@@ -106,7 +106,9 @@ public class GameRenderer implements Renderer {
 
 		
 	}
-
+	
+	GameObject obj;
+	
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
 
@@ -132,6 +134,7 @@ public class GameRenderer implements Renderer {
 	int dir = 1;
 	//-----------------
 
+	float angle;
 	@Override
 	public void onDrawFrame(GL10 gl) {	
 
@@ -139,11 +142,10 @@ public class GameRenderer implements Renderer {
 
 		//Setando o ponto central da perspectiva como a posicao do player
 		Matrix.setLookAtM(viewMatrix, 0,
-				World.getPlayer().getX(), World.getPlayer().getPosition().getY(), 35f,
+				World.getPlayer().getX(), World.getPlayer().getPosition().getY(), 45f,
 				World.getPlayer().getX(), World.getPlayer().getPosition().getY(), 0f,
 				0f, 1f, 0f);
 
-		Matrix.multiplyMM(viewProjectionMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
 
 		//Renderizando 
 		//		mTestMission.render(viewProjectionMatrix);
@@ -151,8 +153,14 @@ public class GameRenderer implements Renderer {
 		mDbgBackground.render(viewProjectionMatrix);
 		Matrix.translateM(viewProjectionMatrix, 0, 0, 0, 15);
 		mDbgBackground1.render(viewProjectionMatrix);
-		Matrix.translateM(viewProjectionMatrix, 0, 0, 0, 10);
+		Matrix.translateM(viewProjectionMatrix, 0, 0, 0, 20);
 		World.loop(viewProjectionMatrix);
+		
+		Matrix.multiplyMM(viewProjectionMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
+	
+		obj.setRotation(45);
+		obj.render(viewProjectionMatrix);
+
 //		HUD.loop(viewProjectionMatrix);
 
 		//------------TESTE
@@ -253,7 +261,9 @@ public class GameRenderer implements Renderer {
 
 			playerMoveVel.setX(-values[0]/110f);
 			playerMoveVel.setY(-values[1]/110f);
-
+			
+			
+			
 			try {
 				((PlayerPhysicsComponent) World.getPlayer().getUpdatableComponent(0)).move(playerMoveVel);
 //				HUD.move();

@@ -10,7 +10,6 @@ import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.Vector2f;
 import br.jp.redsparrow.engine.core.components.AnimatedSpriteComponent;
 import br.jp.redsparrow.engine.core.components.GunComponent;
-import br.jp.redsparrow.engine.core.components.LifeComponent;
 import br.jp.redsparrow.engine.core.components.SoundComponent;
 import br.jp.redsparrow.engine.core.components.SpriteComponent;
 import br.jp.redsparrow.engine.core.physics.AABB;
@@ -178,7 +177,6 @@ public class ObjectFactory {
 			obj.setType(OBJECT_TYPE.PROJECTILE);
 
 			obj.addComponent(new ProjectilePhysicsComponent(obj));
-			obj.addComponent(new LifeComponent(obj));
 
 			obj.addComponent(new SpriteComponent(context, R.drawable.particula_1, obj, 0,0));
 			
