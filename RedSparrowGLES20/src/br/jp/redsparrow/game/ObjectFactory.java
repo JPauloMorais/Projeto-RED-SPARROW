@@ -130,11 +130,10 @@ public class ObjectFactory {
 			obj.setType(OBJECT_TYPE.PLAYER);
 
 			obj.addComponent(new PlayerPhysicsComponent(obj));
-//			obj.addComponent(new SpriteComponent( context, R.drawable.nova_nave, 
-//					obj, 
-//					0, 0));
-			obj.addComponent(new AnimatedSpriteComponent(context, R.drawable.red_sparrow_test_2, obj,
-					new Animation(5, 2), 0.3f, 0.3f));
+
+			Animation animP = new Animation(4, 3);			
+			obj.addComponent(new AnimatedSpriteComponent(context, R.drawable.player_ship, obj,
+					animP, 0.1f, 0.1f));
 
 			ArrayList<MediaPlayer> sounds = new ArrayList<MediaPlayer>();
 			sounds.add(MediaPlayer.create(context, R.raw.test_shot));
@@ -178,7 +177,9 @@ public class ObjectFactory {
 
 			obj.addComponent(new ProjectilePhysicsComponent(obj));
 
-			obj.addComponent(new SpriteComponent(context, R.drawable.particula_1, obj, 0,0));
+			SpriteComponent psc = new SpriteComponent(context, R.drawable.projectile_1, obj, 0.2f,0.2f,
+					2, 1, 0, 1);
+			obj.addComponent(psc);
 			
 			break;
 

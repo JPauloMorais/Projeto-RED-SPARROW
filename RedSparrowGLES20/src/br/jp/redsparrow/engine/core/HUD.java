@@ -22,11 +22,6 @@ public class HUD {
 	public static void addItem(HUDitem item) {
 		mHudItems.add(item);
 	}
-	
-	public static synchronized void move() {
-		for (HUDitem huDitem : mHudItems) {
-			huDitem.move();
-		}
-	}
+
 
 }

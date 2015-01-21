@@ -22,34 +22,17 @@ public final class R {
         public static final int activity_vertical_margin=0x7f040001;
     }
     public static final class drawable {
-        public static final int dbg_bg=0x7f020000;
+        public static final int ammo_display_test=0x7f020000;
         public static final int enemy_ship=0x7f020001;
         public static final int eyes_test=0x7f020002;
         public static final int ic_launcher=0x7f020003;
         public static final int nova_nave=0x7f020004;
         public static final int particula_1=0x7f020005;
-        public static final int points_test_1=0x7f020006;
-        public static final int points_test_2=0x7f020007;
-        public static final int points_test_3=0x7f020008;
-        public static final int points_test_4=0x7f020009;
-        public static final int red_sparrow_test_2=0x7f02000a;
-        public static final int spaaace_1=0x7f02000b;
-        public static final int spaaace_6=0x7f02000c;
-        public static final int spaace_10=0x7f02000d;
-        public static final int spaace_11=0x7f02000e;
-        public static final int spaace_12=0x7f02000f;
-        public static final int spaace_13=0x7f020010;
-        public static final int spaace_14=0x7f020011;
-        public static final int spaace_15=0x7f020012;
-        public static final int spaace_2=0x7f020013;
-        public static final int spaace_3=0x7f020014;
-        public static final int spaace_4=0x7f020015;
-        public static final int spaace_5=0x7f020016;
-        public static final int spaace_7=0x7f020017;
-        public static final int spaace_8=0x7f020018;
-        public static final int spaace_9=0x7f020019;
-        public static final int stars_test1=0x7f02001a;
-        public static final int stars_test2=0x7f02001b;
+        public static final int player_ship=0x7f020006;
+        public static final int projectile_1=0x7f020007;
+        public static final int red_sparrow_test_2=0x7f020008;
+        public static final int stars_test1=0x7f020009;
+        public static final int stars_test2=0x7f02000a;
     }
     public static final class id {
         public static final int action_settings=0x7f080000;

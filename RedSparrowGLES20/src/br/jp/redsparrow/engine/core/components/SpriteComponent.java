@@ -2,7 +2,6 @@ package br.jp.redsparrow.engine.core.components;
 
 import android.content.Context;
 import android.opengl.GLES20;
-import android.util.Log;
 import br.jp.redsparrow.engine.core.Consts;
 import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.Renderable;
@@ -26,6 +25,26 @@ public class SpriteComponent extends Component implements Renderable {
 
 	private float[] mVertsData;
 
+	public SpriteComponent(Context context, int imgId, GameObject parent, 
+			float offsetX, float offsetY, 
+			int spritesInX, int spritesInY, int row, int col) {
+	
+		super("Sprite", parent);
+
+		mTextureProgram = new TextureShaderProg(context);
+		mTexture = TextureUtil.loadTexture(context, imgId);
+
+		mVertsData = new float[30];
+
+		mOffset = new float[2];
+		mOffset[0] = offsetX;
+		mOffset[1] = offsetY;
+
+		setUVs(spritesInX, spritesInY, row, col);
+		updateVertsData();
+		
+	}
+	
 	public SpriteComponent(Context context, int imgId, GameObject parent, float offsetX, float offsetY) {
 		super("Sprite", parent);
 
@@ -77,17 +96,17 @@ public class SpriteComponent extends Component implements Renderable {
 		mVertsData[25] = mVertsData[5];                                         //left
 		mVertsData[26] = mVertsData[11];                                        //bottom
 		mVertsData[27] = mVertsData[2];
-		
+
 		if(mParent.getRotation() != 0) {			
 
 			float cos = (float) Math.cos(Math.toRadians(mParent.getRotation()));
 			float sen = (float) Math.sin(Math.toRadians(mParent.getRotation()));
-			
+
 			Vector2f a = new Vector2f(mVertsData[0], mVertsData[1]);
 			Vector2f b = new Vector2f(mVertsData[5], mVertsData[6]);
 			Vector2f c = new Vector2f(mVertsData[10], mVertsData[11]);
 			Vector2f d = new Vector2f(mVertsData[15], mVertsData[16]);
-			
+
 			mVertsData[0] = cos * (a.getX() - mParent.getX()) - sen * (a.getY() - mParent.getY()) + mParent.getX();
 			mVertsData[1] = sen * (a.getX() - mParent.getX()) + cos * (a.getY() - mParent.getY()) + mParent.getY();
 
@@ -112,7 +131,7 @@ public class SpriteComponent extends Component implements Renderable {
 
 	}
 
-	private void setUVs(){
+	private void setUVs() {
 		//U V
 		mVertsData[3] = 0;//right
 		mVertsData[4] = 0;//top
@@ -131,6 +150,31 @@ public class SpriteComponent extends Component implements Renderable {
 		//U V
 		mVertsData[28] = 1;//left
 		mVertsData[29] = 1;//bottom
+	}
+
+	public void setUVs(int spritesInX, int spritesInY, int row, int col){
+
+		float w = (float) 1/spritesInX;
+		float h = (float) 1/spritesInY;
+
+		//U V
+		mVertsData[3] = col * w + w - 0.01f;//right
+		mVertsData[4] = row * h - 0.01f;//top
+		//U V
+		mVertsData[8] = col * w + 0.01f;//left
+		mVertsData[9] = mVertsData[4];//top
+		//U V
+		mVertsData[13] = mVertsData[8];//left
+		mVertsData[14] = mVertsData[4] + h + 0.01f;//bottom
+		//U V
+		mVertsData[18] = mVertsData[3];//right
+		mVertsData[19] = mVertsData[14];//bottom
+		//U V
+		mVertsData[23] = mVertsData[3];//right
+		mVertsData[24] = mVertsData[4];//top
+		//U V
+		mVertsData[28] = mVertsData[8];//left
+		mVertsData[29] = mVertsData[14];//bottom
 	}
 
 	private void bindData() {

@@ -17,9 +17,9 @@ public class Animation {
 	public Animation(int nCols, int nRows) {
 
 		this.nCols = nCols;
-		setnFramesX(nCols);
+		setNumFramesX(nCols);
 		this.nRows = nRows;
-		setnFramesY(nRows);
+		setNumFramesY(nRows);
 		wFrame = (float) 1/nCols;
 		hFrame = (float) 1/nRows;
 		curCol = 0;
@@ -153,12 +153,20 @@ public class Animation {
 		return loopedOnce;
 	}
 
-	public void setnFramesX(int nFramesX) {
+	public void setNumFramesX(int nFramesX) {
 		this.nFramesX = nFramesX;
 	}
 
-	public void setnFramesY(int nFramesY) {
+	public void setNumFramesY(int nFramesY) {
 		this.nFramesY = nFramesY;
+	}
+	
+	public void setCurRow(int row) {
+		this.curRow = row;
+	}
+	
+	public void setCurCol(int col) {
+		this.curCol = col;
 	}
 
 }

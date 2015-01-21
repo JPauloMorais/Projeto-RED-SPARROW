@@ -13,8 +13,10 @@ import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.Matrix;
 import android.os.Vibrator;
 import android.util.Log;
+import br.jp.redsparrow.R;
 import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.HUD;
+import br.jp.redsparrow.engine.core.HUDitem;
 import br.jp.redsparrow.engine.core.Tile;
 import br.jp.redsparrow.engine.core.Vector2f;
 import br.jp.redsparrow.engine.core.World;
@@ -86,8 +88,9 @@ public class GameRenderer implements Renderer {
 		GLES20.glEnable(GLES20.GL_BLEND);
 		GLES20.glBlendFunc( GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA );
 
-//		HUD.init();
-//		HUD.addItem(new HUDitem(mContext, -2, 2, 1, 1, R.drawable.particula_1));
+		HUD.init();
+		HUD.addItem(new HUDitem(mContext, -19, 38, 10, 10, R.drawable.ammo_display_test));
+//		
 //		TiledBackground.init(mContext, 10, 10, 40, R.drawable.points_test_1, R.drawable.points_test_2, R.drawable.points_test_3, R.drawable.points_test_4);
 		mDbgBackground = ObjectFactory.createObject(mContext, OBJECT_TYPE.DBG_BG, 0, 0);
 		mDbgBackground1 = ObjectFactory.createObject(mContext, OBJECT_TYPE.DBG_BG1, 0, 0);
@@ -158,10 +161,7 @@ public class GameRenderer implements Renderer {
 		
 		Matrix.multiplyMM(viewProjectionMatrix, 0, projectionMatrix, 0, viewMatrix, 0);
 	
-		obj.setRotation(45);
-		obj.render(viewProjectionMatrix);
-
-//		HUD.loop(viewProjectionMatrix);
+		HUD.loop(viewProjectionMatrix);
 
 		//------------TESTE
 		if(times < 50) times++;
@@ -246,7 +246,6 @@ public class GameRenderer implements Renderer {
 
 			try {
 				((PlayerPhysicsComponent) World.getPlayer().getUpdatableComponent(0)).move(playerMoveVel);
-				HUD.move();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}		
@@ -266,7 +265,6 @@ public class GameRenderer implements Renderer {
 			
 			try {
 				((PlayerPhysicsComponent) World.getPlayer().getUpdatableComponent(0)).move(playerMoveVel);
-//				HUD.move();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
