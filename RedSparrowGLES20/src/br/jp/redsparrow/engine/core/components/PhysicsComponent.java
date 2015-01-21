@@ -1,5 +1,6 @@
 package br.jp.redsparrow.engine.core.components;
 
+import android.util.Log;
 import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.Updatable;
 import br.jp.redsparrow.engine.core.Vector2f;
@@ -28,32 +29,6 @@ public abstract class PhysicsComponent extends Component implements Updatable {
 
 	@Override
 	public void update(GameObject parent) {			
-
-		//Input de Movimentacao
-		try { 
-
-//			mVelocity = mVelocity.add((Vector2f) (((Vector2f) parent.getMessage("MOVE").getMessage()).length() > 0.01f ? ((Vector2f) parent.getMessage("MOVE").getMessage()) : 0));
-			applyForce((Vector2f) (((Vector2f) parent.getMessage("MOVE").getMessage()).length() > 0.01f ? ((Vector2f) parent.getMessage("MOVE").getMessage()) : 0));
-
-			//			mPosition.add(mVelocity);
-			mFric.setX(0);
-			mFric.setY(0);
-			
-		} catch (Exception e) {
-		}
-		
-		//Colisao
-		try {
-
-			//			mVelocity = mVelocity.add((Vector2f) parent.getMessage("Collision").getMessage());
-			applyForce((Vector2f) parent.getMessage("Collision").getMessage());
-			//			mPosition.setX(mPosition.getX() + mVelocity.getX()/10);
-			//			mPosition.setY( mPosition.getY() + mVelocity.getY()/10);
-
-			mFric.setX(0.009f);
-			mFric.setY(0.009f);
-
-		} catch (Exception e) {
 			
 			//Friccao
 
@@ -69,8 +44,6 @@ public abstract class PhysicsComponent extends Component implements Updatable {
 				mVelocity.setY(mVelocity.getY() + mFric.getY());
 			}
 			
-			
-		}
 
 		//Clamp de vel
 		if( mVelocity.getX() > mMaxVels.getX() ) mVelocity.setX(mMaxVels.getX());
@@ -83,8 +56,9 @@ public abstract class PhysicsComponent extends Component implements Updatable {
 	}
 	
 	public void addVel(GameObject parent){
-		mPosition = mPosition.add(mVelocity);		
+		mPosition = mPosition.add(mVelocity);
 		parent.setPosition( mPosition );
+		parent.setRotation((Math.atan2(mVelocity.getY(), mVelocity.getX()))-1.5707963268d);
 	}
 
 	public void applyForce(float force){

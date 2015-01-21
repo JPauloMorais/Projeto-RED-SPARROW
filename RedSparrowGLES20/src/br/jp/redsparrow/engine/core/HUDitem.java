@@ -9,13 +9,11 @@ public class HUDitem extends GameObject {
 	
 	private Vector2f mRelPos;
 	
-	public HUDitem(Context context, float x, float y, float width, float height, int imgId) {
+	public HUDitem(Context context, float x, float y, float width, float height) {
 		super(new AABB(new Vector2f(World.getPlayer().getX()+x, World.getPlayer().getY()+y), width, height));
 
 		mRelPos = new Vector2f(x, y);
-		
-		this.addComponent(new SpriteComponent(context, imgId, this, 0, 0));
-		
+				
 	}
 	
 	@Override

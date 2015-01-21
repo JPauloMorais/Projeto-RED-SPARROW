@@ -15,7 +15,7 @@ public class GameObject {
 	private OBJECT_TYPE mType;
 	
 	private Bounds mBounds;
-	private float mRotation;
+	private double mRotation;
 
 	private ArrayList<Component> mUpdatableComponents;
 	private ArrayList<Component> mRenderableComponents;
@@ -106,11 +106,11 @@ public class GameObject {
 		this.mBounds = mBounds;
 	}
 	
-	public float getRotation() {
+	public double getRotation() {
 		return mRotation;
 	}
 	
-	public void setRotation(float mRotation) {
+	public void setRotation(double mRotation) {
 		this.mRotation = mRotation;
 	}
 	//--------------------------------

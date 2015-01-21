@@ -59,7 +59,7 @@ public class SoundComponent extends Component implements Updatable {
 
 				while (curVols[0] < targetVol[0] && curVols[1] < targetVol[1]) {
 					curVols = mSoundVolumes.get(soundIndex);
-					setSoundVolume(soundIndex,(float) (curVols[0] + 0.005*fadeVel),(float) (curVols[1] + 0.005*fadeVel));
+					setSoundVolume(soundIndex,(float) (curVols[0] + 0.001*fadeVel),(float) (curVols[1] + 0.001*fadeVel));
 				}
 				
 			}

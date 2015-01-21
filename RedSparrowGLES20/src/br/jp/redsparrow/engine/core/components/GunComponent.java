@@ -37,6 +37,7 @@ public class GunComponent extends Component implements Updatable {
 
 	public void shoot(Vector2f moveVel){
 		mMoveVel = moveVel;
+		mParent.setRotation(Math.atan2(moveVel.getY(), moveVel.getX()) - 1.5707963268d);
 		toShoot = true;
 	}
 }

@@ -89,9 +89,7 @@ public class EnemyPhysicsComponent extends PhysicsComponent {
 				mVelocity.setY(-MAX_VELS.getY());
 //		}
 
-		mPosition = mPosition.add(mVelocity);
-
-		parent.setPosition( mPosition );
+		addVel(parent);
 
 		mCollided = false;
 

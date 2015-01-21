@@ -125,8 +125,8 @@ public class AnimatedSpriteComponent extends Component implements Renderable {
 
 		if(mParent.getRotation() != 0) {			
 
-			float cos = (float) Math.cos(Math.toRadians(mParent.getRotation()));
-			float sen = (float) Math.sin(Math.toRadians(mParent.getRotation()));
+			float cos = (float) Math.cos(mParent.getRotation());
+			float sen = (float) Math.sin(mParent.getRotation());
 			
 			Vector2f a = new Vector2f(mVertsData[0], mVertsData[1]);
 			Vector2f b = new Vector2f(mVertsData[5], mVertsData[6]);

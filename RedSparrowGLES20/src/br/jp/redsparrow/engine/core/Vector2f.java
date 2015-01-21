@@ -33,9 +33,9 @@ public class Vector2f {
 	
 	public Vector2f rotate(float angle){
 		
-		double aRad = Math.toRadians(angle);
-		double sen = Math.sin(aRad);
-		double cos = Math.cos(aRad);
+//		double aRad = Math.toRadians(angle);
+		double sen = Math.sin(angle);
+		double cos = Math.cos(angle);
 		
 		return new Vector2f((float)(mX * cos - mY * sen), (float)(mX * sen + mY * cos));
 	}

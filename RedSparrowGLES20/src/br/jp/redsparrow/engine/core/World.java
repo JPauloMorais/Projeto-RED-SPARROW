@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.graphics.RectF;
-import android.opengl.Matrix;
 import android.util.Log;
 import br.jp.redsparrow.R;
 import br.jp.redsparrow.engine.core.components.SoundComponent;
@@ -144,7 +143,6 @@ public class World implements Serializable{
 							mGameObjects.get(i).getY() < getPlayer().getY()+mUPDATE_RANGE_Y &&
 							mGameObjects.get(i).getY() > getPlayer().getY()-mUPDATE_RANGE_Y)
 					{
-						mGameObjects.get(i).setRotation(-rot);
 						mGameObjects.get(i).update();
 					}
 
@@ -195,8 +193,6 @@ public class World implements Serializable{
 
 				}
 			}
-			mPlayer.setRotation(rot);
-			rot += 0.9f;
 			mPlayer.update();
 			mPlayer.render(projectionMatrix);
 
@@ -204,7 +200,6 @@ public class World implements Serializable{
 			onStart();
 		}
 	}
-	private static float rot = 0;
 
 	public static void pause(){
 		try {

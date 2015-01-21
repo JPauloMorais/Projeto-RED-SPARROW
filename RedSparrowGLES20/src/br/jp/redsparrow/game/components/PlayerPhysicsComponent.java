@@ -17,10 +17,10 @@ public class PlayerPhysicsComponent extends PhysicsComponent {
 	@Override
 	public void update(GameObject parent) {			
 
-		if (!mMoved) {
-			mFric.setX(0.01f);
-			mFric.setY(0.01f);
-		}
+//		if (!mMoved) {
+//			mFric.setX(0.01f);
+//			mFric.setY(0.01f);
+//		}
 
 		if (!mCollided) {
 
@@ -37,19 +37,19 @@ public class PlayerPhysicsComponent extends PhysicsComponent {
 
 		}
 
-		if (mMoved || mCollided) {
-			
-			//Clamp de vel
-			if (mVelocity.getX() > mMaxVels.getX())
-				mVelocity.setX(mMaxVels.getX());
-			else if (mVelocity.getX() < -mMaxVels.getX())
-				mVelocity.setX(-mMaxVels.getX());
-			if (mVelocity.getY() > mMaxVels.getY())
-				mVelocity.setY(mMaxVels.getY());
-			else if (mVelocity.getY() < -mMaxVels.getY())
-				mVelocity.setY(-mMaxVels.getY());
-			
-		}
+//		if (mMoved || mCollided) {
+//			
+//			//Clamp de vel
+//			if (mVelocity.getX() > mMaxVels.getX())
+//				mVelocity.setX(mMaxVels.getX());
+//			else if (mVelocity.getX() < -mMaxVels.getX())
+//				mVelocity.setX(-mMaxVels.getX());
+//			if (mVelocity.getY() > mMaxVels.getY())
+//				mVelocity.setY(mMaxVels.getY());
+//			else if (mVelocity.getY() < -mMaxVels.getY())
+//				mVelocity.setY(-mMaxVels.getY());
+//			
+//		}
 		
 		addVel(parent);
 
@@ -60,8 +60,9 @@ public class PlayerPhysicsComponent extends PhysicsComponent {
 
 	public void move(Vector2f velocity){
 
-		applyForce((Vector2f) ((velocity.length() > 0.01f ? velocity : new Vector2f(0, 0))));
-
+		applyForce(velocity);
+//				(Vector2f) ((velocity.length() > 0.01f ? velocity : new Vector2f(0, 0))));
+		
 		mFric.setX(0);
 		mFric.setY(0);
 

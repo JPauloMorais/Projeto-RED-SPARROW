@@ -7,6 +7,7 @@ import android.media.MediaPlayer;
 import br.jp.redsparrow.R;
 import br.jp.redsparrow.engine.core.Animation;
 import br.jp.redsparrow.engine.core.GameObject;
+import br.jp.redsparrow.engine.core.HUDitem;
 import br.jp.redsparrow.engine.core.Vector2f;
 import br.jp.redsparrow.engine.core.components.AnimatedSpriteComponent;
 import br.jp.redsparrow.engine.core.components.GunComponent;
@@ -28,88 +29,6 @@ public class ObjectFactory {
 		TEST
 	}
 	
-//	public static GameObject createObject(Context context, OBJECT_TYPE type, float x, float y, float width, float height){
-//
-//		GameObject obj = new GameObject(new AABB(new Vector2f(x, y), width, height));
-//
-//		switch (type) {
-//
-//		case TEST:
-//
-//			break;
-//
-//		case PLAYER:
-//
-//			obj.setType(OBJECT_TYPE.PLAYER);
-//
-//			obj.addComponent(new PlayerPhysicsComponent(obj));
-////			obj.addComponent(new SpriteComponent( context, R.drawable.nova_nave, 
-////					obj, 
-////					0, 0));
-//			obj.addComponent(new AnimatedSpriteComponent(context, R.drawable.nova_nova_nave_3, obj,
-//					new Animation(4, 1), 0.3f, 0.3f));
-//
-//			ArrayList<MediaPlayer> sounds = new ArrayList<MediaPlayer>();
-//			sounds.add(MediaPlayer.create(context, R.raw.test_shot));
-//			sounds.get(0).setVolume(0.005f, 0.005f);
-//			obj.addComponent(new SoundComponent(context, obj, sounds));
-//
-//			obj.addComponent(new GunComponent(obj));
-//			//			obj.addComponent(new AnimatedSpriteComponent(context, obj, R.drawable.nova_nave, 4));
-//			
-//			break;
-//
-//		case BASIC_ENEMY:
-//
-//			obj.setType(OBJECT_TYPE.BASIC_ENEMY);
-//
-//			obj.addComponent(new EnemyPhysicsComponent(obj));
-////			obj.addComponent(new SpriteComponent( context, R.drawable.enemy_ship, 
-////					obj,
-////					0.3f, 0.3f ));
-//			obj.addComponent(new AnimatedSpriteComponent(context, R.drawable.enemy_ship, obj,
-//					new Animation(6, 5), 0.3f, 0.3f));
-//			
-//
-//			ArrayList<MediaPlayer> soundsE = new ArrayList<MediaPlayer>();
-//			soundsE.add(MediaPlayer.create(context, R.raw.test_shot));
-//			soundsE.get(0).setVolume(0.005f, 0.005f);
-//			obj.addComponent(new SoundComponent(context, obj, soundsE));
-//
-//			obj.addComponent(new GunComponent(obj));
-//
-//			break;
-//
-//		case DBG_BG:
-//
-//			obj.setType(OBJECT_TYPE.DBG_BG);
-//
-//			obj.addComponent(new SpriteComponent(context, R.drawable.dbg_bg, 
-//					obj, 
-//					0, 0));			
-//
-//			break;
-//
-//		case PROJECTILE:
-//
-//			obj.setType(OBJECT_TYPE.PROJECTILE);
-//
-//			obj.addComponent(new ProjectilePhysicsComponent(obj));
-//			obj.addComponent(new LifeComponent(obj));
-//
-//			obj.addComponent(new SpriteComponent(context, R.drawable.shot_test, obj, 0,0));
-//			
-//			break;
-//
-//		default:
-//
-//			break;
-//		}
-//
-//		return obj;
-//
-//	}
-
 	public static GameObject createObject(Context context, OBJECT_TYPE type,
 			float x, float y) {
 		
@@ -147,7 +66,7 @@ public class ObjectFactory {
 
 		case BASIC_ENEMY:
 
-			obj.setWidth(1.1f);
+			obj.setWidth(1f);
 			obj.setHeight(1f);
 			obj.setType(OBJECT_TYPE.BASIC_ENEMY);
 
@@ -155,9 +74,9 @@ public class ObjectFactory {
 //			obj.addComponent(new SpriteComponent( context, R.drawable.enemy_ship, 
 //					obj,
 //					0.3f, 0.3f ));
-			Animation anim = new Animation(12, 1);
+			Animation anim = new Animation(1, 1);
 			anim.setAmmoToWait(4);
-			obj.addComponent(new AnimatedSpriteComponent(context, R.drawable.eyes_test, obj,
+			obj.addComponent(new AnimatedSpriteComponent(context, R.drawable.enemy_ship, obj,
 					anim, 0.3f, 0.3f));
 
 			ArrayList<MediaPlayer> soundsE = new ArrayList<MediaPlayer>();
@@ -185,8 +104,8 @@ public class ObjectFactory {
 
 		case DBG_BG:
 			
-			obj.setWidth(100f);
-			obj.setHeight(100f);
+			obj.setWidth(200f);
+			obj.setHeight(200f);
 			obj.setType(OBJECT_TYPE.DBG_BG);
 			
 			obj.addComponent(new SpriteComponent(context, R.drawable.stars_test1, obj, 0, 0));
@@ -195,8 +114,8 @@ public class ObjectFactory {
 			
 		case DBG_BG1:
 
-			obj.setWidth(100f);
-			obj.setHeight(100f);
+			obj.setWidth(200f);
+			obj.setHeight(200f);
 			obj.setType(OBJECT_TYPE.DBG_BG1);
 			
 			obj.addComponent(new SpriteComponent(context, R.drawable.stars_test1, obj, 0, 0));
@@ -210,6 +129,33 @@ public class ObjectFactory {
 
 		return obj;
 
+	}
+	
+	public enum HUDITEM_TYPE {
+		AMMO_DISP, LIFEBAR
+	}
+
+	public static HUDitem createHUDitem(Context context, HUDITEM_TYPE type ) {
+		
+		HUDitem item;
+		
+		switch (type) {
+		case AMMO_DISP:
+			
+			item = new HUDitem(context, -19, 38, 10, 10);
+			item.addComponent(new SpriteComponent(context, R.drawable.ammo_display_test, item, 0, 0f));
+			item.addComponent(new SpriteComponent(context, R.drawable.projectile_1, item, 1f, 0f,
+					2, 1, 0, 1));
+			
+			break;
+
+		default:
+			item = new HUDitem(context, 0, 0, 10, 10);
+			break;
+		}	
+		
+		return item;
+		
 	}
 
 }
