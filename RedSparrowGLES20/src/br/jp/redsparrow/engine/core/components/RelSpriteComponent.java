@@ -10,52 +10,64 @@ import br.jp.redsparrow.engine.core.VertexArray;
 import br.jp.redsparrow.engine.core.util.TextureUtil;
 import br.jp.redsparrow.engine.shaders.TextureShaderProg;
 
-public class SpriteComponent extends Component implements Renderable {
+public class RelSpriteComponent extends Component implements Renderable   {
 
 	/*
-	 * Sprite component simples que se posiciona no centro do objeto ao qual pertence.
+	 * Sprite component ligeiramente alterado para posicionar-se
+	 *  relativo ao centro do objeto a qual pertence.
 	 * */
 	
+	private boolean isVisible;
+	
+	private Vector2f mRelPosition;
+	private Vector2f mCurPosition;
+	
 	private VertexArray mVertsArray;
-
-	private float[] mSizeOffset;
-
+	
+	private float mWidth;
+	private float mHeight;
+	
 	private TextureShaderProg mTextureProgram;
 	private int mTexture;
+	
+	private float[] mVertsData;	
 
-	private float[] mVertsData;
-
-	public SpriteComponent(Context context, int imgId, GameObject parent, 
-			float sizeOffsetX, float sizeOffsetY, 
+	public RelSpriteComponent(Context context, int imgId, GameObject parent, 
+			Vector2f relativePosition, float width, float height,
 			int spritesInX, int spritesInY, int row, int col) {
 	
-		super("Sprite", parent);
+		super("RelativeSprite", parent);
 
+		isVisible = true;
+		
 		mTextureProgram = new TextureShaderProg(context);
 		mTexture = TextureUtil.loadTexture(context, imgId);
 
+		mRelPosition = relativePosition;
+		mCurPosition = new Vector2f(0, 0);
 		mVertsData = new float[30];
 
-		mSizeOffset = new float[2];
-		mSizeOffset[0] = sizeOffsetX;
-		mSizeOffset[1] = sizeOffsetY;
+		mWidth = width;
+		mHeight = height;
 
 		setUVs(spritesInX, spritesInY, row, col);
 		updateVertsData();
 		
 	}
 	
-	public SpriteComponent(Context context, int imgId, GameObject parent, float sizeOffsetX, float sizeOffsetY) {
-		super("Sprite", parent);
+	public RelSpriteComponent(Context context, int imgId, GameObject parent, 
+			Vector2f relativePosition, float width, float height) {
+		super("RelativeSprite", parent);
 
 		mTextureProgram = new TextureShaderProg(context);
 		mTexture = TextureUtil.loadTexture(context, imgId);
 
+		mRelPosition = relativePosition;
+		mCurPosition = new Vector2f(0, 0);
 		mVertsData = new float[30];
 
-		mSizeOffset = new float[2];
-		mSizeOffset[0] = sizeOffsetX;
-		mSizeOffset[1] = sizeOffsetY;
+		mWidth = width;
+		mHeight = height;
 
 		setUVs();
 		updateVertsData();
@@ -63,20 +75,22 @@ public class SpriteComponent extends Component implements Renderable {
 	}
 
 	private void updateVertsData(){
-
+		
+		mCurPosition = mParent.getPosition().add(mRelPosition);
+		
 		//X Y Z                                                                                           
-		mVertsData[0] = mParent.getX() + mParent.getWidth() / 2 + mSizeOffset[0];  //right 
-		mVertsData[1] = mParent.getY() + mParent.getHeight() / 2 + mSizeOffset[1]; //top
+		mVertsData[0] = mCurPosition.getX() + mWidth / 2;  //right 
+		mVertsData[1] = mCurPosition.getY() + mHeight / 2; //top
 		mVertsData[2] = 1f;
 
 		//X Y Z
-		mVertsData[5] = mParent.getX() - mParent.getWidth() / 2 - mSizeOffset[0];  //left
+		mVertsData[5] = mCurPosition.getX() - mWidth / 2;  //left
 		mVertsData[6] = mVertsData[1];                                         //top		
 		mVertsData[7] = mVertsData[2];
 
 		//X Y Z
 		mVertsData[10] = mVertsData[5];                                         //left
-		mVertsData[11] = mParent.getY() - mParent.getHeight() / 2 - mSizeOffset[1]; //bottom
+		mVertsData[11] = mCurPosition.getY() - mHeight / 2; //bottom
 		mVertsData[12] = mVertsData[2];
 
 		//X Y Z
@@ -103,6 +117,8 @@ public class SpriteComponent extends Component implements Renderable {
 			Vector2f b = new Vector2f(mVertsData[5], mVertsData[6]);
 			Vector2f c = new Vector2f(mVertsData[10], mVertsData[11]);
 			Vector2f d = new Vector2f(mVertsData[15], mVertsData[16]);
+			
+			//TODO: Definir rotacao independente/baseada no proprio centro
 
 			mVertsData[0] = cos * (a.getX() - mParent.getX()) - sen * (a.getY() - mParent.getY()) + mParent.getX();
 			mVertsData[1] = sen * (a.getX() - mParent.getX()) + cos * (a.getY() - mParent.getY()) + mParent.getY();
@@ -192,12 +208,22 @@ public class SpriteComponent extends Component implements Renderable {
 	@Override
 	public void render(VertexArray vertexArray, float[] projectionMatrix) {
 
-		updateVertsData();
-		mTextureProgram.useProgram();
-		mTextureProgram.setUniforms(projectionMatrix, mTexture);
-		bindData();
-		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 6);
+		if (isVisible) {
+			updateVertsData();
+			mTextureProgram.useProgram();
+			mTextureProgram.setUniforms(projectionMatrix, mTexture);
+			bindData();
+			GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 6);
+		}
 
+	}
+
+	public boolean isVisible() {
+		return isVisible;
+	}
+
+	public void setVisible(boolean visible) {
+		this.isVisible = visible;
 	}
 
 }

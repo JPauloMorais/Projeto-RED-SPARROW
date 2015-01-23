@@ -15,10 +15,6 @@ import br.jp.redsparrow.engine.shaders.TextureShaderProg;
 
 public class AnimatedSpriteComponent extends Component implements Renderable {
 
-	private static final int POSITION_COUNT = 3;
-	private static final int TEXTURE_COORDS_COUNT = 2;
-	private static final int STRIDE = (POSITION_COUNT
-			+ TEXTURE_COORDS_COUNT) * Consts.BYTES_PER_FLOAT;
 	private VertexArray mVertsArray;
 
 	private float[] mOffset;
@@ -58,13 +54,13 @@ public class AnimatedSpriteComponent extends Component implements Renderable {
 		mVertsArray.setVertexAttribPointer(
 				0,
 				mTextureProgram.getPositionAttributeLocation(),
-				POSITION_COUNT,
-				STRIDE);
+				Consts.POSITION_COUNT,
+				Consts.STRIDE);
 		mVertsArray.setVertexAttribPointer(
-				POSITION_COUNT,
+				Consts.POSITION_COUNT,
 				mTextureProgram.getTextureCoordinatesAttributeLocation(),
-				TEXTURE_COORDS_COUNT,
-				STRIDE);
+				Consts.TEXTURE_COORDS_COUNT,
+				Consts.STRIDE);
 
 	}
 

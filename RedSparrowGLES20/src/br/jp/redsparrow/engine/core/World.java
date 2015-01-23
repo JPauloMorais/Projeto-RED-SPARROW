@@ -104,18 +104,8 @@ public class World implements Serializable{
 							if(!mGameObjects.get(i).getType().equals(OBJECT_TYPE.PROJECTILE) &&
 									!mToCheck.get(j).getType().equals(OBJECT_TYPE.PROJECTILE)){
 
-								//								if (((EnemyPhysicsComponent) mGameObjects.get(i).getUpdatableComponent(0)).getVelocity().length()==0) {
-								//									//Transfere a velocidade de um bojeto para outro
-								//									((EnemyPhysicsComponent) mToCheck.get(j)
-								//											.getUpdatableComponent(0))
-								//											.collide(((EnemyPhysicsComponent) mGameObjects
-								//													.get(i)
-								//													.getUpdatableComponent(0))
-								//													.getVelocity());
-								//								}
-								//
 								((EnemyPhysicsComponent) mGameObjects.get(i).getUpdatableComponent(0)).collide(
-										((EnemyPhysicsComponent) mToCheck.get(j).getUpdatableComponent(0)).getVelocity().copy());
+										Collision.getColVector((AABB) mGameObjects.get(i).getBounds(),(AABB) mToCheck.get(j).getBounds()));
 
 
 							}else if(!mToCheck.get(j).getType().equals(OBJECT_TYPE.PROJECTILE)){
@@ -181,18 +171,19 @@ public class World implements Serializable{
 						//						}
 						//						
 						((EnemyPhysicsComponent) mToCheck.get(i).getUpdatableComponent(0)).collide(
-								((PlayerPhysicsComponent) mPlayer.getUpdatableComponent(0)).getVelocity());
+								Collision.getColVector((AABB) mToCheck.get(i).getBounds(), (AABB) mPlayer.getBounds()));
 
 					}else {
 						if(!((ProjectilePhysicsComponent) mToCheck.get(i).getUpdatableComponent(0))
 								.getShootertype().equals(OBJECT_TYPE.PLAYER)) {
-							mPlayer.die();
+							mPlayer.recieveMessage(new Message(-2, "Damage", 1));
 							mToCheck.get(i).die();
 						}
 					}
 
 				}
 			}
+
 			mPlayer.update();
 			mPlayer.render(projectionMatrix);
 

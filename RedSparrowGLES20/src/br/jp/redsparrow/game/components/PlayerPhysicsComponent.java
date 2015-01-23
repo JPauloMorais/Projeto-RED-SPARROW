@@ -21,21 +21,21 @@ public class PlayerPhysicsComponent extends PhysicsComponent {
 //			mFric.setX(0.01f);
 //			mFric.setY(0.01f);
 //		}
+//
+//		if (!mCollided) {
+//
+//			if (mVelocity.getX() > 0.00000000001f) {
+//				mVelocity.setX(mVelocity.getX() - mFric.getX());
+//			} else if (mVelocity.getX() < -0.00000000001f) {
+//				mVelocity.setX(mVelocity.getX() + mFric.getX());
+//			}
+//			if (mVelocity.getY() > 0.00000000001f) {
+//				mVelocity.setY(mVelocity.getY() - mFric.getY());
+//			} else if (mVelocity.getY() < -0.000000000001f) {
+//				mVelocity.setY(mVelocity.getY() + mFric.getY());
+//			}
 
-		if (!mCollided) {
-
-			if (mVelocity.getX() > 0.00000000001f) {
-				mVelocity.setX(mVelocity.getX() - mFric.getX());
-			} else if (mVelocity.getX() < -0.00000000001f) {
-				mVelocity.setX(mVelocity.getX() + mFric.getX());
-			}
-			if (mVelocity.getY() > 0.00000000001f) {
-				mVelocity.setY(mVelocity.getY() - mFric.getY());
-			} else if (mVelocity.getY() < -0.000000000001f) {
-				mVelocity.setY(mVelocity.getY() + mFric.getY());
-			}
-
-		}
+//		}
 
 //		if (mMoved || mCollided) {
 //			

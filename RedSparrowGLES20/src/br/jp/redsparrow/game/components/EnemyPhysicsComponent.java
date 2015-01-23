@@ -6,22 +6,12 @@ import br.jp.redsparrow.engine.core.components.PhysicsComponent;
 
 public class EnemyPhysicsComponent extends PhysicsComponent {
 
-	private final Vector2f MAX_VELS;
-
-	private Vector2f mPosition; 
-	private Vector2f mVelocity = new Vector2f(0f, 0f);
-	private Vector2f fric = new Vector2f(0f, 0f);
-
-	private float mMass;
-
-	private boolean mCollided;
-
 	public EnemyPhysicsComponent(GameObject parent) {
 		super(parent);
 
 		mPosition = parent.getPosition();
 
-		MAX_VELS = new Vector2f(parent.getWidth()/10, parent.getHeight()/10);
+		mMaxVels = new Vector2f(parent.getWidth()/10, parent.getHeight()/10);
 
 		mMass = (parent.getWidth()+parent.getHeight())*10;
 
@@ -59,14 +49,14 @@ public class EnemyPhysicsComponent extends PhysicsComponent {
 		if (!mCollided) {
 
 			if (mVelocity.getX() > 0.0000001f) {
-				mVelocity.setX(mVelocity.getX() - fric.getX());
+				mVelocity.setX(mVelocity.getX() - mFric.getX());
 			} else if (mVelocity.getX() < -0.0000001f) {
-				mVelocity.setX(mVelocity.getX() + fric.getX());
+				mVelocity.setX(mVelocity.getX() + mFric.getX());
 			}
 			if (mVelocity.getY() > 0.0000001f) {
-				mVelocity.setY(mVelocity.getY() - fric.getY());
+				mVelocity.setY(mVelocity.getY() - mFric.getY());
 			} else if (mVelocity.getY() < -0.00000001f) {
-				mVelocity.setY(mVelocity.getY() + fric.getY());
+				mVelocity.setY(mVelocity.getY() + mFric.getY());
 			}
 
 		}
@@ -76,18 +66,18 @@ public class EnemyPhysicsComponent extends PhysicsComponent {
 		//		}
 
 
-//		if (!mCollided) {
-			//Clamp de vel
-			if (mVelocity.getX() > MAX_VELS.getX())
-				mVelocity.setX(MAX_VELS.getX());
-			else if (mVelocity.getX() < -MAX_VELS.getX())
-				mVelocity.setX(-MAX_VELS.getX());
+		if (!mCollided) {
+//			Clamp de vel
+			if (mVelocity.getX() > mMaxVels.getX())
+				mVelocity.setX(mMaxVels.getX());
+			else if (mVelocity.getX() < -mMaxVels.getX())
+				mVelocity.setX(-mMaxVels.getX());
 
-			if (mVelocity.getY() > MAX_VELS.getY())
-				mVelocity.setY(MAX_VELS.getY());
-			else if (mVelocity.getY() < -MAX_VELS.getY())
-				mVelocity.setY(-MAX_VELS.getY());
-//		}
+			if (mVelocity.getY() > mMaxVels.getY())
+				mVelocity.setY(mMaxVels.getY());
+			else if (mVelocity.getY() < -mMaxVels.getY())
+				mVelocity.setY(-mMaxVels.getY());
+		}
 
 		addVel(parent);
 
@@ -99,8 +89,8 @@ public class EnemyPhysicsComponent extends PhysicsComponent {
 
 		applyForce(((velocity.length() > 0.01f ? velocity : new Vector2f(0, 0))));
 
-		fric.setX(0.009f);
-		fric.setY(0.009f);
+		mFric.setX(0.009f);
+		mFric.setY(0.009f);
 
 	}
 
@@ -109,27 +99,27 @@ public class EnemyPhysicsComponent extends PhysicsComponent {
 		applyForce(otherVel);
 		mCollided = true;
 
-		fric.setX(0f);
-		fric.setY(0f);
+		mFric.setX(0f);
+		mFric.setY(0f);
 
 	}
 
-	public void applyForce(float force){
-
-		force /= mMass;
-		mVelocity = mVelocity.add(force);
-
-	}
-
-	public void applyForce(Vector2f force){
-
-		force = force.div(mMass);
-		mVelocity = mVelocity.add(force);
-
-	}
-
-	public Vector2f getVelocity(){
-		return mVelocity;
-	}
+//	public void applyForce(float force){
+//
+//		force /= mMass;
+//		mVelocity = mVelocity.add(force);
+//
+//	}
+//
+//	public void applyForce(Vector2f force){
+//
+//		force = force.div(mMass);
+//		mVelocity = mVelocity.add(force);
+//
+//	}
+//
+//	public Vector2f getVelocity(){
+//		return mVelocity;
+//	}
 
 }

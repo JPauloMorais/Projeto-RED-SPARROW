@@ -11,11 +11,14 @@ import br.jp.redsparrow.engine.core.HUDitem;
 import br.jp.redsparrow.engine.core.Vector2f;
 import br.jp.redsparrow.engine.core.components.AnimatedSpriteComponent;
 import br.jp.redsparrow.engine.core.components.GunComponent;
+import br.jp.redsparrow.engine.core.components.LifeBarComponent;
+import br.jp.redsparrow.engine.core.components.RelSpriteComponent;
 import br.jp.redsparrow.engine.core.components.SoundComponent;
 import br.jp.redsparrow.engine.core.components.SpriteComponent;
 import br.jp.redsparrow.engine.core.physics.AABB;
 import br.jp.redsparrow.game.components.EnemyPhysicsComponent;
 import br.jp.redsparrow.game.components.PlayerPhysicsComponent;
+import br.jp.redsparrow.game.components.PlayerStatsComponent;
 import br.jp.redsparrow.game.components.ProjectilePhysicsComponent;
 
 public class ObjectFactory {
@@ -60,6 +63,8 @@ public class ObjectFactory {
 			obj.addComponent(new SoundComponent(context, obj, sounds));
 
 			obj.addComponent(new GunComponent(obj));
+			
+			obj.addComponent(new PlayerStatsComponent(obj, 5, 5));
 			//			obj.addComponent(new AnimatedSpriteComponent(context, obj, R.drawable.nova_nave, 4));
 			
 			break;
@@ -143,9 +148,30 @@ public class ObjectFactory {
 		case AMMO_DISP:
 			
 			item = new HUDitem(context, -19, 38, 10, 10);
-			item.addComponent(new SpriteComponent(context, R.drawable.ammo_display_test, item, 0, 0f));
-			item.addComponent(new SpriteComponent(context, R.drawable.projectile_1, item, 1f, 0f,
+			item.addComponent(new SpriteComponent(context, R.drawable.ammo_display_test, item, 0, 0));
+			item.addComponent(new RelSpriteComponent(context, R.drawable.projectile_1, item,
+					new Vector2f(0, 1f), 8, 8,
 					2, 1, 0, 1));
+			
+			break;
+			
+		case LIFEBAR:
+			
+			item = new HUDitem(context, -14, 38, 9, 3);
+			
+			item.addComponent(new LifeBarComponent(item));
+			
+			//life slots
+			item.addComponent(new RelSpriteComponent(context, R.drawable.life_gauge_test, item,
+					new Vector2f(0, 0), 3, 3));
+			item.addComponent(new RelSpriteComponent(context, R.drawable.life_gauge_test, item,
+					new Vector2f(3, 0), 3, 3));
+			item.addComponent(new RelSpriteComponent(context, R.drawable.life_gauge_test, item,
+					new Vector2f(6, 0), 3, 3));
+			item.addComponent(new RelSpriteComponent(context, R.drawable.life_gauge_test, item,
+					new Vector2f(9, 0), 3, 3));
+			item.addComponent(new RelSpriteComponent(context, R.drawable.life_gauge_test, item,
+					new Vector2f(12, 0), 3, 3));
 			
 			break;
 

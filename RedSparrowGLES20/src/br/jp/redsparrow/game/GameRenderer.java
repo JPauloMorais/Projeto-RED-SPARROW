@@ -20,6 +20,7 @@ import br.jp.redsparrow.engine.core.Vector2f;
 import br.jp.redsparrow.engine.core.World;
 import br.jp.redsparrow.engine.core.components.GunComponent;
 import br.jp.redsparrow.engine.core.components.SoundComponent;
+import br.jp.redsparrow.engine.core.messages.Message;
 import br.jp.redsparrow.engine.core.missions.MissionSystem;
 import br.jp.redsparrow.engine.core.missions.TestMission;
 import br.jp.redsparrow.engine.core.util.FPSCounter;
@@ -89,16 +90,16 @@ public class GameRenderer implements Renderer {
 
 		HUD.init();
 		HUD.addItem(ObjectFactory.createHUDitem(mContext, HUDITEM_TYPE.AMMO_DISP));
+		HUD.addItem(ObjectFactory.createHUDitem(mContext, HUDITEM_TYPE.LIFEBAR));
 //		
 //		TiledBackground.init(mContext, 10, 10, 40, R.drawable.points_test_1, R.drawable.points_test_2, R.drawable.points_test_3, R.drawable.points_test_4);
 		mDbgBackground = ObjectFactory.createObject(mContext, OBJECT_TYPE.DBG_BG, 0, 0);
 		mDbgBackground1 = ObjectFactory.createObject(mContext, OBJECT_TYPE.DBG_BG1, 0, 0);
-		obj = ObjectFactory.createObject(mContext, OBJECT_TYPE.PLAYER, 1, 1);
 		World.init(mContext);
 		World.setPlayer(ObjectFactory.createObject(mContext, OBJECT_TYPE.PLAYER, 0f, 0f));
 		//----TESTE----
 		int qd = 1; int qd2 = 1;
-		for (int i = 0; i < 1; i++) {
+		for (int i = 0; i < 30; i++) {
 			World.addObject(ObjectFactory.createObject(mContext, OBJECT_TYPE.BASIC_ENEMY, (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2));
 			if(i%2==0) qd *= -1;
 			else qd2 *= -1;
@@ -166,48 +167,48 @@ public class GameRenderer implements Renderer {
 		HUD.loop(viewProjectionMatrix);
 
 		//------------TESTE
-		try {
-			((EnemyPhysicsComponent) World.getObject(0).getUpdatableComponent(0)).move(new Vector2f(1f, 1f));
-		} catch (Exception e) {
-			objIds++;
+//		try {
+//			((EnemyPhysicsComponent) World.getObject(0).getUpdatableComponent(0)).move(new Vector2f(1f, 1f));
+//		} catch (Exception e) {
+//			objIds++;
+//		}
+		if(times < 50) times++;
+		else {
+			times = 0;
+
+			if ( objIds < World.getObjectCount() ) {
+
+				try {
+					if( World.getObjectById(objIds).getType().equals(OBJECT_TYPE.BASIC_ENEMY) ){
+
+//						World.getPlayer().recieveMessage(new Message(-2, "Damage", 1));
+						
+						Vector2f moveO = new Vector2f(0f,
+								((random.nextFloat()) / 10) * dir);
+
+						((EnemyPhysicsComponent) World.getObjectById(objIds).getUpdatableComponent(0)).move(moveO);
+
+
+						((SoundComponent) World.getObjectById(objIds)
+								.getUpdatableComponent(1)).setSoundVolume(0, 0.05f, 0.05f);
+						((SoundComponent) World.getObjectById(objIds)
+								.getUpdatableComponent(1)).startSound(0, false);
+						((GunComponent) World.getObjectById(objIds)
+								.getUpdatableComponent(2)).shoot(new Vector2f(0f, -0.5f));
+
+						objIds++;
+					}
+				} catch (NullPointerException e) {
+					objIds = 0;
+					dir *= -1;
+				}
+
+			}else{
+				objIds = 0;
+				dir *= -1;
+			}
+
 		}
-//		if(times < 50) times++;
-//		else {
-//		}
-//		else {
-//			times = 0;
-//
-//			if ( objIds < World.getObjectCount() ) {
-//
-//				try {
-//					if( World.getObjectById(objIds).getType().equals(OBJECT_TYPE.BASIC_ENEMY) ){
-//
-//						Vector2f moveO = new Vector2f(0f,
-//								((random.nextFloat()) / 10) * dir);
-//
-//						((EnemyPhysicsComponent) World.getObjectById(objIds).getUpdatableComponent(0)).move(moveO);
-//
-//
-//						((SoundComponent) World.getObjectById(objIds)
-//								.getUpdatableComponent(1)).setSoundVolume(0, 0.05f, 0.05f);
-//						((SoundComponent) World.getObjectById(objIds)
-//								.getUpdatableComponent(1)).startSound(0, false);
-//						((GunComponent) World.getObjectById(objIds)
-//								.getUpdatableComponent(2)).shoot(new Vector2f(0f, -0.5f));
-//
-//						objIds++;
-//					}
-//				} catch (NullPointerException e) {
-//					objIds = 0;
-//					dir *= -1;
-//				}
-//
-//			}else{
-//				objIds = 0;
-//				dir *= -1;
-//			}
-//
-//		}
 
 		//-------------------------------
 		

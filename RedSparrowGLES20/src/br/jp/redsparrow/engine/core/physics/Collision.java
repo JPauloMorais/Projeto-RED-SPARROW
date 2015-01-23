@@ -4,29 +4,7 @@ import br.jp.redsparrow.engine.core.Vector2f;
 
 public class Collision {
 	
-//	public static boolean areIntersecting(RectF a, RectF b){
-//		return false;
-//		//left
-//		obj1.getCenter().getX() - obj1.getWidth()/2;
-//		//top
-//		obj1.getCenter().getY() - obj1.getHeight()/2;
-//		//right
-//		obj1.getCenter().getX() + obj1.getWidth()/2;
-//		//bottom
-//		obj1.getCenter().getY() + obj1.getHeight()/2;
-//	}
-	
-//	public static boolean areIntersecting(BCircle a, BCircle b){
-//		
-//		// Calculate squared distance between centers 
-//		Vector2f d = a.getCenter().sub(b.getCenter()); 
-//		float dist2 = d.dot(d); 
-//		// Spheres intersect if squared distance is less than squared sum of radii 
-//		float radiusSum = a.getWidth() + b.getWidth(); 
-//		return (dist2 <= radiusSum * radiusSum);
-//		
-//	}
-	
+	//Teste rapido de colisao entre dois AABBs
 	public static boolean areIntersecting(AABB aabb, AABB aabb2) {
 		
 		if(Math.abs(aabb.getCenter().getX()-aabb2.getCenter().getX()) < (aabb.getWidth()/2 + aabb2.getWidth()/2)){
@@ -51,4 +29,82 @@ public class Collision {
 		return false;
 		
 	}
+	
+	//Teste de colisao usando o teorema da separacao dos eixos
+	public static Vector2f getColVector(AABB obj1, AABB obj2) {
+		float min1, max1,
+			min2, max2,
+			offsetx = 0, offsety = 0;
+		
+//		Colisoes em X
+		if (obj1.getCenter().getX() < obj2.getCenter().getX())
+		{
+			min1 = obj1.getCenter().getX();
+			max1 = obj1.getCenter().getX() + obj1.getWidth()/2;
+			min2 = obj2.getCenter().getX() - obj2.getWidth()/2;
+			max2 = obj2.getCenter().getX();
+			offsetx = min2 - max1;
+
+			if (min1 - max2 > 0 || min2 - max1 > 0)
+				return null;
+		}
+		
+		else if (obj1.getCenter().getX() > obj2.getCenter().getX())
+		{
+			min1 = obj1.getCenter().getX() - obj1.getWidth()/2;
+			max1 = obj1.getCenter().getX();
+			min2 = obj2.getCenter().getX();
+			max2 = obj2.getCenter().getX() + obj2.getWidth()/2;
+			offsetx = max2 - min1;
+
+			if (min1 - max2 > 0 || min2 - max1 > 0)
+				return null;
+		}
+		
+		
+//		Colisoes em Y
+		if (obj1.getCenter().getY() < obj2.getCenter().getY())
+		{
+			min1 = obj1.getCenter().getY();
+			max1 = obj1.getCenter().getY() + obj1.getHeight()/2;
+			min2 = obj2.getCenter().getY() - obj2.getHeight()/2;
+			max2 = obj2.getCenter().getY();
+			offsety = min2 - max1;
+
+			if (min1 - max2 > 0 || min2 - max1 > 0)
+				return null;
+			
+		}
+		
+		else if (obj1.getCenter().getY() > obj2.getCenter().getY())
+		{
+			min1 = obj1.getCenter().getY() - obj1.getWidth()/2;
+			max1 = obj1.getCenter().getY();
+			min2 = obj2.getCenter().getY();
+			max2 = obj2.getCenter().getY() + obj2.getHeight()/2;
+			offsety = max2 - min1;
+
+			if (min1 - max2 > 0 || min2 - max1 > 0)
+				return null;
+			
+		}
+		
+		if (offsetx == 0 || offsety == 0)
+		{
+
+		}
+		else
+		{
+			// Push the object on one axis only (least resistance)
+			if (Math.abs(offsetx) < Math.abs(offsety))
+				offsety = 0;
+			else
+				offsetx = 0;
+		}
+		
+		return new Vector2f(offsetx, offsety);
+	}
+	
+	
+	
 }

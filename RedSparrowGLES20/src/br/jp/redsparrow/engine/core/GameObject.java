@@ -121,6 +121,10 @@ public class GameObject {
 		if(component instanceof Renderable) mRenderableComponents.add(component);
 	}
 	
+	public ArrayList<Component> getUpdatableComponents() {
+		return mUpdatableComponents;
+	}
+	
 	public Component getUpdatableComponent(String name) {
 		for (Component component : mUpdatableComponents) {
 			if(component.getName().equals(name)) return component;
@@ -132,6 +136,14 @@ public class GameObject {
 		return mUpdatableComponents.get(indx);
 	}
 	
+	public void removeUpdatableComponent(int indx) {
+		mUpdatableComponents.remove(indx);
+	}
+	
+	public ArrayList<Component> getRenderableComponents() {
+		return mRenderableComponents;
+	}
+	
 	public Component getRenderableComponent(String name) {
 		for (Component component : mRenderableComponents) {
 			if(component.getName().equals(name)) return component;
@@ -141,6 +153,10 @@ public class GameObject {
 	
 	public Component getRenderableComponent(int indx) {
 		return mRenderableComponents.get(indx);
+	}
+	
+	public void removeRenderableComponent(int indx) {
+		mRenderableComponents.remove(indx);
 	}
 	//-------------------------------
 	
