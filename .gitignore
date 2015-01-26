@@ -6,7 +6,6 @@
 .project
 .metadata
 tmp/
-bin/
 *.tmp
 *.bak
 *.swp
