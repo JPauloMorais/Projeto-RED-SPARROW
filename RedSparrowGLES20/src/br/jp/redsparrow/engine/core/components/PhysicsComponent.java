@@ -1,6 +1,5 @@
 package br.jp.redsparrow.engine.core.components;
 
-import android.util.Log;
 import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.Updatable;
 import br.jp.redsparrow.engine.core.Vector2f;
@@ -14,7 +13,7 @@ public abstract class PhysicsComponent extends Component implements Updatable {
 	protected Vector2f mFric = new Vector2f(0f, 0f);
 
 	protected float mMass;
-	
+
 	protected boolean mMoved;
 	protected boolean mCollided;
 
@@ -24,26 +23,26 @@ public abstract class PhysicsComponent extends Component implements Updatable {
 		mPosition = parent.getPosition();
 		mMoved = false;
 		mCollided = false;
-		
+
 	}
 
 	@Override
 	public void update(GameObject parent) {			
-			
-			//Friccao
 
-			if(mVelocity.getX() > 0.0000001f){
-				mVelocity.setX(mVelocity.getX() - mFric.getX());
-			}else if (mVelocity.getX() < -0.0000001f){
-				mVelocity.setX(mVelocity.getX() + mFric.getX());
-			}
+		//Friccao
 
-			if(mVelocity.getY() > 0.0000001f){
-				mVelocity.setY(mVelocity.getY() - mFric.getY());
-			}else if (mVelocity.getY() < -0.00000001f){
-				mVelocity.setY(mVelocity.getY() + mFric.getY());
-			}
-			
+		if(mVelocity.getX() > 0.0000001f){
+			mVelocity.setX(mVelocity.getX() - mFric.getX());
+		}else if (mVelocity.getX() < -0.0000001f){
+			mVelocity.setX(mVelocity.getX() + mFric.getX());
+		}
+
+		if(mVelocity.getY() > 0.0000001f){
+			mVelocity.setY(mVelocity.getY() - mFric.getY());
+		}else if (mVelocity.getY() < -0.00000001f){
+			mVelocity.setY(mVelocity.getY() + mFric.getY());
+		}
+
 
 		//Clamp de vel
 		if( mVelocity.getX() > mMaxVels.getX() ) mVelocity.setX(mMaxVels.getX());
@@ -54,13 +53,13 @@ public abstract class PhysicsComponent extends Component implements Updatable {
 
 
 	}
-	
+
 	public void addVel(GameObject parent){
 		mPosition = mPosition.add(mVelocity);
 		parent.setPosition( mPosition );
-		
+
 		parent.setRotation((Math.atan2(mVelocity.getY(), mVelocity.getX()))-1.5707963268d);
-		
+
 	}
 
 	public void applyForce(float force){
@@ -76,7 +75,7 @@ public abstract class PhysicsComponent extends Component implements Updatable {
 		mVelocity = mVelocity.add(force);
 
 	}
-	
+
 	public void collide(Vector2f otherVel){
 
 		applyForce(otherVel);

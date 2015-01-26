@@ -23,5 +23,9 @@ public class HUD {
 		mHudItems.add(item);
 	}
 
+	public static HUDitem getItem(int indx) {
+		return mHudItems.get(indx);
+	}
+
 
 }

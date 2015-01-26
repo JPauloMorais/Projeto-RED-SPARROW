@@ -27,18 +27,7 @@ public class ProjectilePhysicsComponent extends PhysicsComponent {
 	public void update(GameObject parent) {			
 
 		if (!hitTarget) {
-			super.update(parent);
-			if (!shot) {
-				//Input de Movimentacao
-				try {
-
-					mVelocity = (Vector2f) parent.getMessage("MOVE").getMessage();
-					shot = true;
-
-				} catch (Exception e) {
-				}
-
-			}
+//			super.update(parent);
 
 			parent.setPosition(	parent.getPosition().add(mVelocity) );
 
@@ -62,6 +51,11 @@ public class ProjectilePhysicsComponent extends PhysicsComponent {
 
 	public void hitTarget() {
 		this.hitTarget = true;
+	}
+	
+	@Override
+	public void collide(Vector2f otherVel) {
+		hitTarget();
 	}
 
 	public OBJECT_TYPE getShootertype() {

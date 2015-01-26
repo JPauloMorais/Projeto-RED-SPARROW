@@ -16,9 +16,10 @@ public class PlayerStatsComponent extends StatsComponent {
 		super.update(object);
 
 		try {
+			
 			int damage = Integer.valueOf(mParent.getMessage("Damage").getMessage().toString());
-			mHealth -= damage;
-			Log.i("MessagingSystem", ""+mHealth);
+			damage(damage);
+			Log.i("MessagingSystem", "" + mHealth);
 
 		} catch (Exception e) {
 		}

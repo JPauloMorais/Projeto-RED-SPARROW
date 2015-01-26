@@ -7,16 +7,16 @@ import android.content.Context;
 import android.graphics.RectF;
 import android.util.Log;
 import br.jp.redsparrow.R;
+import br.jp.redsparrow.engine.core.components.PhysicsComponent;
 import br.jp.redsparrow.engine.core.components.SoundComponent;
 import br.jp.redsparrow.engine.core.messages.Message;
 import br.jp.redsparrow.engine.core.physics.AABB;
+import br.jp.redsparrow.engine.core.physics.Bounds;
 import br.jp.redsparrow.engine.core.physics.Collision;
 import br.jp.redsparrow.engine.core.util.LogConfig;
 import br.jp.redsparrow.game.GameRenderer;
 import br.jp.redsparrow.game.ObjectFactory;
 import br.jp.redsparrow.game.ObjectFactory.OBJECT_TYPE;
-import br.jp.redsparrow.game.components.EnemyPhysicsComponent;
-import br.jp.redsparrow.game.components.PlayerPhysicsComponent;
 import br.jp.redsparrow.game.components.ProjectilePhysicsComponent;
 
 public class World implements Serializable{
@@ -72,7 +72,6 @@ public class World implements Serializable{
 		bgmSoundComponent.fadeIn(0, targetVol, 1, true);
 	}
 
-
 	public static void loop(float[] projectionMatrix){
 		if (isRunning) {
 			//-------LIMPANDO---------
@@ -104,7 +103,7 @@ public class World implements Serializable{
 							if(!mGameObjects.get(i).getType().equals(OBJECT_TYPE.PROJECTILE) &&
 									!mToCheck.get(j).getType().equals(OBJECT_TYPE.PROJECTILE)){
 
-								((EnemyPhysicsComponent) mGameObjects.get(i).getUpdatableComponent(0)).collide(
+								((PhysicsComponent) mGameObjects.get(i).getUpdatableComponent(0)).collide(
 										Collision.getColVector((AABB) mGameObjects.get(i).getBounds(),(AABB) mToCheck.get(j).getBounds()));
 
 
@@ -152,32 +151,23 @@ public class World implements Serializable{
 			mQuadTree.getToCheck(mToCheck, mPlayer.getBounds());
 
 			for (int i = 0; i < mToCheck.size(); i++) {
-				if(Collision.areIntersecting((AABB) mPlayer.getBounds(), (AABB) mToCheck.get(i).getBounds())){
+				if(Collision.areIntersecting((Bounds) mPlayer.getBounds(), (Bounds) mToCheck.get(i).getBounds())){
 
-					//					Log.i("Physics", "Cool");
 					if(!mToCheck.get(i).getType().equals(OBJECT_TYPE.PROJECTILE)){
-
-						//Transfere a velocidade de um bojeto para outro
-						//						vels = ((PlayerPhysicsComponent) mPlayer.getUpdatableComponent(0)).getVelocity();
-						//						mToCheck.get(i).recieveMessage(
-						//								new Message(-2, "Collision", vels));
-						//												((PlayerPhysicsComponent) mPlayer.getUpdatableComponent(0)).collide(
-						//														((EnemyPhysicsComponent) mToCheck.get(i).getUpdatableComponent(0)).getVelocity());
-
-						//						if(vels.length()==0){							
-						//							vels = ((EnemyPhysicsComponent) mToCheck.get(i).getUpdatableComponent(0)).getVelocity();
-						//							mPlayer.recieveMessage(
-						//									new Message(-2, "Collision", vels));
-						//						}
-						//						
-						((EnemyPhysicsComponent) mToCheck.get(i).getUpdatableComponent(0)).collide(
-								Collision.getColVector((AABB) mToCheck.get(i).getBounds(), (AABB) mPlayer.getBounds()));
+						
+						((PhysicsComponent) mToCheck.get(i).getUpdatableComponent(0)).collide(
+								Collision.getColVector((Bounds) mToCheck.get(i).getBounds(), (Bounds) mPlayer.getBounds()));
 
 					}else {
 						if(!((ProjectilePhysicsComponent) mToCheck.get(i).getUpdatableComponent(0))
 								.getShootertype().equals(OBJECT_TYPE.PLAYER)) {
+							
 							mPlayer.recieveMessage(new Message(-2, "Damage", 1));
-							mToCheck.get(i).die();
+							((PhysicsComponent) mPlayer.getUpdatableComponent(0)).collide(
+									Collision.getColVector(mPlayer.getBounds(), mToCheck.get(i).getBounds()).div(2));
+							
+							
+							((PhysicsComponent) mToCheck.get(i).getUpdatableComponent(0)).collide(mPlayer.getPosition().mult(-1));
 						}
 					}
 

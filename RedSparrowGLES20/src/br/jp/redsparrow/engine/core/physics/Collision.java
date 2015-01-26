@@ -4,8 +4,8 @@ import br.jp.redsparrow.engine.core.Vector2f;
 
 public class Collision {
 	
-	//Teste rapido de colisao entre dois AABBs
-	public static boolean areIntersecting(AABB aabb, AABB aabb2) {
+	//Teste rapido de colisao entre dois limites
+	public static boolean areIntersecting(Bounds aabb, Bounds aabb2) {
 		
 		if(Math.abs(aabb.getCenter().getX()-aabb2.getCenter().getX()) < (aabb.getWidth()/2 + aabb2.getWidth()/2)){
 			if(Math.abs(aabb.getCenter().getY()-aabb2.getCenter().getY()) < (aabb.getHeight()/2 + aabb2.getHeight()/2)){
@@ -16,7 +16,8 @@ public class Collision {
 		return false;
 	}
 	
-	public static boolean isInside(Vector2f a, AABB b) {
+//	determina se um ponto se encontra dentro dos limites
+	public static boolean isInside(Vector2f a, Bounds b) {
 		
 		if(Math.abs(b.getCenter().getX() - a.getX()) < b.getWidth()/2){
 			if(Math.abs(b.getCenter().getY() - a.getY()) < b.getHeight()/2){
@@ -31,7 +32,7 @@ public class Collision {
 	}
 	
 	//Teste de colisao usando o teorema da separacao dos eixos
-	public static Vector2f getColVector(AABB obj1, AABB obj2) {
+	public static Vector2f getColVector(Bounds obj1, Bounds obj2) {
 		float min1, max1,
 			min2, max2,
 			offsetx = 0, offsety = 0;
