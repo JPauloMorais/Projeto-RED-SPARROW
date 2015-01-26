@@ -31,6 +31,17 @@ public class Vector2f {
 		return this;
 	}
 	
+	public void setLength(float length) {
+		
+		float curLength = length();
+		
+		length /= curLength;
+		
+		mX /= length;
+		mY /= length;
+		
+	}
+	
 	public Vector2f rotate(float angle){
 		
 //		double aRad = Math.toRadians(angle);

@@ -48,16 +48,8 @@ public class EnemyPhysicsComponent extends PhysicsComponent {
 
 		if (!mCollided) {
 
-			if (mVelocity.getX() > 0.0000001f) {
-				mVelocity.setX(mVelocity.getX() - mFric.getX());
-			} else if (mVelocity.getX() < -0.0000001f) {
-				mVelocity.setX(mVelocity.getX() + mFric.getX());
-			}
-			if (mVelocity.getY() > 0.0000001f) {
-				mVelocity.setY(mVelocity.getY() - mFric.getY());
-			} else if (mVelocity.getY() < -0.00000001f) {
-				mVelocity.setY(mVelocity.getY() + mFric.getY());
-			}
+			mFric = mVelocity.div(60);
+			applyForce(mFric);
 
 		}
 
@@ -68,15 +60,15 @@ public class EnemyPhysicsComponent extends PhysicsComponent {
 
 		if (!mCollided) {
 //			Clamp de vel
-			if (mVelocity.getX() > mMaxVels.getX())
-				mVelocity.setX(mMaxVels.getX());
-			else if (mVelocity.getX() < -mMaxVels.getX())
-				mVelocity.setX(-mMaxVels.getX());
-
-			if (mVelocity.getY() > mMaxVels.getY())
-				mVelocity.setY(mMaxVels.getY());
-			else if (mVelocity.getY() < -mMaxVels.getY())
-				mVelocity.setY(-mMaxVels.getY());
+//			if (mVelocity.getX() > mMaxVels.getX())
+//				mVelocity.setX(mMaxVels.getX());
+//			else if (mVelocity.getX() < -mMaxVels.getX())
+//				mVelocity.setX(-mMaxVels.getX());
+//
+//			if (mVelocity.getY() > mMaxVels.getY())
+//				mVelocity.setY(mMaxVels.getY());
+//			else if (mVelocity.getY() < -mMaxVels.getY())
+//				mVelocity.setY(-mMaxVels.getY());
 		}
 
 		addVel(parent);
@@ -87,10 +79,9 @@ public class EnemyPhysicsComponent extends PhysicsComponent {
 
 	public void move(Vector2f velocity){
 
-		applyForce(((velocity.length() > 0.01f ? velocity : new Vector2f(0, 0))));
+		applyForce( ((velocity.length() > 0.01f ? velocity : new Vector2f(0, 0))));
 
-		mFric.setX(0.009f);
-		mFric.setY(0.009f);
+//		mFric = mVelocity.div(60);
 
 	}
 
@@ -99,27 +90,9 @@ public class EnemyPhysicsComponent extends PhysicsComponent {
 		applyForce(otherVel);
 		mCollided = true;
 
-		mFric.setX(0f);
-		mFric.setY(0f);
+//		mFric.setX(0);
+//		mFric.setY(0);
 
 	}
-
-//	public void applyForce(float force){
-//
-//		force /= mMass;
-//		mVelocity = mVelocity.add(force);
-//
-//	}
-//
-//	public void applyForce(Vector2f force){
-//
-//		force = force.div(mMass);
-//		mVelocity = mVelocity.add(force);
-//
-//	}
-//
-//	public Vector2f getVelocity(){
-//		return mVelocity;
-//	}
 
 }

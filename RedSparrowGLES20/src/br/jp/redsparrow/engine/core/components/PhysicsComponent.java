@@ -21,6 +21,7 @@ public abstract class PhysicsComponent extends Component implements Updatable {
 		super("Physics", parent);
 
 		mPosition = parent.getPosition();
+		mMaxVels = new Vector2f(parent.getWidth(), parent.getHeight());
 		mMoved = false;
 		mCollided = false;
 
@@ -31,30 +32,37 @@ public abstract class PhysicsComponent extends Component implements Updatable {
 
 		//Friccao
 
-		if(mVelocity.getX() > 0.0000001f){
-			mVelocity.setX(mVelocity.getX() - mFric.getX());
-		}else if (mVelocity.getX() < -0.0000001f){
-			mVelocity.setX(mVelocity.getX() + mFric.getX());
-		}
-
-		if(mVelocity.getY() > 0.0000001f){
-			mVelocity.setY(mVelocity.getY() - mFric.getY());
-		}else if (mVelocity.getY() < -0.00000001f){
-			mVelocity.setY(mVelocity.getY() + mFric.getY());
-		}
+		mVelocity.sub(mFric);
+//		if(mVelocity.getX() > 0.0000001f){
+//			mVelocity.setX(mVelocity.getX() - mFric.getX());
+//		}else if (mVelocity.getX() < -0.0000001f){
+//			mVelocity.setX(mVelocity.getX() + mFric.getX());
+//		}
+//
+//		if(mVelocity.getY() > 0.0000001f){
+//			mVelocity.setY(mVelocity.getY() - mFric.getY());
+//		}else if (mVelocity.getY() < -0.00000001f){
+//			mVelocity.setY(mVelocity.getY() + mFric.getY());
+//		}
 
 
 		//Clamp de vel
-		if( mVelocity.getX() > mMaxVels.getX() ) mVelocity.setX(mMaxVels.getX());
-		else if(mVelocity.getX() < -mMaxVels.getX()) mVelocity.setX(-mMaxVels.getX());
-
-		if( mVelocity.getY() > mMaxVels.getY() ) mVelocity.setY(mMaxVels.getY());
-		else if(mVelocity.getY() < -mMaxVels.getY()) mVelocity.setY(-mMaxVels.getY());
+		
+		
+		
+//		if( mVelocity.getX() > mMaxVels.getX() ) mVelocity.setX(mMaxVels.getX());
+//		else if(mVelocity.getX() < -mMaxVels.getX()) mVelocity.setX(-mMaxVels.getX());
+//
+//		if( mVelocity.getY() > mMaxVels.getY() ) mVelocity.setY(mMaxVels.getY());
+//		else if(mVelocity.getY() < -mMaxVels.getY()) mVelocity.setY(-mMaxVels.getY());
 
 
 	}
 
 	public void addVel(GameObject parent){
+		
+//		mVelocity.setLength(1);
+		
 		mPosition = mPosition.add(mVelocity);
 		parent.setPosition( mPosition );
 
@@ -81,8 +89,7 @@ public abstract class PhysicsComponent extends Component implements Updatable {
 		applyForce(otherVel);
 		mCollided = true;
 
-		mFric.setX(0.01f);
-		mFric.setY(0.01f);
+		mFric = mVelocity.div(60);
 
 	}
 
