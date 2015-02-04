@@ -26,6 +26,7 @@ public class ObjectFactory {
 	public enum OBJECT_TYPE{
 		PLAYER, 
 		BASIC_ENEMY,
+		BASIC_ENEMY_2,
 		PROJECTILE,
 		DBG_BG,
 		DBG_BG1,
@@ -88,6 +89,31 @@ public class ObjectFactory {
 			soundsE.add(MediaPlayer.create(context, R.raw.test_shot));
 			soundsE.get(0).setVolume(0.005f, 0.005f);
 			obj.addComponent(new SoundComponent(context, obj, soundsE));
+
+			obj.addComponent(new GunComponent(obj));
+
+			break;
+
+
+		case BASIC_ENEMY_2:
+
+			obj.setWidth(1f);
+			obj.setHeight(1f);
+			obj.setType(OBJECT_TYPE.BASIC_ENEMY_2);
+
+			obj.addComponent(new EnemyPhysicsComponent(obj));
+//			obj.addComponent(new SpriteComponent( context, R.drawable.enemy_ship, 
+//					obj,
+//					0.3f, 0.3f ));
+			Animation anim_2 = new Animation(1, 1);
+			anim_2.setAmmoToWait(4);
+			obj.addComponent(new AnimatedSpriteComponent(context, R.drawable.basic_enemy_ship, obj,
+					anim_2, 0.3f, 0.3f));
+
+			ArrayList<MediaPlayer> soundsE_2 = new ArrayList<MediaPlayer>();
+			soundsE_2.add(MediaPlayer.create(context, R.raw.test_shot));
+			soundsE_2.get(0).setVolume(0.005f, 0.005f);
+			obj.addComponent(new SoundComponent(context, obj, soundsE_2));
 
 			obj.addComponent(new GunComponent(obj));
 
