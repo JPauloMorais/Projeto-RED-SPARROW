@@ -60,14 +60,15 @@ public abstract class PhysicsComponent extends Component implements Updatable {
 	}
 
 	public void addVel(GameObject parent){
-		
-//		mVelocity.setLength(1);
-		
+				
 		mPosition = mPosition.add(mVelocity);
 		parent.setPosition( mPosition );
 
-		parent.setRotation((Math.atan2(mVelocity.getY(), mVelocity.getX()))-1.5707963268d);
-
+	}
+	
+	public void pointForwards(GameObject parent) {
+		//Calcula arco tangente do vetor de velocidade - 90° para determinar a rotacao do objeto
+		parent.setRotation(Math.atan2(mVelocity.getY(), mVelocity.getX())-1.5707963268d);
 	}
 
 	public void applyForce(float force){

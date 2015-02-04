@@ -12,6 +12,7 @@ import br.jp.redsparrow.engine.core.Vector2f;
 import br.jp.redsparrow.engine.core.VertexArray;
 import br.jp.redsparrow.engine.core.util.TextureUtil;
 import br.jp.redsparrow.engine.shaders.TextureShaderProg;
+import br.jp.redsparrow.game.GameRenderer;
 
 public class AnimatedSpriteComponent extends Component implements Renderable {
 
@@ -20,7 +21,8 @@ public class AnimatedSpriteComponent extends Component implements Renderable {
 	private float[] mOffset;
 
 	private TextureShaderProg mTextureProgram;
-	private int mTexture;
+	private ArrayList<Integer> mTextures;
+//	private int mTexture;
 
 	private float[] mVertsData;
 
@@ -33,7 +35,8 @@ public class AnimatedSpriteComponent extends Component implements Renderable {
 		super("Sprite", parent);
 
 		mTextureProgram = new TextureShaderProg(context);
-		mTexture = TextureUtil.loadTexture(context, imgId);
+		mTextures = new ArrayList<Integer>();
+		mTextures.add(TextureUtil.loadTexture(context, imgId));
 
 		mVertsData = new float[30];
 
@@ -158,7 +161,7 @@ public class AnimatedSpriteComponent extends Component implements Renderable {
 
 		updateVertsData();
 		mTextureProgram.useProgram();
-		mTextureProgram.setUniforms(projectionMatrix, mTexture);
+		mTextureProgram.setUniforms(projectionMatrix, mTextures.get(curAnim));
 		bindData();
 		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 6);
 
@@ -172,7 +175,8 @@ public class AnimatedSpriteComponent extends Component implements Renderable {
 		return mAnimations.get(indx);
 	}
 
-	public void addAnimation(Animation anim){
+	public void addAnimation(int srcSheet, Animation anim){
+		mTextures.add(TextureUtil.loadTexture(GameRenderer.getContext(), srcSheet));
 		mAnimations.add(anim);
 	}
 

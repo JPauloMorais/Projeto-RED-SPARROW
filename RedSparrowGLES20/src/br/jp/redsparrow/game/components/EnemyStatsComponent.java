@@ -1,33 +1,21 @@
 package br.jp.redsparrow.game.components;
 
-import android.util.Log;
 import br.jp.redsparrow.R;
 import br.jp.redsparrow.engine.core.Animation;
 import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.components.AnimatedSpriteComponent;
 import br.jp.redsparrow.engine.core.components.StatsComponent;
 
-public class PlayerStatsComponent extends StatsComponent {
-	
-	public PlayerStatsComponent(GameObject parent, int health, int speed) {
+public class EnemyStatsComponent extends StatsComponent {
+
+	public EnemyStatsComponent(GameObject parent, int health, int speed) {
 		super(parent, health, speed);
-
+		// TODO Auto-generated constructor stub
 	}
-
+	
 	@Override
 	public void update(GameObject object) {
 		super.update(object);
-
-		try {
-			
-			int damage = Integer.valueOf(mParent.getMessage("Damage").getMessage().toString());
-			takeDamage(damage);
-			Log.i("MessagingSystem", "" + mHealth);
-
-		} catch (Exception e) {
-		}
-		
-		
 	}
 
 	@Override
@@ -38,5 +26,6 @@ public class PlayerStatsComponent extends StatsComponent {
 		}
 		else if(((AnimatedSpriteComponent) mParent.getUpdatableComponent(1)).getAnimation(1).hasLoopedOnce()) mParent.die();
 	}
+
 
 }

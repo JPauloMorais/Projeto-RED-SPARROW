@@ -8,6 +8,7 @@ public abstract class StatsComponent extends Component implements Updatable {
 	protected int mHealth;
 	protected int mCurHealth;
 	protected int mSpeed;
+	protected boolean isDiyng;
 	
 	public StatsComponent(GameObject parent, int health, int speed) {
 		super("Stats", parent);
@@ -15,6 +16,7 @@ public abstract class StatsComponent extends Component implements Updatable {
 		mHealth = health;
 		mCurHealth = health;
 		mSpeed = speed;
+		isDiyng = false;
 		
 	}
 	
@@ -31,7 +33,7 @@ public abstract class StatsComponent extends Component implements Updatable {
 		this.mCurHealth = mCurHealth;
 	}
 	
-	public synchronized void damage(int damage) {
+	public void takeDamage(int damage) {
 		mCurHealth -= damage;
 	}
 

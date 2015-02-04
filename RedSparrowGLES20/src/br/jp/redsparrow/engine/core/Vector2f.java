@@ -22,7 +22,7 @@ public class Vector2f {
 		return mX * v.getX() + mY * v.getY();
 	}
 	
-	public Vector2f normalize(){
+	public Vector2f normalize (){
 		float length = length();
 		
 		mX /= length;
@@ -31,7 +31,7 @@ public class Vector2f {
 		return this;
 	}
 	
-	public void setLength(float length) {
+	public void setLength (float length) {
 		
 		float curLength = length();
 		

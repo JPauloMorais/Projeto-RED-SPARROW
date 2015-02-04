@@ -93,11 +93,13 @@ public class GameRenderer implements Renderer {
 		HUD.addItem(ObjectFactory.createHUDitem(mContext, HUDITEM_TYPE.LIFEBAR));
 		//		
 		//		TiledBackground.init(mContext, 10, 10, 40, R.drawable.points_test_1, R.drawable.points_test_2, R.drawable.points_test_3, R.drawable.points_test_4);
-		mDbgBackground = ObjectFactory.createObject(mContext, OBJECT_TYPE.DBG_BG, 0, 0);
-		mDbgBackground1 = ObjectFactory.createObject(mContext, OBJECT_TYPE.DBG_BG1, 0, 0);
 		World.init(mContext);
 		World.setPlayer(ObjectFactory.createObject(mContext, OBJECT_TYPE.PLAYER, 0f, 0f));
 		//----TESTE----
+		
+		mDbgBackground = ObjectFactory.createObject(mContext, OBJECT_TYPE.DBG_BG, 0, 0);
+		mDbgBackground1 = ObjectFactory.createObject(mContext, OBJECT_TYPE.DBG_BG1, 0, 0);
+
 		int qd = 1; int qd2 = 1;
 		for (int i = 0; i < 30; i++) {
 			World.addObject(ObjectFactory.createObject(mContext, OBJECT_TYPE.BASIC_ENEMY, (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2));
@@ -112,6 +114,7 @@ public class GameRenderer implements Renderer {
 			else qd2_b *= -1;
 		}
 
+		
 		//--------------
 
 
@@ -224,10 +227,12 @@ public class GameRenderer implements Renderer {
 			try {
 				((PlayerPhysicsComponent) World.getPlayer()
 						.getUpdatableComponent(0)).move(playerMoveVel);
+				playerMoveVel.setX(0);
+				playerMoveVel.setY(0);
+				move = false;
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			move = false;
 		}
 
 		if(LogConfig.ON) fps.logFrame();
@@ -243,15 +248,15 @@ public class GameRenderer implements Renderer {
 
 			Log.i("Input", " Touch em: (" + normalizedX + ", " + normalizedY + ")");
 
-			if (!Collision.isInside(new Vector2f(normalizedX+World.getPlayer().getX(), normalizedY+World.getPlayer().getY()),
+			if (!Collision.isInside(new Vector2f(normalizedX, normalizedY).add(World.getPlayer().getPosition()),
 					HUD.getItem(0).getBounds())) {
 				mVibrator.vibrate(100);
 				projMoveVel.setX(normalizedX);
 				projMoveVel.setY(normalizedY);
 				((SoundComponent) World.getPlayer().getUpdatableComponent(1))
-						.startSound(0, false);
+				.startSound(0, false);
 				((GunComponent) World.getPlayer().getUpdatableComponent(2))
-						.shoot(projMoveVel);
+				.shoot(projMoveVel);
 			}
 
 		} catch (Exception e) {
@@ -285,13 +290,16 @@ public class GameRenderer implements Renderer {
 
 		if (accelControls) {
 
+
 			playerMoveVel.setX(-values[0]/500);
 			playerMoveVel.setY(-values[1]/500);
-			move = true;
+//			playerMoveVel = playerMoveVel.normalize();
+			if(playerMoveVel.length() > 0.001f) {
+				move = true;
+//				Log.i("Physics", "(" + values[0] + "," + values[1] + ")");
+			}
 
-			Log.i("Physics", "(" + values[0] + "," + values[1] + ")");
-			//			World.getPlayer().setRotation(Math.atan2(values[1], values[0]));
-
+			
 
 
 		}

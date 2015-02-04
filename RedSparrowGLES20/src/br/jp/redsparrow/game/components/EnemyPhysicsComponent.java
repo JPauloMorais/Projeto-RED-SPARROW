@@ -72,6 +72,7 @@ public class EnemyPhysicsComponent extends PhysicsComponent {
 		}
 
 		addVel(parent);
+//		pointForwards(parent);
 
 		mCollided = false;
 
@@ -80,6 +81,8 @@ public class EnemyPhysicsComponent extends PhysicsComponent {
 	public void move(Vector2f velocity){
 
 		applyForce( ((velocity.length() > 0.01f ? velocity : new Vector2f(0, 0))));
+
+		pointForwards(mParent);
 
 //		mFric = mVelocity.div(60);
 

@@ -6,6 +6,10 @@ import br.jp.redsparrow.engine.core.util.ShaderUtil;
 import br.jp.redsparrow.engine.core.util.TextFileReader;
 
 public class ShaderProg {
+	
+	protected static final String U_TIME = "u_Time";
+	protected static final String A_DIRECTION_VECTOR = "a_DirectionVector";
+	protected static final String A_PARTICLE_START_TIME = "a_ParticleStartTime";
 
 	protected static final String U_MATRIX = "u_Matrix";
 	protected static final String U_TEXTURE_UNIT = "u_TextureUnit";

@@ -4,13 +4,16 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.RectF;
 import android.util.Log;
 import br.jp.redsparrow.R;
 import br.jp.redsparrow.engine.core.components.PhysicsComponent;
 import br.jp.redsparrow.engine.core.components.SoundComponent;
+import br.jp.redsparrow.engine.core.components.StatsComponent;
 import br.jp.redsparrow.engine.core.messages.Message;
-import br.jp.redsparrow.engine.core.physics.AABB;
+import br.jp.redsparrow.engine.core.particles.ParticleEmitter;
+import br.jp.redsparrow.engine.core.particles.ParticleSystem;
 import br.jp.redsparrow.engine.core.physics.Bounds;
 import br.jp.redsparrow.engine.core.physics.Collision;
 import br.jp.redsparrow.engine.core.util.LogConfig;
@@ -46,22 +49,39 @@ public class World implements Serializable{
 	private static SoundComponent bgmSoundComponent;
 	private static float bgMusicRightVol = 0.1f;
 	private static float bgMusicLeftVol = 0.1f;
+	
+	private static ParticleSystem mParticleSystem;
+	private static ArrayList<ParticleEmitter> mEmiters;
+	
 
 	public static void init(Context context){
 
 		isRunning = false;
 
+		//Objetos
 		mPlayer = new GameObject();
 		mGameObjects = new ArrayList<GameObject>();
 		mToRemove = new ArrayList<GameObject>();
 
+		//Quadtree
 		mToCheck = new ArrayList<GameObject>();
-		mQuadTree = new Quadtree(0, new RectF(-100, -100, 100, 100));
+		mQuadTree = new Quadtree(0, new RectF(-1000, -1000, 1000, 1000));
 
 		mLayers = new ArrayList<Integer>();
 
+		//BGM
 		bgmSoundComponent = new SoundComponent(context, new GameObject());
 		bgmSoundComponent.addSound(R.raw.at_least_you_tried_greaf);
+		
+		//Particulas
+		mParticleSystem = new ParticleSystem(200, context);		
+		mEmiters = new ArrayList<ParticleEmitter>();
+		float[] pos = {0,0,0};
+		float[] dir = {0,1,0};
+		mEmiters.add(new ParticleEmitter(pos, dir, Color.YELLOW,
+				5,1));
+		mEmiters.add(new ParticleEmitter(pos, dir, Color.RED,
+				5,1));
 
 	}
 
@@ -98,20 +118,21 @@ public class World implements Serializable{
 					//CHECANDO COLISAO
 					for (int j=0; j < mToCheck.size(); j++) {
 
-						if (Collision.areIntersecting((AABB) mGameObjects.get(i).getBounds(), (AABB) mToCheck.get(j).getBounds())){
+						if (Collision.areIntersecting(mGameObjects.get(i).getBounds(), mToCheck.get(j).getBounds())) {
 
 							if(!mGameObjects.get(i).getType().equals(OBJECT_TYPE.PROJECTILE) &&
 									!mToCheck.get(j).getType().equals(OBJECT_TYPE.PROJECTILE)){
 
 								((PhysicsComponent) mGameObjects.get(i).getUpdatableComponent(0)).collide(
-										Collision.getColVector((AABB) mGameObjects.get(i).getBounds(),(AABB) mToCheck.get(j).getBounds()));
+										Collision.getColVector( mGameObjects.get(i).getBounds(), mToCheck.get(j).getBounds()));
 
 
 							}else if(!mToCheck.get(j).getType().equals(OBJECT_TYPE.PROJECTILE)){
 
 								if(!((ProjectilePhysicsComponent) mGameObjects.get(i).getUpdatableComponent(0))
 										.getShootertype().equals(mToCheck.get(j).getType())) {
-									mToCheck.get(j).die();
+									((StatsComponent) mToCheck.get(j).getUpdatableComponent(3)).takeDamage(5);
+//									mToCheck.get(j).die();
 									mGameObjects.get(i).die();
 								}
 
@@ -176,6 +197,19 @@ public class World implements Serializable{
 
 			mPlayer.update();
 			mPlayer.render(projectionMatrix);
+			mEmiters.get(0).setPosition(new float[] {
+					mPlayer.getX(), mPlayer.getY(),0
+			});
+			mEmiters.get(1).setPosition(new float[] {
+					mPlayer.getX(), mPlayer.getY(),0
+			});
+			
+			//------PARTICULAS-----------
+			
+			for (ParticleEmitter emitter : mEmiters) {
+				emitter.addParticles(mParticleSystem, mParticleSystem.getCurTime(), 5);
+			}
+			mParticleSystem.render(null,projectionMatrix);
 
 		}else {
 			onStart();
@@ -308,6 +342,10 @@ public class World implements Serializable{
 
 	public static void removeObject(GameObject object){
 		mGameObjects.remove(object);
+	}
+	
+	public static void addEmitter(ParticleEmitter emitter) {
+		mEmiters.add(emitter);
 	}
 
 	public static boolean isRunning() {
