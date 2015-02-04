@@ -103,6 +103,13 @@ public class GameRenderer implements Renderer {
 			World.addObject(ObjectFactory.createObject(mContext, OBJECT_TYPE.BASIC_ENEMY, (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2));
 			if(i%2==0) qd *= -1;
 			else qd2 *= -1;
+		}		
+			
+			int qd_b = 1; int qd2_b = 1;
+			for (int i_b = 0; i_b < 30; i_b++) {
+				World.addObject(ObjectFactory.createObject(mContext, OBJECT_TYPE.BASIC_ENEMY_2, (qd_b * random.nextFloat() * random.nextInt(10)) + 2*qd_b, (qd2_b * random.nextFloat() * random.nextInt(10)) + 2*qd2_b));
+				if(i_b%2==0) qd_b *= -1;
+				else qd2_b *= -1;
 		}
 
 		//--------------
