@@ -2,52 +2,82 @@ package br.jp.redsparrow.engine.core.missions;
 
 import java.util.ArrayList;
 
-import br.jp.redsparrow.engine.core.messages.Message;
+import android.app.IntentService;
+import android.content.Intent;
+import android.util.Log;
+import br.jp.redsparrow.engine.core.World;
+import br.jp.redsparrow.engine.core.physics.Collision;
+import br.jp.redsparrow.game.GameRenderer;
 
-public class MissionSystem {
+public class MissionSystem extends IntentService {
 
-	private static ArrayList<Mission> mMissions;
-	private static ArrayList<Message> mEventMessages;
+	public static final String TAG = "MissionSystem";
 	
-
-	public static void init(){
-		
-		mMissions = new ArrayList<Mission>();
-		mEventMessages = new ArrayList<Message>();
+	private static MissionSequence mainSequence;
+	private static ArrayList<MissionSequence> sideSequences;
 	
-	}
-
-	//adiciona a missao e retorna o id
-	public static int registerMission(Mission mission){
-		
-		mMissions.add(mission);
-
-		return mMissions.indexOf(mission);
+	public MissionSystem() {
+		super(TAG);				
 	}
 	
-	public static void update(){
-		
+	public static void setup(MissionSequence mainMissionSequence) {
+		mainSequence = mainMissionSequence;
+		sideSequences = new ArrayList<MissionSequence>();
 	}
 
-	public static void removeMission(int id){
-		mMissions.remove(id);
-	}
+	@Override
+	protected void onHandleIntent(Intent intent) {
 
-	public static void sendEventMessage(Message eventMessage){
-		mEventMessages.add(eventMessage);
-	}
+		Log.d(TAG, "-------------UPD_______________");
 
-	public static ArrayList<Message> getMessages(int missionId){
-		ArrayList<Message> toReturn = new ArrayList<Message>();
-		//adiciona as msg a lista de retorno e as remove da lista do sistema de missoes
-		for (Message message : mEventMessages) {
-			if( message.getObjectId() == missionId ) {
-				toReturn.add(message);
-				mEventMessages.remove( mEventMessages.indexOf(message) );
+		while(GameRenderer.isRunning()) {
+			
+			//------MAIN--------------
+			if(!mainSequence.getCurMission().wasTriggered()) {
+				if(Collision.areIntersecting(World.getPlayer().getBounds(), mainSequence.getCurMission().mBounds)) {
+					
+					mainSequence.getCurMission().trigger();
+				
+				}
+			}else {
+			
+				mainSequence.update();
+			
 			}
+			
+			//-------SIDE-------------
+			for (MissionSequence sideSequence : sideSequences) {
+				if(!sideSequence.getCurMission().wasTriggered()){
+					if(Collision.areIntersecting(World.getPlayer().getBounds(), sideSequence.getCurMission().mBounds)){
+						
+						sideSequence.getCurMission().trigger();
+						
+					}
+				}else {
+					
+					sideSequence.update();
+					
+				}
+			}
+			
+			removeCompletedSequences();
+			
 		}
+	
+	}
+	
+	private void removeCompletedSequences() {
 
-		return toReturn;
+		ArrayList<MissionSequence> aux = sideSequences;
+		
+		for (MissionSequence sideSequence : aux) {
+			if(sideSequence.isComplete()) sideSequences.remove(sideSequence);
+		}
+		
+	}
+
+	public void addSideMissionSequence(MissionSequence sequence) {
+		sideSequences.add(sequence);
 	}
 
 }

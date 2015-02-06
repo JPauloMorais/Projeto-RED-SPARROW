@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.WindowManager;
 import android.widget.Toast;
 import br.jp.redsparrow.R;
 import br.jp.redsparrow.engine.core.World;
@@ -63,6 +64,8 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 		}
 
 		setContentView(mGameView);
+		
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 	}
 
 

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.util.Log;
 import br.jp.redsparrow.R;
 import br.jp.redsparrow.engine.core.Animation;
 import br.jp.redsparrow.engine.core.GameObject;
@@ -32,7 +31,7 @@ public class ObjectFactory {
 		PROJECTILE,
 		DBG_BG,
 		DBG_BG1,
-		TEST, BASIC_ENEMY_2
+		TEST
 	}
 
 	public static GameObject createObject(Context context, OBJECT_TYPE type,
@@ -56,8 +55,8 @@ public class ObjectFactory {
 
 			obj.addComponent(new PlayerPhysicsComponent(obj));
 
-			Animation animP = new Animation(4, 3);			
-			obj.addComponent(new AnimatedSpriteComponent(context, R.drawable.player_ship, obj,
+			Animation animP = new Animation(1, 1);			
+			obj.addComponent(new AnimatedSpriteComponent(context, R.drawable.life_gauge_test, obj,
 					animP, 0.1f, 0.1f));
 
 			ArrayList<MediaPlayer> sounds = new ArrayList<MediaPlayer>();
@@ -82,24 +81,22 @@ public class ObjectFactory {
 
 			Animation anim = new Animation(1, 1);
 			anim.setAmmoToWait(4);
-			//UPD 1, RDB 0
+			//RDB 0
 			obj.addComponent(new AnimatedSpriteComponent(context, R.drawable.basic_enemy_ship_dark, obj,
 					anim, 0.3f, 0.3f));
 
 			ArrayList<MediaPlayer> soundsE = new ArrayList<MediaPlayer>();
 			soundsE.add(MediaPlayer.create(context, R.raw.test_shot));
 			soundsE.get(0).setVolume(0.005f, 0.005f);
-			//UPD 2
+			//UPD 1
 			obj.addComponent(new SoundComponent(context, obj, soundsE));
 
-			//UPD 3
+			//UPD 2
 			obj.addComponent(new GunComponent(obj));
 
-			//UPD 4
+			//UPD 3
 			EnemyStatsComponent esc = new EnemyStatsComponent(obj, 5, 1);
-			obj.addComponent(esc);
-			Log.i("MessagingSystem", "!!!!!!" + (obj.getUpdatableComponents().size()));
-			
+			obj.addComponent(esc);			
 
 			break;
 
@@ -111,9 +108,7 @@ public class ObjectFactory {
 			obj.setType(OBJECT_TYPE.BASIC_ENEMY_2);
 
 			obj.addComponent(new EnemyPhysicsComponent(obj));
-//			obj.addComponent(new SpriteComponent( context, R.drawable.enemy_ship, 
-//					obj,
-//					0.3f, 0.3f ));
+
 			Animation anim_2 = new Animation(1, 1);
 			anim_2.setAmmoToWait(4);
 			obj.addComponent(new AnimatedSpriteComponent(context, R.drawable.basic_enemy_ship, obj,

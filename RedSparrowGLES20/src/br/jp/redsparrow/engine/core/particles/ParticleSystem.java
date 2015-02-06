@@ -4,33 +4,32 @@ import android.content.Context;
 import android.graphics.Color;
 import android.opengl.GLES20;
 import br.jp.redsparrow.engine.core.Consts;
-import br.jp.redsparrow.engine.core.Renderable;
 import br.jp.redsparrow.engine.core.VertexArray;
 import br.jp.redsparrow.engine.shaders.ParticleShaderProg;
 
-public class ParticleSystem implements Renderable{
+public class ParticleSystem{
 
-	private static final int POSITION_COMPONENT_COUNT = 3;
-	private static final int COLOR_COMPONENT_COUNT = 3;
-	private static final int VECTOR_COMPONENT_COUNT = 3;
-	private static final int PARTICLE_START_TIME_COMPONENT_COUNT = 1;
-	private static final int TOTAL_COMPONENT_COUNT =
+	private final int POSITION_COMPONENT_COUNT = 3;
+	private final int COLOR_COMPONENT_COUNT = 3;
+	private final int VECTOR_COMPONENT_COUNT = 3;
+	private final int PARTICLE_START_TIME_COMPONENT_COUNT = 1;
+	private final int TOTAL_COMPONENT_COUNT =
 			POSITION_COMPONENT_COUNT
 			+ COLOR_COMPONENT_COUNT
 			+ VECTOR_COMPONENT_COUNT
 			+ PARTICLE_START_TIME_COMPONENT_COUNT;
-	private static final int STRIDE = TOTAL_COMPONENT_COUNT * Consts.BYTES_PER_FLOAT;
+	private final int STRIDE = TOTAL_COMPONENT_COUNT * Consts.BYTES_PER_FLOAT;
 
-	private final float[] particles;
+	private float[] particles;
 
-	private final VertexArray vertexArray;
+	private VertexArray vertexArray;
 
 	private ParticleShaderProg particleProgram;
 	
 	private long startTime;
 	private float curTime;
 	
-	private final int maxParticleCount;
+	private int mMaxParticleCount;
 	private int currentParticleCount;
 	private int nextParticle;
 
@@ -38,7 +37,7 @@ public class ParticleSystem implements Renderable{
 
 		particles = new float[maxParticleCount * TOTAL_COMPONENT_COUNT];
 		vertexArray = new VertexArray(particles);
-		this.maxParticleCount = maxParticleCount;
+		mMaxParticleCount = maxParticleCount;
 		
 		particleProgram = new ParticleShaderProg(context);
 		
@@ -54,11 +53,11 @@ public class ParticleSystem implements Renderable{
 		int currentOffset = particleOffset;
 		nextParticle++;
 
-		if (currentParticleCount < maxParticleCount) {
+		if (currentParticleCount < mMaxParticleCount) {
 			currentParticleCount++;
 		}
 
-		if (nextParticle == maxParticleCount) {
+		if (nextParticle == mMaxParticleCount) {
 			nextParticle = 0;
 		}
 
@@ -98,8 +97,7 @@ public class ParticleSystem implements Renderable{
 				PARTICLE_START_TIME_COMPONENT_COUNT, STRIDE);
 	}
 
-	@Override
-	public void render(VertexArray vertexArray, float[] projectionMatrix) {
+	public void render(float[] projectionMatrix) {
 		
 		curTime = (System.nanoTime() - startTime) / 1000000000f;
 		

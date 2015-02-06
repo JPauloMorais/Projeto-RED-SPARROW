@@ -36,8 +36,6 @@ public class World implements Serializable{
 	private static ArrayList<GameObject> mGameObjects;
 	private static ArrayList<GameObject> mToRemove;
 
-	private static ArrayList<Integer> mLayers;
-
 	private static ArrayList<GameObject> mToCheck;
 	private static Quadtree mQuadTree;
 
@@ -53,7 +51,6 @@ public class World implements Serializable{
 	private static ParticleSystem mParticleSystem;
 	private static ArrayList<ParticleEmitter> mEmiters;
 	
-
 	public static void init(Context context){
 
 		isRunning = false;
@@ -65,23 +62,19 @@ public class World implements Serializable{
 
 		//Quadtree
 		mToCheck = new ArrayList<GameObject>();
-		mQuadTree = new Quadtree(0, new RectF(-1000, -1000, 1000, 1000));
-
-		mLayers = new ArrayList<Integer>();
+		mQuadTree = new Quadtree(0, new RectF(-200, -200, 200, 200));
 
 		//BGM
 		bgmSoundComponent = new SoundComponent(context, new GameObject());
 		bgmSoundComponent.addSound(R.raw.at_least_you_tried_greaf);
 		
 		//Particulas
-		mParticleSystem = new ParticleSystem(200, context);		
+		mParticleSystem = new ParticleSystem(1000, context);		
 		mEmiters = new ArrayList<ParticleEmitter>();
 		float[] pos = {0,0,0};
-		float[] dir = {0,1,0};
-		mEmiters.add(new ParticleEmitter(pos, dir, Color.YELLOW,
-				5,1));
-		mEmiters.add(new ParticleEmitter(pos, dir, Color.RED,
-				5,1));
+		float[] dir = {0,0,0.5f};
+		mEmiters.add(new ParticleEmitter(pos, dir, Color.rgb(255, 0, 0), 45, 1));
+		mEmiters.add(new ParticleEmitter(pos, dir, Color.rgb(255, 255, 0), 25, 1));		
 
 	}
 
@@ -194,9 +187,8 @@ public class World implements Serializable{
 
 				}
 			}
-
-			mPlayer.update();
-			mPlayer.render(projectionMatrix);
+			
+			//------PARTICULAS-----------
 			mEmiters.get(0).setPosition(new float[] {
 					mPlayer.getX(), mPlayer.getY(),0
 			});
@@ -204,12 +196,14 @@ public class World implements Serializable{
 					mPlayer.getX(), mPlayer.getY(),0
 			});
 			
-			//------PARTICULAS-----------
-			
 			for (ParticleEmitter emitter : mEmiters) {
-				emitter.addParticles(mParticleSystem, mParticleSystem.getCurTime(), 5);
+				emitter.addParticles(mParticleSystem, mParticleSystem.getCurTime(), 8);
 			}
-			mParticleSystem.render(null,projectionMatrix);
+			mParticleSystem.render(projectionMatrix);
+
+			mPlayer.update();
+			mPlayer.render(projectionMatrix);
+			
 
 		}else {
 			onStart();
@@ -311,10 +305,6 @@ public class World implements Serializable{
 		return mGameObjects.size();
 	}
 
-	public static int getObjectLayer(int indx){
-		return mLayers.get(indx);
-	}
-
 	private static void removeDead(){
 		mToRemove.clear();
 		for (int i = 0; i < mGameObjects.size(); i++) {
@@ -327,13 +317,17 @@ public class World implements Serializable{
 		mGameObjects.removeAll(mToRemove);
 
 		if(mPlayer.isDead() && !mGameObjects.isEmpty()) {
-			//-----Teste------
-			//Isso e inevitavel Mr. Anderson.
-			mGameObjects.set(0, ObjectFactory.createObject(GameRenderer.getContext(), OBJECT_TYPE.PLAYER, mGameObjects.get(0).getX(), mGameObjects.get(0).getY()));
-			World.setPlayer(mGameObjects.get(0));
-			//------------------
-			mGameObjects.remove(0);
+			onPlayerDeath();
 		}
+	}
+	
+	private static void onPlayerDeath() {
+		//-----Teste------
+		//Isso e inevitavel Mr. Anderson.
+		mGameObjects.set(0, ObjectFactory.createObject(GameRenderer.getContext(), OBJECT_TYPE.PLAYER, mGameObjects.get(0).getX(), mGameObjects.get(0).getY()));
+		World.setPlayer(mGameObjects.get(0));
+		mGameObjects.remove(0);
+		//------------------
 	}
 
 	public static void removeObject(int index){
@@ -346,6 +340,10 @@ public class World implements Serializable{
 	
 	public static void addEmitter(ParticleEmitter emitter) {
 		mEmiters.add(emitter);
+	}
+	
+	public static ArrayList<ParticleEmitter> getEmitters() {
+		return mEmiters;
 	}
 
 	public static boolean isRunning() {

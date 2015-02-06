@@ -33,7 +33,7 @@ public class ParticleEmitter {
 
 	}
 
-	public void addParticles(ParticleSystem particleSystem, float curTime, int count) {
+	public void addParticles(ParticleSystem system, float curTime, int count) {
 		for (int i = 0; i < count; i++) {
 
 			Matrix.setRotateEulerM(mRotMatrix, 0,
@@ -54,13 +54,17 @@ public class ParticleEmitter {
 					mResVector[2] * speedAdj
 					};
 
-			particleSystem.addParticle(mPosition, mColor, curDir, curTime);
+			system.addParticle(mPosition, mColor, curDir, curTime);
 
 		}
 	}
 	
 	public void setPosition(float[] pos) {
 		mPosition = pos;
+	}
+	
+	public void setDirection(float[] dir) {
+		mDirVector = dir;
 	}
 
 }

@@ -8,6 +8,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
+import android.content.Intent;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.Matrix;
@@ -19,24 +20,26 @@ import br.jp.redsparrow.engine.core.Vector2f;
 import br.jp.redsparrow.engine.core.World;
 import br.jp.redsparrow.engine.core.components.GunComponent;
 import br.jp.redsparrow.engine.core.components.SoundComponent;
+import br.jp.redsparrow.engine.core.missions.MissionSequence;
 import br.jp.redsparrow.engine.core.missions.MissionSystem;
-import br.jp.redsparrow.engine.core.missions.TestMission;
 import br.jp.redsparrow.engine.core.physics.Collision;
-import br.jp.redsparrow.engine.core.tilemaps.Tile;
 import br.jp.redsparrow.engine.core.util.FPSCounter;
 import br.jp.redsparrow.engine.core.util.LogConfig;
 import br.jp.redsparrow.game.ObjectFactory.HUDITEM_TYPE;
 import br.jp.redsparrow.game.ObjectFactory.OBJECT_TYPE;
 import br.jp.redsparrow.game.components.EnemyPhysicsComponent;
 import br.jp.redsparrow.game.components.PlayerPhysicsComponent;
+import br.jp.redsparrow.game.missions.TestMission;
 
 public class GameRenderer implements Renderer {
 
 	//Ativa e desativa controles por acelerometro
 	private boolean accelControls = true;
+	
+	private static boolean isRunning = false; 
 
-	Vector2f playerMoveVel = new Vector2f(0, 0);
-	Vector2f projMoveVel = new Vector2f(0.6f, 0.6f);
+	private Vector2f playerMoveVel = new Vector2f(0, 0);
+	private Vector2f projMoveVel = new Vector2f(0.6f, 0.6f);
 
 	private static Context mContext;
 
@@ -47,7 +50,6 @@ public class GameRenderer implements Renderer {
 
 	private GameObject mDbgBackground;
 	private GameObject mDbgBackground1;
-	private TestMission mTestMission;
 
 	private final float[] viewMatrix = new float[16];
 	private final float[] viewProjectionMatrix = new float[16];
@@ -58,22 +60,19 @@ public class GameRenderer implements Renderer {
 
 	private final FPSCounter fps = new FPSCounter();
 
-	Tile tile;
-
 	public GameRenderer(Context context) {
-
+		
 		mContext = context;
 
 		mVibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-
-		MissionSystem.init();
-		mTestMission = new TestMission(5, 5);
-		new Thread(mTestMission).start();
 
 	}
 
 	@Override
 	public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
+		
+		setRunning(true);
+		
 		//				GLES20.glClearColor(0.0f, 0.749f, 1.0f, 0.0f);
 		GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
@@ -87,14 +86,18 @@ public class GameRenderer implements Renderer {
 		//ativando e definindo alpha blending
 		GLES20.glEnable(GLES20.GL_BLEND);
 		GLES20.glBlendFunc( GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA );
-
+		
 		HUD.init();
 		HUD.addItem(ObjectFactory.createHUDitem(mContext, HUDITEM_TYPE.AMMO_DISP));
 		HUD.addItem(ObjectFactory.createHUDitem(mContext, HUDITEM_TYPE.LIFEBAR));
-		//		
-		//		TiledBackground.init(mContext, 10, 10, 40, R.drawable.points_test_1, R.drawable.points_test_2, R.drawable.points_test_3, R.drawable.points_test_4);
+
 		World.init(mContext);
 		World.setPlayer(ObjectFactory.createObject(mContext, OBJECT_TYPE.PLAYER, 0f, 0f));
+	
+		Intent msIntent = new Intent(mContext, MissionSystem.class);
+		MissionSystem.setup(new MissionSequence(new TestMission()));
+		mContext.startService(msIntent);
+		
 		//----TESTE----
 		
 		mDbgBackground = ObjectFactory.createObject(mContext, OBJECT_TYPE.DBG_BG, 0, 0);
@@ -106,13 +109,6 @@ public class GameRenderer implements Renderer {
 			if(i%2==0) qd *= -1;
 			else qd2 *= -1;
 		}		
-			
-		int qd_b = 1; int qd2_b = 1;
-		for (int i_b = 0; i_b < 30; i_b++) {
-			World.addObject(ObjectFactory.createObject(mContext, OBJECT_TYPE.BASIC_ENEMY_2, (qd_b * random.nextFloat() * random.nextInt(10)) + 2*qd_b, (qd2_b * random.nextFloat() * random.nextInt(10)) + 2*qd2_b));
-			if(i_b%2==0) qd_b *= -1;
-			else qd2_b *= -1;
-		}
 
 		
 		//--------------
@@ -155,7 +151,7 @@ public class GameRenderer implements Renderer {
 
 
 		Matrix.perspectiveM(projectionMatrix, 0, 90, (float) mScreenWidth
-				/ (float) mScreenHeight, 1, 1000);
+				/ (float) mScreenHeight, 1, 100);
 		//Setando o ponto central da perspectiva como a posicao do player
 		Matrix.setLookAtM(viewMatrix, 0,
 				World.getPlayer().getX(), World.getPlayer().getY(), 45f,
@@ -164,8 +160,6 @@ public class GameRenderer implements Renderer {
 
 
 		//Renderizando 
-		//		mTestMission.render(viewProjectionMatrix);
-		//		TiledBackground.render(viewProjectionMatrix);
 		mDbgBackground.render(viewProjectionMatrix);
 		Matrix.translateM(viewProjectionMatrix, 0, 0, 0, 25);
 		mDbgBackground1.render(viewProjectionMatrix);
@@ -177,11 +171,7 @@ public class GameRenderer implements Renderer {
 		HUD.loop(viewProjectionMatrix);
 
 		//------------TESTE
-		//		try {
-		//			((EnemyPhysicsComponent) World.getObject(0).getUpdatableComponent(0)).move(new Vector2f(1f, 1f));
-		//		} catch (Exception e) {
-		//			objIds++;
-		//		}
+	
 		if(times < 50) times++;
 		else {
 			times = 0;
@@ -312,6 +302,14 @@ public class GameRenderer implements Renderer {
 
 	public static int getScreenHeight() {
 		return mScreenHeight;
+	}
+
+	public static boolean isRunning() {
+		return isRunning;
+	}
+
+	public static void setRunning(boolean isRunning) {
+		GameRenderer.isRunning = isRunning;
 	}
 
 }

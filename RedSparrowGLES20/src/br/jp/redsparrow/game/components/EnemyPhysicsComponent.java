@@ -72,7 +72,7 @@ public class EnemyPhysicsComponent extends PhysicsComponent {
 		}
 
 		addVel(parent);
-//		pointForwards(parent);
+		pointForwards(parent);
 
 		mCollided = false;
 

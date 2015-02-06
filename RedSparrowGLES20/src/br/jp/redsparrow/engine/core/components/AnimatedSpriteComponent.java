@@ -48,6 +48,7 @@ public class AnimatedSpriteComponent extends Component implements Renderable {
 		mOffset[0] = offsetX;
 		mOffset[1] = offsetY;
 
+		mVertsArray = new VertexArray(mVertsData);
 		updateVertsData();
 
 	}
@@ -152,7 +153,8 @@ public class AnimatedSpriteComponent extends Component implements Renderable {
 
 		}
 
-		mVertsArray = new VertexArray(mVertsData);
+		mVertsArray.updateBuffer(mVertsData, 0, mVertsData.length);
+//		mVertsArray = new VertexArray(mVertsData);
 
 	}
 
