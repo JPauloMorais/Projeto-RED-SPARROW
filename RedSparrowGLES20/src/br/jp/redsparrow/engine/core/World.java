@@ -73,8 +73,8 @@ public class World implements Serializable{
 		mEmiters = new ArrayList<ParticleEmitter>();
 		float[] pos = {0,0,0};
 		float[] dir = {0,0,0.5f};
-		mEmiters.add(new ParticleEmitter(pos, dir, Color.rgb(255, 0, 0), 45, 1));
-		mEmiters.add(new ParticleEmitter(pos, dir, Color.rgb(255, 255, 0), 25, 1));		
+		mEmiters.add(new ParticleEmitter(pos, dir, Color.rgb(255, 0, 0), 90, 1));
+		mEmiters.add(new ParticleEmitter(pos, dir, Color.rgb(255, 255, 0), 45, 1));		
 
 	}
 
@@ -197,7 +197,7 @@ public class World implements Serializable{
 			});
 			
 			for (ParticleEmitter emitter : mEmiters) {
-				emitter.addParticles(mParticleSystem, mParticleSystem.getCurTime(), 8);
+				emitter.addParticles(mParticleSystem, mParticleSystem.getCurTime(), 20);
 			}
 			mParticleSystem.render(projectionMatrix);
 

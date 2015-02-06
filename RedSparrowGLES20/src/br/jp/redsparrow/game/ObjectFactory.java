@@ -31,10 +31,7 @@ public class ObjectFactory {
 		PROJECTILE,
 		DBG_BG,
 		DBG_BG1,
-<<<<<<< HEAD
-		TEST
-=======
->>>>>>> origin/master
+
 	}
 
 	public static GameObject createObject(Context context, OBJECT_TYPE type,
@@ -53,7 +50,7 @@ public class ObjectFactory {
 			obj.addComponent(new PlayerPhysicsComponent(obj));
 
 			Animation animP = new Animation(1, 1);			
-			obj.addComponent(new AnimatedSpriteComponent(context, R.drawable.life_gauge_test, obj,
+			obj.addComponent(new AnimatedSpriteComponent(context, R.drawable.nova_nave, obj,
 					animP, 0.1f, 0.1f));
 
 			ArrayList<MediaPlayer> sounds = new ArrayList<MediaPlayer>();
@@ -79,7 +76,7 @@ public class ObjectFactory {
 			Animation anim = new Animation(1, 1);
 			anim.setAmmoToWait(4);
 			//RDB 0
-			obj.addComponent(new AnimatedSpriteComponent(context, R.drawable.basic_enemy_ship_dark, obj,
+			obj.addComponent(new AnimatedSpriteComponent(context, R.drawable.basic_enemy_ship, obj,
 					anim, 0.3f, 0.3f));
 
 			ArrayList<MediaPlayer> soundsE = new ArrayList<MediaPlayer>();
