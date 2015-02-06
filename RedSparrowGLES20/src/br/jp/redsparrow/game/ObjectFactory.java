@@ -115,6 +115,10 @@ public class ObjectFactory {
 			obj.addComponent(new SoundComponent(context, obj, soundsE_2));
 
 			obj.addComponent(new GunComponent(obj));
+			
+			//UPD 3
+			EnemyStatsComponent esc2 = new EnemyStatsComponent(obj, 5, 1);
+			obj.addComponent(esc2);	
 
 			break;
 

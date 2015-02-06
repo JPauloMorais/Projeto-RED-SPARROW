@@ -31,7 +31,7 @@ public class GameRenderer implements Renderer {
 
 	//Ativa e desativa controles por acelerometro
 	private boolean accelControls = true;
-	
+
 	private static boolean isRunning = false; 
 
 	private Vector2f playerMoveVel = new Vector2f(0, 0);
@@ -57,7 +57,7 @@ public class GameRenderer implements Renderer {
 	private final FPSCounter fps = new FPSCounter();
 
 	public GameRenderer(Context context) {
-		
+
 		mContext = context;
 
 		mVibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
@@ -66,9 +66,9 @@ public class GameRenderer implements Renderer {
 
 	@Override
 	public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
-		
+
 		setRunning(true);
-		
+
 		//				GLES20.glClearColor(0.0f, 0.749f, 1.0f, 0.0f);
 		GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
@@ -82,16 +82,16 @@ public class GameRenderer implements Renderer {
 		//ativando e definindo alpha blending
 		GLES20.glEnable(GLES20.GL_BLEND);
 		GLES20.glBlendFunc( GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA );
-		
+
 		HUD.init();
 		HUD.addItem(ObjectFactory.createHUDitem(mContext, HUDITEM_TYPE.AMMO_DISP));
 		HUD.addItem(ObjectFactory.createHUDitem(mContext, HUDITEM_TYPE.LIFEBAR));
 
 		World.init(mContext);
 		World.setPlayer(ObjectFactory.createObject(mContext, OBJECT_TYPE.PLAYER, 0f, 0f));
-		
+
 		//----TESTE----
-		
+
 		mDbgBackground = ObjectFactory.createObject(mContext, OBJECT_TYPE.DBG_BG, 0, 0);
 		mDbgBackground1 = ObjectFactory.createObject(mContext, OBJECT_TYPE.DBG_BG1, 0, 0);
 
@@ -102,27 +102,13 @@ public class GameRenderer implements Renderer {
 			else qd2 *= -1;
 		}		
 
-		qd = 1; qd2 = 1;
-		for (int i = 0; i < 30; i++) {
-<<<<<<< HEAD
-			World.addObject(ObjectFactory.createObject(mContext, OBJECT_TYPE.BASIC_ENEMY, (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2));
-			if(i%2==0) qd *= -1;
-			else qd2 *= -1;
-		}		
-=======
-			World.addObject(ObjectFactory.createObject(mContext, OBJECT_TYPE.BASIC_ENEMY_2, (qd3 * random.nextFloat() * random.nextInt(10)) + 2*qd3, (qd4 * random.nextFloat() * random.nextInt(10)) + 2*qd4));
-			if(i%2==0) qd3 *= -1;
-			else qd4 *= -1;
-		}	
-
 		int qd5 = 1; int qd6 = 1;
 		for (int i = 0; i < 30; i++) {
 			World.addObject(ObjectFactory.createObject(mContext, OBJECT_TYPE.BASIC_ENEMY_2, (qd5 * random.nextFloat() * random.nextInt(10)) + 2*qd5, (qd6 * random.nextFloat() * random.nextInt(10)) + 2*qd6));
 			if(i%2==0) qd5 *= -1;
 			else qd6 *= -1;
 		}
->>>>>>> origin/master
-		
+
 		//--------------
 
 
@@ -183,7 +169,7 @@ public class GameRenderer implements Renderer {
 		HUD.loop(viewProjectionMatrix);
 
 		//------------TESTE
-	
+
 		if(times < 50) times++;
 		else {
 			times = 0;
@@ -295,13 +281,13 @@ public class GameRenderer implements Renderer {
 
 			playerMoveVel.setX(-values[0]/500);
 			playerMoveVel.setY(-values[1]/500);
-//			playerMoveVel = playerMoveVel.normalize();
+			//			playerMoveVel = playerMoveVel.normalize();
 			if(playerMoveVel.length() > 0.001f) {
 				move = true;
-//				Log.i("Physics", "(" + values[0] + "," + values[1] + ")");
+				//				Log.i("Physics", "(" + values[0] + "," + values[1] + ")");
 			}
 
-			
+
 
 
 		}
