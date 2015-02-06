@@ -8,7 +8,6 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
-import android.content.Intent;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.Matrix;
@@ -20,8 +19,6 @@ import br.jp.redsparrow.engine.core.Vector2f;
 import br.jp.redsparrow.engine.core.World;
 import br.jp.redsparrow.engine.core.components.GunComponent;
 import br.jp.redsparrow.engine.core.components.SoundComponent;
-import br.jp.redsparrow.engine.core.missions.MissionSequence;
-import br.jp.redsparrow.engine.core.missions.MissionSystem;
 import br.jp.redsparrow.engine.core.physics.Collision;
 import br.jp.redsparrow.engine.core.util.FPSCounter;
 import br.jp.redsparrow.engine.core.util.LogConfig;
@@ -29,7 +26,6 @@ import br.jp.redsparrow.game.ObjectFactory.HUDITEM_TYPE;
 import br.jp.redsparrow.game.ObjectFactory.OBJECT_TYPE;
 import br.jp.redsparrow.game.components.EnemyPhysicsComponent;
 import br.jp.redsparrow.game.components.PlayerPhysicsComponent;
-import br.jp.redsparrow.game.missions.TestMission;
 
 public class GameRenderer implements Renderer {
 
@@ -93,10 +89,6 @@ public class GameRenderer implements Renderer {
 
 		World.init(mContext);
 		World.setPlayer(ObjectFactory.createObject(mContext, OBJECT_TYPE.PLAYER, 0f, 0f));
-	
-		Intent msIntent = new Intent(mContext, MissionSystem.class);
-		MissionSystem.setup(new MissionSequence(new TestMission()));
-		mContext.startService(msIntent);
 		
 		//----TESTE----
 		
@@ -110,11 +102,11 @@ public class GameRenderer implements Renderer {
 			else qd2 *= -1;
 		}		
 
-		int qd3 = 1; int qd4 = 1;
+		qd = 1; qd2 = 1;
 		for (int i = 0; i < 30; i++) {
-			World.addObject(ObjectFactory.createObject(mContext, OBJECT_TYPE.BASIC_ENEMY_2, (qd3 * random.nextFloat() * random.nextInt(10)) + 2*qd3, (qd4 * random.nextFloat() * random.nextInt(10)) + 2*qd4));
-			if(i%2==0) qd3 *= -1;
-			else qd4 *= -1;
+			World.addObject(ObjectFactory.createObject(mContext, OBJECT_TYPE.BASIC_ENEMY, (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2));
+			if(i%2==0) qd *= -1;
+			else qd2 *= -1;
 		}		
 		
 		//--------------

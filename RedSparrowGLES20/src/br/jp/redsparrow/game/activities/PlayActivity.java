@@ -66,6 +66,7 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 		setContentView(mGameView);
 		
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+	
 	}
 
 
