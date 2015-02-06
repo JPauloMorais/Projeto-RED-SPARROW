@@ -28,6 +28,7 @@ public class ObjectFactory {
 		PLAYER, 
 		BASIC_ENEMY,
 		BASIC_ENEMY_2,
+		BASIC_ENEMY_3,
 		PROJECTILE,
 		DBG_BG,
 		DBG_BG1,
@@ -105,7 +106,7 @@ public class ObjectFactory {
 
 			Animation anim_2 = new Animation(1, 1);
 			anim_2.setAmmoToWait(4);
-			obj.addComponent(new AnimatedSpriteComponent(context, R.drawable.basic_enemy_ship, obj,
+			obj.addComponent(new AnimatedSpriteComponent(context, R.drawable.basic_enemy_shipp, obj,
 					anim_2, 0.3f, 0.3f));
 
 			ArrayList<MediaPlayer> soundsE_2 = new ArrayList<MediaPlayer>();
@@ -117,6 +118,29 @@ public class ObjectFactory {
 
 			break;
 
+			
+		case BASIC_ENEMY_3:
+
+			obj.setWidth(1f);
+			obj.setHeight(1f);
+			obj.setType(OBJECT_TYPE.BASIC_ENEMY_2);
+
+			obj.addComponent(new EnemyPhysicsComponent(obj));
+
+			Animation anim_3 = new Animation(1, 1);
+			anim_3.setAmmoToWait(4);
+			obj.addComponent(new AnimatedSpriteComponent(context, R.drawable.basic_enemy_shippp, obj,
+					anim_3, 0.3f, 0.3f));
+
+			ArrayList<MediaPlayer> soundsE_3 = new ArrayList<MediaPlayer>();
+			soundsE_3.add(MediaPlayer.create(context, R.raw.test_shot));
+			soundsE_3.get(0).setVolume(0.005f, 0.005f);
+			obj.addComponent(new SoundComponent(context, obj, soundsE_3));
+
+			obj.addComponent(new GunComponent(obj));
+
+			break;
+			
 		case PROJECTILE:
 
 			obj.setWidth(0.2f);
