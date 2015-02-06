@@ -31,7 +31,10 @@ public class ObjectFactory {
 		PROJECTILE,
 		DBG_BG,
 		DBG_BG1,
+<<<<<<< HEAD
 		TEST
+=======
+>>>>>>> origin/master
 	}
 
 	public static GameObject createObject(Context context, OBJECT_TYPE type,
@@ -40,12 +43,6 @@ public class ObjectFactory {
 		GameObject obj = new GameObject(new AABB(new Vector2f(x, y), 0, 0));
 
 		switch (type) {
-
-		case TEST:
-
-
-
-			break;
 
 		case PLAYER:
 
