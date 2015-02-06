@@ -76,7 +76,7 @@ public class ObjectFactory {
 			Animation anim = new Animation(1, 1);
 			anim.setAmmoToWait(4);
 			//RDB 0
-			obj.addComponent(new AnimatedSpriteComponent(context, R.drawable.basic_enemy_ship, obj,
+			obj.addComponent(new AnimatedSpriteComponent(context, R.drawable.basic_enemy_ship_dark, obj,
 					anim, 0.3f, 0.3f));
 
 			ArrayList<MediaPlayer> soundsE = new ArrayList<MediaPlayer>();
