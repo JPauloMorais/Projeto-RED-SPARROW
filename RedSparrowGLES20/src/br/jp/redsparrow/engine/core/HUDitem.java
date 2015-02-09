@@ -1,7 +1,6 @@
 package br.jp.redsparrow.engine.core;
 
 import android.content.Context;
-import br.jp.redsparrow.engine.core.components.SpriteComponent;
 import br.jp.redsparrow.engine.core.physics.AABB;
 
 

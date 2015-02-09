@@ -1,6 +1,5 @@
 package br.jp.redsparrow.engine.core;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import android.content.Context;
@@ -22,11 +21,8 @@ import br.jp.redsparrow.game.ObjectFactory;
 import br.jp.redsparrow.game.ObjectFactory.OBJECT_TYPE;
 import br.jp.redsparrow.game.components.ProjectilePhysicsComponent;
 
-public class World implements Serializable{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class World{
+	
 	//TODO: Saveinstancestate stuff
 
 	private static final String TAG = "World";
@@ -47,11 +43,11 @@ public class World implements Serializable{
 	private static SoundComponent bgmSoundComponent;
 	private static float bgMusicRightVol = 0.1f;
 	private static float bgMusicLeftVol = 0.1f;
-	
+
 	private static ParticleSystem mParticleSystem;
 	private static ArrayList<ParticleEmitter> mEmiters;
-	
-	public static void init(Context context){
+
+	public World(Context context){
 
 		isRunning = false;
 
@@ -67,7 +63,7 @@ public class World implements Serializable{
 		//BGM
 		bgmSoundComponent = new SoundComponent(context, new GameObject());
 		bgmSoundComponent.addSound(R.raw.at_least_you_tried_greaf);
-		
+
 		//Particulas
 		mParticleSystem = new ParticleSystem(1000, context);		
 		mEmiters = new ArrayList<ParticleEmitter>();
@@ -78,14 +74,14 @@ public class World implements Serializable{
 
 	}
 
-	private static void onStart(){
+	private void onStart(){
 		isRunning = true;
 		//		physicsCheckT.start();
 		float targetVol[] = { bgMusicLeftVol, bgMusicRightVol };
 		bgmSoundComponent.fadeIn(0, targetVol, 1, true);
 	}
 
-	public static void loop(float[] projectionMatrix){
+	public void loop(float[] projectionMatrix){
 		if (isRunning) {
 			//-------LIMPANDO---------
 			mQuadTree.clear();
@@ -121,18 +117,17 @@ public class World implements Serializable{
 
 
 							}else if(!mToCheck.get(j).getType().equals(OBJECT_TYPE.PROJECTILE)){
-
+								
 								if(!((ProjectilePhysicsComponent) mGameObjects.get(i).getUpdatableComponent(0))
 										.getShootertype().equals(mToCheck.get(j).getType())) {
-									((StatsComponent) mToCheck.get(j).getUpdatableComponent(3)).takeDamage(5);
-//									mToCheck.get(j).die();
+
+									((StatsComponent) mToCheck.get(j).getUpdatableComponent(3))
+									.takeDamage(
+											((ProjectilePhysicsComponent) mGameObjects.get(i).getUpdatableComponent(0))
+											.getDamage());
+
 									mGameObjects.get(i).die();
 								}
-
-							}else{
-
-								//								mGameObjects.get(i).die();
-								//								mToCheck.get(j).die();
 
 							}
 
@@ -159,7 +154,7 @@ public class World implements Serializable{
 
 				}
 			}
-			
+
 			//------LOOP DO PLAYER-------------
 			mToCheck.clear();
 			mQuadTree.getToCheck(mToCheck, mPlayer.getBounds());
@@ -168,26 +163,24 @@ public class World implements Serializable{
 				if(Collision.areIntersecting((Bounds) mPlayer.getBounds(), (Bounds) mToCheck.get(i).getBounds())){
 
 					if(!mToCheck.get(i).getType().equals(OBJECT_TYPE.PROJECTILE)){
-						
+
 						((PhysicsComponent) mToCheck.get(i).getUpdatableComponent(0)).collide(
 								Collision.getColVector((Bounds) mToCheck.get(i).getBounds(), (Bounds) mPlayer.getBounds()));
 
 					}else {
 						if(!((ProjectilePhysicsComponent) mToCheck.get(i).getUpdatableComponent(0))
 								.getShootertype().equals(OBJECT_TYPE.PLAYER)) {
-							
-							mPlayer.recieveMessage(new Message(-2, "Damage", 1));
+
+							((StatsComponent) mPlayer.getUpdatableComponent(3)).takeDamage(5);
 							((PhysicsComponent) mPlayer.getUpdatableComponent(0)).collide(
 									Collision.getColVector(mPlayer.getBounds(), mToCheck.get(i).getBounds()).div(2));
-							
-							
-							((PhysicsComponent) mToCheck.get(i).getUpdatableComponent(0)).collide(mPlayer.getPosition().mult(-1));
+
 						}
 					}
 
 				}
 			}
-			
+
 			//------PARTICULAS-----------
 			mEmiters.get(0).setPosition(new float[] {
 					mPlayer.getX(), mPlayer.getY(),0
@@ -195,7 +188,7 @@ public class World implements Serializable{
 			mEmiters.get(1).setPosition(new float[] {
 					mPlayer.getX(), mPlayer.getY(),0
 			});
-			
+
 			for (ParticleEmitter emitter : mEmiters) {
 				emitter.addParticles(mParticleSystem, mParticleSystem.getCurTime(), 20);
 			}
@@ -203,14 +196,14 @@ public class World implements Serializable{
 
 			mPlayer.update();
 			mPlayer.render(projectionMatrix);
-			
+
 
 		}else {
 			onStart();
 		}
 	}
 
-	public static void pause(){
+	public void pause(){
 		try {
 			bgmSoundComponent.pauseSound(0);
 		} catch (Exception e) {
@@ -218,11 +211,11 @@ public class World implements Serializable{
 		}
 	}
 
-	public static void resume(){
+	public void resume(){
 		//		bgMusic.start();
 	}
 
-	public static void stop(){
+	public void stop(){
 		try {
 			bgmSoundComponent.stopSound(0);
 			bgmSoundComponent.releaseSound(0);
@@ -231,36 +224,36 @@ public class World implements Serializable{
 		}
 	}
 
-	public static SoundComponent getBgmSoundComponent() {
+	public SoundComponent getBgmSoundComponent() {
 		return bgmSoundComponent;
 	}
 
-	public static void setBgmSoundComponent(SoundComponent bgmSoundComponent) {
+	public void setBgmSoundComponent(SoundComponent bgmSoundComponent) {
 		World.bgmSoundComponent = bgmSoundComponent;
 	}
 
-	public static GameObject getPlayer() {
+	public GameObject getPlayer() {
 		if(mPlayer!=null) return mPlayer;
 		else return new GameObject();
 	}
 
-	public static void setPlayer(GameObject mPlayer) {
+	public void setPlayer(GameObject mPlayer) {
 		World.mPlayer = mPlayer;
 	}
 
-	public static GameObject getObject(int index){
+	public GameObject getObject(int index){
 
 		return mGameObjects.get(index);
 
 	}
 
-	public static GameObject getObject(GameObject object){
+	public GameObject getObject(GameObject object){
 
 		return mGameObjects.get(mGameObjects.indexOf(object));
 
 	}
 
-	public static GameObject getObjectById(int id){
+	public GameObject getObjectById(int id){
 
 		if(mGameObjects != null){			
 			for (GameObject gameObject : mGameObjects) {
@@ -274,15 +267,15 @@ public class World implements Serializable{
 
 	}
 
-	public static Vector2f getUpdatingRange(){
+	public Vector2f getUpdatingRange(){
 		return new Vector2f(mUPDATE_RANGE_X, mUPDATE_RANGE_Y);
 	}
 
-	public static Vector2f getRenderingRange(){
+	public Vector2f getRenderingRange(){
 		return new Vector2f(mRENDERING_RANGE_X, mRENDERING_RANGE_X);
 	}
 
-	public static void addObject(GameObject object){
+	public void addObject(GameObject object){
 
 		//TODO: sistema eficiente de atribuicao de ids
 		//Se id ja nao foi estabelecido, atribuir baseado em posicao no array
@@ -295,17 +288,17 @@ public class World implements Serializable{
 		if(LogConfig.ON) Log.i(TAG, "Objeto de id " + object.getId() + " add em " + object.getPosition().toString());
 	}
 
-	public static void addObjects(int layer, GameObject ... objects){
+	public void addObjects(int layer, GameObject ... objects){
 		for (int i = 0; i < objects.length; i++) {
-			World.addObject(objects[i]);
+			this.addObject(objects[i]);
 		}
 	}
 
-	public static int getObjectCount(){
+	public int getObjectCount(){
 		return mGameObjects.size();
 	}
 
-	private static void removeDead(){
+	private void removeDead(){
 		mToRemove.clear();
 		for (int i = 0; i < mGameObjects.size(); i++) {
 			if(mGameObjects.get(i).isDead()) {
@@ -320,43 +313,43 @@ public class World implements Serializable{
 			onPlayerDeath();
 		}
 	}
-	
-	private static void onPlayerDeath() {
+
+	private void onPlayerDeath() {
 		//-----Teste------
 		//Isso e inevitavel Mr. Anderson.
 		mGameObjects.set(0, ObjectFactory.createObject(GameRenderer.getContext(), OBJECT_TYPE.PLAYER, mGameObjects.get(0).getX(), mGameObjects.get(0).getY()));
-		World.setPlayer(mGameObjects.get(0));
+		this.setPlayer(mGameObjects.get(0));
 		mGameObjects.remove(0);
 		//------------------
 	}
 
-	public static void removeObject(int index){
+	public void removeObject(int index){
 		mGameObjects.remove(index);
 	}
 
-	public static void removeObject(GameObject object){
+	public void removeObject(GameObject object){
 		mGameObjects.remove(object);
 	}
-	
-	public static void addEmitter(ParticleEmitter emitter) {
+
+	public void addEmitter(ParticleEmitter emitter) {
 		mEmiters.add(emitter);
 	}
-	
-	public static ArrayList<ParticleEmitter> getEmitters() {
+
+	public ArrayList<ParticleEmitter> getEmitters() {
 		return mEmiters;
 	}
 
-	public static boolean isRunning() {
+	public boolean isRunning() {
 		return isRunning;
 	}
 
-	public static void setRunning(boolean isRunning) {
+	public void setRunning(boolean isRunning) {
 		World.isRunning = isRunning;
 	}
 
-	public static void sendMessages(final int objectId, final ArrayList<Message> curMessages) {
+	public void sendMessages(final int objectId, final ArrayList<Message> curMessages) {
 		try {
-			getObject(objectId).recieveMessages(curMessages);
+			this.getObject(objectId).recieveMessages(curMessages);
 		} catch (Exception e) {	}
 	}
 }

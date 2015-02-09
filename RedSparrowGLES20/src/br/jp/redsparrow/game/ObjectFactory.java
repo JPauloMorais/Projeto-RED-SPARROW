@@ -53,6 +53,7 @@ public class ObjectFactory {
 			Animation animP = new Animation(1, 1);			
 			obj.addComponent(new AnimatedSpriteComponent(context, R.drawable.nova_nave, obj,
 					animP, 0.1f, 0.1f));
+			((AnimatedSpriteComponent) obj.getRenderableComponent(0)).addAnimation( context, R.drawable.explosion_test,new Animation(5, 4));
 
 			ArrayList<MediaPlayer> sounds = new ArrayList<MediaPlayer>();
 			sounds.add(MediaPlayer.create(context, R.raw.test_shot));
@@ -61,7 +62,7 @@ public class ObjectFactory {
 
 			obj.addComponent(new GunComponent(obj));
 
-			obj.addComponent(new PlayerStatsComponent(obj, 5, 5));
+			obj.addComponent(new PlayerStatsComponent(obj, 5));
 
 			break;
 
@@ -79,6 +80,7 @@ public class ObjectFactory {
 			//RDB 0
 			obj.addComponent(new AnimatedSpriteComponent(context, R.drawable.basic_enemy_ship_dark, obj,
 					anim, 0.3f, 0.3f));
+			((AnimatedSpriteComponent) obj.getRenderableComponent(0)).addAnimation( context, R.drawable.explosion_test,new Animation(5, 4));
 
 			ArrayList<MediaPlayer> soundsE = new ArrayList<MediaPlayer>();
 			soundsE.add(MediaPlayer.create(context, R.raw.test_shot));
@@ -90,7 +92,7 @@ public class ObjectFactory {
 			obj.addComponent(new GunComponent(obj));
 
 			//UPD 3
-			EnemyStatsComponent esc = new EnemyStatsComponent(obj, 5, 1);
+			EnemyStatsComponent esc = new EnemyStatsComponent(obj, 5);
 			obj.addComponent(esc);			
 
 			break;
@@ -106,8 +108,10 @@ public class ObjectFactory {
 
 			Animation anim_2 = new Animation(1, 1);
 			anim_2.setAmmoToWait(4);
-			obj.addComponent(new AnimatedSpriteComponent(context, R.drawable.basic_enemy_shipp, obj,
+			obj.addComponent(new AnimatedSpriteComponent(context, R.drawable.basic_enemy_shippp, obj,
 					anim_2, 0.3f, 0.3f));
+			((AnimatedSpriteComponent) obj.getRenderableComponent(0)).addAnimation( context, R.drawable.explosion_test,new Animation(5, 4));
+
 
 			ArrayList<MediaPlayer> soundsE_2 = new ArrayList<MediaPlayer>();
 			soundsE_2.add(MediaPlayer.create(context, R.raw.test_shot));
@@ -117,7 +121,7 @@ public class ObjectFactory {
 			obj.addComponent(new GunComponent(obj));
 			
 			//UPD 3
-			EnemyStatsComponent esc2 = new EnemyStatsComponent(obj, 5, 1);
+			EnemyStatsComponent esc2 = new EnemyStatsComponent(obj, 5);
 			obj.addComponent(esc2);	
 
 			break;
@@ -135,6 +139,8 @@ public class ObjectFactory {
 			anim_3.setAmmoToWait(4);
 			obj.addComponent(new AnimatedSpriteComponent(context, R.drawable.basic_enemy_shippp, obj,
 					anim_3, 0.3f, 0.3f));
+			((AnimatedSpriteComponent) obj.getRenderableComponent(0)).addAnimation( context, R.drawable.explosion_test,new Animation(5, 4));
+
 
 			ArrayList<MediaPlayer> soundsE_3 = new ArrayList<MediaPlayer>();
 			soundsE_3.add(MediaPlayer.create(context, R.raw.test_shot));
@@ -151,7 +157,7 @@ public class ObjectFactory {
 			obj.setHeight(0.4f);
 			obj.setType(OBJECT_TYPE.PROJECTILE);
 
-			obj.addComponent(new ProjectilePhysicsComponent(obj));
+			obj.addComponent(new ProjectilePhysicsComponent(obj,1));
 
 			SpriteComponent psc = new SpriteComponent(context, R.drawable.projectile_1, obj, 0.2f,0.2f,
 					2, 1, 0, 1);

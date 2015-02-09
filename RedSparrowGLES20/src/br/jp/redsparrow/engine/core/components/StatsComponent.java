@@ -1,51 +1,43 @@
 package br.jp.redsparrow.engine.core.components;
 
+import android.util.Log;
 import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.Updatable;
 
 public abstract class StatsComponent extends Component implements Updatable {
 
+	protected boolean isDying;
 	protected int mHealth;
 	protected int mCurHealth;
-	protected int mSpeed;
-	protected boolean isDiyng;
 	
-	public StatsComponent(GameObject parent, int health, int speed) {
+	public StatsComponent(GameObject parent, int health) {
 		super("Stats", parent);
 		
 		mHealth = health;
 		mCurHealth = health;
-		mSpeed = speed;
-		isDiyng = false;
+		isDying = false;
 		
 	}
 	
 	@Override
 	public void update(GameObject object) {
-		if(mHealth <= 0) die();
+		if(mCurHealth <= 0) die();
 	}
 
-	public synchronized int getCurHealth() {
+	public int getCurHealth() {
 		return mCurHealth;
 	}
 
-	public synchronized void setCurHealth(int mCurHealth) {
+	public void setCurHealth(int mCurHealth) {
 		this.mCurHealth = mCurHealth;
 	}
 	
 	public void takeDamage(int damage) {
 		mCurHealth -= damage;
+		Log.i("MessagingSystem", "!!!!!!!!!DMG!!!!!!!!!!!!!!!!");
 	}
 
 	protected abstract void die();
-
-	public int getSpeed() {
-		return mSpeed;
-	}
-
-	public void setSpeed(int mSpeed) {
-		this.mSpeed = mSpeed;
-	}
 
 	public int getHealth() {
 		return mHealth;

@@ -11,7 +11,9 @@ public class Animation {
 	private float wFrame, hFrame;
 	private int curRow, curCol;
 	private int lastDir;
+
 	private int wait, ammoToWait;
+
 	private boolean loopedOnce;
 
 	public Animation(int nCols, int nRows) {
@@ -34,46 +36,47 @@ public class Animation {
 		wait = 0;
 		ammoToWait = 0;
 		loopedOnce = false;
-		
-		update();
+
+		//		update();
 	}
 
 	//Considera que SpriteSheet contem uma direçao por linha de frames
 	public void update(int curDir){
-		
-		if(wait<ammoToWait && curDir==lastDir) wait++;
+
+		if (wait < ammoToWait && curDir == lastDir)
+			wait++;
 		else {
-			if(nRows==4){
+			if (nRows == 4) {
 				switch (curDir) {
 				case 0:
-					curRow=2;
+					curRow = 2;
 					curCol++;
-					if (curCol>=nCols) {
-						curCol=0;
+					if (curCol >= nCols) {
+						curCol = 0;
 						loopedOnce = true;
 					}
 					break;
 				case 1:
-					curRow=0;
+					curRow = 0;
 					curCol++;
-					if (curCol>=nCols) {
-						curCol=0;
+					if (curCol >= nCols) {
+						curCol = 0;
 						loopedOnce = true;
 					}
 					break;
 				case 2:
-					curRow=1;
+					curRow = 1;
 					curCol++;
-					if (curCol>=nCols) {
-						curCol=0;
+					if (curCol >= nCols) {
+						curCol = 0;
 						loopedOnce = true;
 					}
 					break;
 				case 3:
-					curRow=3;
+					curRow = 3;
 					curCol++;
-					if (curCol>=nCols) {
-						curCol=0;
+					if (curCol >= nCols) {
+						curCol = 0;
 						loopedOnce = true;
 					}
 					break;
@@ -81,50 +84,51 @@ public class Animation {
 				default:
 					break;
 				}
-			} else if(nRows==1){
-				curRow=0;
+			} else if (nRows == 1) {
+				curRow = 0;
 				curCol++;
-				if (curCol>=nCols) {
-					curCol=0;
+				if (curCol >= nCols) {
+					curCol = 0;
 					loopedOnce = true;
 				}
 			}
-			wait=0;
+			wait = 0;
 		}
-
-
 		lastDir = curDir;
-		
-		mUVs[0] = curCol*wFrame;
-		mUVs[1] = curRow*hFrame;
-		mUVs[2] = mUVs[0]+wFrame;
-		mUVs[3] = mUVs[1]+hFrame;
-
+		mUVs[0] = curCol * wFrame;
+		mUVs[1] = curRow * hFrame;
+		mUVs[2] = mUVs[0] + wFrame;
+		mUVs[3] = mUVs[1] + hFrame;
 	}
+
+
 
 	//Para spriteSheets sem multiplas direcoes
 	public void update(){
 
-		if(wait>ammoToWait){
+
+		if (wait > ammoToWait) {
 			curCol++;
-			if (curCol>=nCols || curCol >= nFramesX) {
-				curCol=0;
+			if (curCol >= nCols || curCol >= nFramesX) {
+				curCol = 0;
 				curRow++;
-				if (curRow>=nRows || curRow >= nFramesY) {
-					curRow=0;
+				if (curRow >= nRows || curRow >= nFramesY) {
+					curRow = 0;
 					loopedOnce = true;
 				}
 			}
-			wait=0;
-		}else wait++;
-
-		mUVs[0] = curCol*wFrame; //left
-		mUVs[1] = curRow*hFrame; //top
-		mUVs[2] = mUVs[0]+wFrame;//right
-		mUVs[3] = mUVs[1]+hFrame;//bottom
+			wait = 0;
+		} else
+			wait++;
+		mUVs[0] = curCol * wFrame; //left
+		mUVs[1] = curRow * hFrame; //top
+		mUVs[2] = mUVs[0] + wFrame;//right
+		mUVs[3] = mUVs[1] + hFrame;//bottom
 
 	}
-	
+
+
+
 	public int getFrameCount(){
 		return nRows*nCols;
 	}
@@ -160,11 +164,11 @@ public class Animation {
 	public void setNumFramesY(int nFramesY) {
 		this.nFramesY = nFramesY;
 	}
-	
+
 	public void setCurRow(int row) {
 		this.curRow = row;
 	}
-	
+
 	public void setCurCol(int col) {
 		this.curCol = col;
 	}

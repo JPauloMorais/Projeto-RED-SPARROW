@@ -1,15 +1,13 @@
 package br.jp.redsparrow.engine.core.tilemaps;
 
 import android.content.Context;
-import android.content.Intent;
 
 public class Tilemap {
 
 	private static Tile[][] mTiles;
 	private static Tile[][] mCurrentTiles;
 
-
-	public static void create(Context context, int tilesInX, int tilesInY, float tileSize) {
+	public Tilemap(Context context, int tilesInX, int tilesInY, float tileSize) {
 
 		mCurrentTiles = new Tile[3][3];
 		mTiles = new Tile[tilesInX][tilesInY];
@@ -20,22 +18,19 @@ public class Tilemap {
 			}
 		}
 		
-		Intent intent = new Intent(context, TilemapLoader.class);
-		context.startService(intent);
-		
 	}
 	
-	public static void render() {
+	public void render(float[] projMatrix) {
 		
 	}
 
 
-	public static Tile[][] getCurrentTiles() {
+	public Tile[][] getCurrentTiles() {
 		return mCurrentTiles;
 	}
 
 
-	public static synchronized void setCurrentTiles(int left, int top) {
+	public synchronized void setCurrentTiles(int left, int top) {
 		
 		int k = 0;
 		int l = 0;

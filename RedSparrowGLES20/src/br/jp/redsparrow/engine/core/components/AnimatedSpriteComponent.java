@@ -12,7 +12,6 @@ import br.jp.redsparrow.engine.core.Vector2f;
 import br.jp.redsparrow.engine.core.VertexArray;
 import br.jp.redsparrow.engine.core.util.TextureUtil;
 import br.jp.redsparrow.engine.shaders.TextureShaderProg;
-import br.jp.redsparrow.game.GameRenderer;
 
 public class AnimatedSpriteComponent extends Component implements Renderable {
 
@@ -177,8 +176,8 @@ public class AnimatedSpriteComponent extends Component implements Renderable {
 		return mAnimations.get(indx);
 	}
 
-	public void addAnimation(int srcSheet, Animation anim){
-		mTextures.add(TextureUtil.loadTexture(GameRenderer.getContext(), srcSheet));
+	public void addAnimation(Context context, int srcSheet, Animation anim){
+		mTextures.add(TextureUtil.loadTexture(context, srcSheet));
 		mAnimations.add(anim);
 	}
 
@@ -189,10 +188,5 @@ public class AnimatedSpriteComponent extends Component implements Renderable {
 	public void resume() {
 		this.isPaused = false;
 	}
-
-	public void setFrame(int frame){
-		if(mAnimations.get(curAnim).getFrameCount() <= frame) ;
-	}
-
 
 }

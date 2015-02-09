@@ -1,31 +1,44 @@
 package br.jp.redsparrow.engine.core.tilemaps;
 
-import br.jp.redsparrow.engine.core.World;
 
 
 public class TilemapLoader implements Runnable {
 
+	private Thread mThread;
 	private boolean isRunning;
-	private int mCurPlayerTile;
-	private int mPlayerTile;
 	
-	public TilemapLoader() {
+	@SuppressWarnings("unused")
+	private Tilemap mTilemap;
+//	private int mCurPlayerTile;
+//	private int mPlayerTile;
+	
+	public TilemapLoader(Tilemap tilemap) {
 
-		isRunning = true;
 //		mCurPlayerTile = World.getPlayer().
+		mThread = new Thread(this, "TilemapLoader");
 		
+		mTilemap = tilemap;
+		
+	}
+	
+	public void start() {
+		isRunning = true;
+		mThread.start();
 	}
 
 	@Override
 	public void run() {
 
 		while (isRunning) {
-
 			
 //			Tilemap.setCurrentTiles(, top);
 			
 		}
 		
+	}
+	
+	public void stop() {
+		isRunning = false;
 	}
 	
 

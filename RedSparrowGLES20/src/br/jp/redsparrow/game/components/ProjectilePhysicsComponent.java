@@ -12,15 +12,17 @@ public class ProjectilePhysicsComponent extends PhysicsComponent {
 
 	private Vector2f mVelocity = new Vector2f(0f, 0f);
 	//	private Vector2f location = new Vector2f(0f, 0f); 
+	
+	private int mDamage;
 
 	private boolean hitTarget;
 
-	public ProjectilePhysicsComponent(GameObject parent) {
+	public ProjectilePhysicsComponent(GameObject parent, int damage) {
 		super(parent);
 
 		hitTarget = false;
-		mMaxVels = new Vector2f(parent.getWidth()/2, parent.getHeight()/2);
-
+		mDamage = damage;
+		
 	}
 
 	@Override
@@ -64,6 +66,10 @@ public class ProjectilePhysicsComponent extends PhysicsComponent {
 
 	public void setShooterType(OBJECT_TYPE shooterType) {
 		this.mShooterType = shooterType;
+	}
+
+	public int getDamage() {
+		return mDamage;
 	}
 
 }
