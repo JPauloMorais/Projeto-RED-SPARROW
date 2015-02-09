@@ -1,5 +1,7 @@
 package br.jp.redsparrow.game;
 
+import android.content.Context;
+import android.os.Vibrator;
 import android.util.Log;
 import br.jp.redsparrow.engine.core.Game;
 import br.jp.redsparrow.engine.core.InputHandler;
@@ -11,8 +13,20 @@ import br.jp.redsparrow.game.components.PlayerPhysicsComponent;
 
 public class ReSpInputHandle extends InputHandler {
 
+	//Ativa e desativa controles por acelerometro
+	private boolean accelControls = true;
+	private Vibrator mVibrator;
+	
+
+	public Vector2f playerMoveVel = new Vector2f(0, 0);
+	public Vector2f projMoveVel = new Vector2f(0.6f, 0.6f);
+
+	public boolean move = false;
+
 	public ReSpInputHandle(Game game) {
 		super(game);
+		mVibrator = (Vibrator) game.getContext().getSystemService(Context.VIBRATOR_SERVICE);
+
 	}
 
 	@Override

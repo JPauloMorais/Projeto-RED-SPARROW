@@ -1,9 +1,11 @@
 package br.jp.redsparrow.engine.core;
 
-public class InputHandler extends GameSystem {
 
+public class InputHandler extends GameSystem {
+	
 	public InputHandler(Game game) {
 		super(game);
+
 	}
 	
 	@Override

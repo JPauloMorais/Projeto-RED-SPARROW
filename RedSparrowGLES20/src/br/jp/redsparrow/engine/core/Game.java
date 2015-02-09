@@ -1,23 +1,22 @@
 package br.jp.redsparrow.engine.core;
 
-import br.jp.redsparrow.game.ObjectFactory;
 import android.content.Context;
+import br.jp.redsparrow.game.ObjectFactory;
 
 public abstract class Game {
 	
+	protected Context mContext;
 	protected World mWorld;
 	protected ObjectFactory mObjFactory;
 	protected HUD mHUD;
 	protected GameRenderer mRenderer;
 	protected InputHandler mInputHandler;
 	
-	public void create(Context context) {
-		mWorld = new World(context, this);
-		mHUD = new HUD(this);
-		mObjFactory = new ObjectFactory(this);
-		mRenderer = new GameRenderer(context, this);
-		mInputHandler = new InputHandler(this);
+	public Game(Context context) {
+		mContext = context;
 	}
+	
+	public abstract void create();
 
 	public abstract void loop(float[] viewMatrix, float[] projMatrix, float[] viewProjMatrix);
 	public abstract void pause();
@@ -62,6 +61,14 @@ public abstract class Game {
 
 	public void setInputHandler(InputHandler mInputHandler) {
 		this.mInputHandler = mInputHandler;
+	}
+
+	public Context getContext() {
+		return mContext;
+	}
+
+	public void setContext(Context context) {
+		this.mContext = context;
 	}
 
 }

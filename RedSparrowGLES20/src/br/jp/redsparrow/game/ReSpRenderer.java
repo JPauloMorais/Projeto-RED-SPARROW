@@ -1,18 +1,20 @@
 package br.jp.redsparrow.game;
 
+import static android.opengl.GLES20.glViewport;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
 import android.opengl.GLES20;
+import android.opengl.Matrix;
 import br.jp.redsparrow.engine.core.Game;
 import br.jp.redsparrow.engine.core.GameRenderer;
-import br.jp.redsparrow.game.ObjectFactory.OBJECT_TYPE;
 
 public class ReSpRenderer extends GameRenderer {
-
+	
 	public ReSpRenderer(Context context, Game game) {
-		super(context, game);
+		super(game);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -32,19 +34,33 @@ public class ReSpRenderer extends GameRenderer {
 		//ativando e definindo alpha blending
 		GLES20.glEnable(GLES20.GL_BLEND);
 		GLES20.glBlendFunc( GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA );
-		
-		mDbgBackground = game.getObjFactory().createObject(mContext, OBJECT_TYPE.DBG_BG, 0, 0);
-		mDbgBackground1 = game.getObjFactory().createObject(mContext, OBJECT_TYPE.DBG_BG1, 0, 0);
+				
+		game.create();
 	}
 
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
-		super.onSurfaceChanged(gl, width, height);
-	}
+		mScreenWidth = width;
+		mScreenHeight = height;
+
+		glViewport(0, 0, width, height);
+
+		//criando e ajustando matriz de projecao em perspectiva
+		Matrix.perspectiveM(projectionMatrix, 0, 90, (float) width
+				/ (float) height, 1, 100);
+		Matrix.setLookAtM(viewMatrix, 0,
+				0f, 0f, 10f,
+				0f, 0f, 0f,
+				0f, 0f, 1f);	
+		}
 
 	@Override
 	public void onDrawFrame(GL10 gl) {
 		super.onDrawFrame(gl);
+		
+		//Renderizando 
+		game.loop(viewMatrix, projectionMatrix, viewProjectionMatrix);
+		
 	}
 
 	@Override
