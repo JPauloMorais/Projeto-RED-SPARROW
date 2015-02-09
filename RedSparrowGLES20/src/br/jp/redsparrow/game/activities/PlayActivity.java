@@ -38,6 +38,7 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 		super.onCreate(savedInstanceState);
 
 		mGameView = new GameView(this);
+		game = new ReSpGame(this);
 
 		final ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 		final ConfigurationInfo confInfo = activityManager.getDeviceConfigurationInfo();
@@ -74,24 +75,19 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 	protected void onResume() {
 		super.onResume();
 		mGameView.onResume();
-		game.getWorld().resume();
 		mSensorManager.registerListener(this, mSensorAccelerometer, SensorManager.SENSOR_DELAY_GAME);
-		//		gv.resume();
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
 		mGameView.onPause();
-		game.getWorld().pause();
 		mSensorManager.unregisterListener(this);
-		//		gv.pause();
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
-		game.getWorld().stop();
 		mSensorManager.unregisterListener(this);
 	}
 
@@ -123,7 +119,7 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 		if(event.values!=null) mGameView.queueEvent(new Runnable() {
 			@Override
 			public void run() {
-				game.getRenderer().handleSensorChange(se.values);
+				if(game!=null) game.getInputHandler().handleSensorChange(se.values);
 			}
 		});
 	}

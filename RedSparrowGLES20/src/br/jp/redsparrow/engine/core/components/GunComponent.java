@@ -2,7 +2,6 @@ package br.jp.redsparrow.engine.core.components;
 
 import br.jp.redsparrow.engine.core.Game;
 import br.jp.redsparrow.engine.core.GameObject;
-import br.jp.redsparrow.engine.core.GameRenderer;
 import br.jp.redsparrow.engine.core.Updatable;
 import br.jp.redsparrow.engine.core.Vector2f;
 import br.jp.redsparrow.game.ObjectFactory.OBJECT_TYPE;
@@ -22,7 +21,7 @@ public class GunComponent extends Component implements Updatable {
 
 		if(toShoot){
 						
-			GameObject proj = game.getObjFactory().createObject(GameRenderer.getContext(), OBJECT_TYPE.PROJECTILE, parent.getX(), parent.getY());
+			GameObject proj = game.getObjFactory().createObject(game.getContext(), OBJECT_TYPE.PROJECTILE, parent.getX(), parent.getY());
 			
 //			((PhysicsComponent) parent.getUpdatableComponent(0)).collide(Collision.getColVector(parent.getBounds(), proj.getBounds()));
 			

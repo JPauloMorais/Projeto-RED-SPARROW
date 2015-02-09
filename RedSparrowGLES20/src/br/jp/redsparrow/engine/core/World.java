@@ -166,7 +166,8 @@ public class World extends GameSystem{
 
 						((PhysicsComponent) mToCheck.get(i).getUpdatableComponent(0)).collide(
 								Collision.getColVector((Bounds) mToCheck.get(i).getBounds(), (Bounds) mPlayer.getBounds()));
-
+						
+						mPlayer.die();
 					}else {
 						if(!((ProjectilePhysicsComponent) mToCheck.get(i).getUpdatableComponent(0))
 								.getShootertype().equals(OBJECT_TYPE.PLAYER)) {
@@ -317,7 +318,7 @@ public class World extends GameSystem{
 	private void onPlayerDeath(Game game) {
 		//-----Teste------
 		//Isso e inevitavel Mr. Anderson.
-		mGameObjects.set(0, game.getObjFactory().createObject(GameRenderer.getContext(), OBJECT_TYPE.PLAYER, mGameObjects.get(0).getX(), mGameObjects.get(0).getY()));
+		mGameObjects.set(0, game.getObjFactory().createObject(game.getContext(), OBJECT_TYPE.PLAYER, mGameObjects.get(0).getX(), mGameObjects.get(0).getY()));
 		this.setPlayer(mGameObjects.get(0));
 		mGameObjects.remove(0);
 		//------------------

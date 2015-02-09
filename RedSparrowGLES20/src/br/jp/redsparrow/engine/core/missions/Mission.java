@@ -1,5 +1,6 @@
 package br.jp.redsparrow.engine.core.missions;
 
+import br.jp.redsparrow.engine.core.Game;
 import br.jp.redsparrow.engine.core.Vector2f;
 import br.jp.redsparrow.engine.core.physics.BCircle;
 
@@ -19,7 +20,7 @@ public abstract class Mission {
 		
 	}
 	
-	public abstract void update();
+	public abstract void update(Game game);
 	
 	public boolean isComplete() {
 		return mComplete;

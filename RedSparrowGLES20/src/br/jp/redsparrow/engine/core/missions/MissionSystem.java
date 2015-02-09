@@ -44,7 +44,7 @@ public class MissionSystem extends GameSystem implements Runnable {
 				}
 			}else {
 
-				mainSequence.update();
+				mainSequence.update(game);
 
 			}
 
@@ -58,7 +58,7 @@ public class MissionSystem extends GameSystem implements Runnable {
 					}
 				}else {
 
-					sideSequence.update();
+					sideSequence.update(game);
 
 				}
 			}

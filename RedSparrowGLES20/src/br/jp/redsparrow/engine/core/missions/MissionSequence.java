@@ -1,5 +1,7 @@
 package br.jp.redsparrow.engine.core.missions;
 
+import br.jp.redsparrow.engine.core.Game;
+
 public class MissionSequence {
 
 	private Mission[] mMissions;
@@ -14,10 +16,10 @@ public class MissionSequence {
 		
 	}
 	
-	public void update() {
+	public void update(Game game) {
 		if(mMissions[mCurMission] != null) {
 			
-			mMissions[mCurMission].update();
+			mMissions[mCurMission].update(game);
 			
 			if(mMissions[mCurMission].isComplete()) {
 				mCurMission++;

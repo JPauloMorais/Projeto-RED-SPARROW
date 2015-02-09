@@ -5,8 +5,10 @@ import java.util.Random;
 import android.content.Context;
 import android.opengl.Matrix;
 import br.jp.redsparrow.engine.core.Game;
-import br.jp.redsparrow.engine.core.GameRenderer;
+import br.jp.redsparrow.engine.core.GameObject;
+import br.jp.redsparrow.engine.core.HUD;
 import br.jp.redsparrow.engine.core.Vector2f;
+import br.jp.redsparrow.engine.core.World;
 import br.jp.redsparrow.engine.core.components.GunComponent;
 import br.jp.redsparrow.engine.core.components.SoundComponent;
 import br.jp.redsparrow.game.ObjectFactory.HUDITEM_TYPE;
@@ -16,47 +18,74 @@ import br.jp.redsparrow.game.components.PlayerPhysicsComponent;
 public class ReSpGame extends Game {
 
 	private Random random;
-	
-	public ReSpGame() {
+	private GameObject mDbgBackground;
+	private GameObject mDbgBackground1;
+
+	public ReSpGame(Context context) {
+		super(context);
+		
 		random = new Random();
+		mRenderer = new ReSpRenderer(mContext, this);
+		mInputHandler = new ReSpInputHandle(this);	
 	}
 
 	@Override
-	public void create(Context context) {
-		super.create(context);
+	public void create() {
+		
+		mObjFactory = new ObjectFactory(this);
+		
+		mDbgBackground = mObjFactory.createObject(mContext, OBJECT_TYPE.DBG_BG, 0, 0);
+		mDbgBackground1 =mObjFactory.createObject(mContext, OBJECT_TYPE.DBG_BG1, 0, 0);
 
-		mHUD.addItem(mObjFactory.createHUDitem(context, HUDITEM_TYPE.AMMO_DISP));
-		mHUD.addItem(mObjFactory.createHUDitem(context, HUDITEM_TYPE.LIFEBAR));
-
-		mWorld.setPlayer(mObjFactory.createObject(context, OBJECT_TYPE.PLAYER, 0f, 0f));
+		mWorld = new World(mContext, this);
+		mWorld.setPlayer(mObjFactory.createObject(mContext, OBJECT_TYPE.PLAYER, 0f, 0f));
+		
 		int qd = 1; int qd2 = 1;
 		for (int i = 0; i < 15; i++) {
-			mWorld.addObject(mObjFactory.createObject(context, OBJECT_TYPE.BASIC_ENEMY, (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2));
+			mWorld.addObject(mObjFactory.createObject(mContext, OBJECT_TYPE.BASIC_ENEMY, (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2));
 			if(i%2==0) qd *= -1;
 			else qd2 *= -1;
 		}		
 
 		qd = 1; qd2 = 2;
 		for (int i = 0; i < 15; i++) {
-			mWorld.addObject(mObjFactory.createObject(context, OBJECT_TYPE.BASIC_ENEMY_2, (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2));
+			mWorld.addObject(mObjFactory.createObject(mContext, OBJECT_TYPE.BASIC_ENEMY_2, (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2));
 			if(i%2==0) qd *= -1;
 			else qd2 *= -1;
 		}
+		
+		mHUD = new HUD(this);
+		mHUD.addItem(mObjFactory.createHUDitem(mContext, HUDITEM_TYPE.AMMO_DISP));
+		mHUD.addItem(mObjFactory.createHUDitem(mContext, HUDITEM_TYPE.LIFEBAR));
+		
 	}
 
 	//------------TESTE
-		int times = 0;
-		int objIds = -1;
-		int dir = 1;
-		//-----------------
-	
+	int times = 0;
+	int objIds = -1;
+	int dir = 1;
+	//-----------------
+
 	@Override
 	public void loop(float[] viewMatrix, float[] projMatrix, float[] viewProjMatrix) {
+
+		//Setando o ponto central da perspectiva como a posicao do player
+		Matrix.setLookAtM(viewMatrix, 0,
+				mWorld.getPlayer().getX(), mWorld.getPlayer().getY(), 45f,
+				mWorld.getPlayer().getX(), mWorld.getPlayer().getY(), 0f,
+				0f, 1f, 0f);
+		
+		mDbgBackground.render(viewProjMatrix);
+		Matrix.translateM(viewProjMatrix, 0, 0, 0, 25);
+		mDbgBackground1.render(viewProjMatrix);
+		Matrix.translateM(viewProjMatrix, 0, 0, 0, 10);
 		
 		mWorld.loop(this, projMatrix);
-		Matrix.multiplyMM(viewProjMatrix, 0, projMatrix, 0, viewMatrix, 0);
-		mHUD.loop(this, projMatrix);
 		
+		Matrix.multiplyMM(viewProjMatrix, 0, projMatrix, 0, viewMatrix, 0);
+		
+		mHUD.loop(this, projMatrix);
+
 		//------------TESTE
 
 		if(times < 50) times++;
@@ -99,13 +128,14 @@ public class ReSpGame extends Game {
 
 		//-------------------------------
 
-		if (GameRenderer.move) {
+		if (((ReSpInputHandle)mInputHandler).move) {
 			try {
 				((PlayerPhysicsComponent) mWorld.getPlayer()
-						.getUpdatableComponent(0)).move(GameRenderer.playerMoveVel);
-				GameRenderer.playerMoveVel.setX(0);
-				GameRenderer.playerMoveVel.setY(0);
-				GameRenderer.move = false;
+						.getUpdatableComponent(0)).move(((ReSpInputHandle)mInputHandler).playerMoveVel);
+				
+				((ReSpInputHandle) mInputHandler).playerMoveVel.setX(0);
+				((ReSpInputHandle)mInputHandler).playerMoveVel.setY(0);
+				((ReSpInputHandle)mInputHandler).move = false;
 			} catch (Exception e) {
 				//				e.printStackTrace();
 			}

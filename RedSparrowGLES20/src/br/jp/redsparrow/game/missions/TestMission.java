@@ -2,7 +2,7 @@ package br.jp.redsparrow.game.missions;
 
 import android.media.MediaPlayer;
 import br.jp.redsparrow.R;
-import br.jp.redsparrow.engine.core.GameRenderer;
+import br.jp.redsparrow.engine.core.Game;
 import br.jp.redsparrow.engine.core.missions.Mission;
 
 public class TestMission extends Mission {
@@ -15,9 +15,9 @@ public class TestMission extends Mission {
 	}
 
 	@Override
-	public void update() {
+	public void update(Game game) {
 		
-		mp = MediaPlayer.create(GameRenderer.getContext(), R.raw.test_missionaccomplished);
+		mp = MediaPlayer.create(game.getContext(), R.raw.test_missionaccomplished);
 		mp.start();
 		this.mComplete = true;
 		
