@@ -78,7 +78,7 @@ public class ObjectFactory {
 			Animation anim = new Animation(1, 1);
 			anim.setAmmoToWait(4);
 			//RDB 0
-			obj.addComponent(new AnimatedSpriteComponent(context, R.drawable.basic_enemy_ship_dark, obj,
+			obj.addComponent(new AnimatedSpriteComponent(context, R.drawable.basic_enemy_ship, obj,
 					anim, 0.3f, 0.3f));
 			((AnimatedSpriteComponent) obj.getRenderableComponent(0)).addAnimation( context, R.drawable.explosion_test,new Animation(5, 4));
 

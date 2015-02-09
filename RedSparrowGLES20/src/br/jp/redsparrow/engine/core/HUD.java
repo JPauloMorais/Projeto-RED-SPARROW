@@ -6,11 +6,11 @@ public class HUD {
 
 	private static ArrayList<HUDitem> mHudItems;
 	
-	public static void init(){
+	public HUD(){
 		mHudItems = new ArrayList<HUDitem>();
 	}
 	
-	public static void loop(float[] projectionMatrix){
+	public void loop(float[] projectionMatrix){
 		
 		for (HUDitem hItem : mHudItems) {
 			hItem.update();
@@ -19,11 +19,11 @@ public class HUD {
 		
 	}
 	
-	public static void addItem(HUDitem item) {
+	public void addItem(HUDitem item) {
 		mHudItems.add(item);
 	}
 
-	public static HUDitem getItem(int indx) {
+	public HUDitem getItem(int indx) {
 		return mHudItems.get(indx);
 	}
 
