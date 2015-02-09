@@ -3,20 +3,28 @@ package br.jp.redsparrow.engine.core.messages;
 import java.util.ArrayList;
 
 import android.util.Log;
-import br.jp.redsparrow.engine.core.World;
+import br.jp.redsparrow.engine.core.Game;
+import br.jp.redsparrow.engine.core.GameSystem;
 import br.jp.redsparrow.engine.core.util.LogConfig;
 
-public class MessagingSystem {
+public class MessagingSystem extends GameSystem{
 
 	private static final String TAG = "MessagingSystem";
 
 	private static ArrayList<Message> mMessages;
 
-	public static void init(){
+	public MessagingSystem(Game game){
+		super(game);
 		mMessages = new ArrayList<Message>();
 	}
+	
+	@Override
+	public void loop(Game game, float[] projectionMatrix) {
+		// TODO Auto-generated method stub
+		
+	}
 
-	public static ArrayList<Message> getMessages(int id){
+	public ArrayList<Message> getMessages(int id){
 		try{
 
 			ArrayList<Message> toReturn = new ArrayList<Message>();
@@ -37,15 +45,15 @@ public class MessagingSystem {
 		}
 	}
 
-	public static void sendMessages(Message ... message) throws NullPointerException{
+	public void sendMessages(Message ... message) throws NullPointerException{
 		for (int i = 0; i < message.length; i++) {			
 			mMessages.add(message[i]);
 		}
 	}
 
-	public static void sendMessagesToObject(final int objectId, final Message ... messages) throws NullPointerException {
+	public void sendMessagesToObject(final int objectId, final Message ... messages) throws NullPointerException {
 		for (int i = 0; i < messages.length; i++) {
-			World.getObjectById(objectId).recieveMessage(messages[i]);
+			game.getWorld().getObjectById(objectId).recieveMessage(messages[i]);
 			if(LogConfig.ON) Log.i(TAG, " MSG entegue a obj de id: " + objectId);
 		}
 	}

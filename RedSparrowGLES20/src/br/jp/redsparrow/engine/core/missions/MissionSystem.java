@@ -2,10 +2,11 @@ package br.jp.redsparrow.engine.core.missions;
 
 import java.util.ArrayList;
 
-import br.jp.redsparrow.engine.core.World;
+import br.jp.redsparrow.engine.core.Game;
+import br.jp.redsparrow.engine.core.GameSystem;
 import br.jp.redsparrow.engine.core.physics.Collision;
 
-public class MissionSystem implements Runnable {
+public class MissionSystem extends GameSystem implements Runnable {
 
 	public static final String TAG = "MissionSystem";
 
@@ -15,8 +16,8 @@ public class MissionSystem implements Runnable {
 	private static MissionSequence mainSequence;
 	private static ArrayList<MissionSequence> sideSequences;
 
-	public MissionSystem(MissionSequence mainMissionSequence) {
-
+	public MissionSystem(Game game, MissionSequence mainMissionSequence) {
+		super(game);
 		mThread = new Thread( this, "MissionSystem" );
 		
 		mainSequence = mainMissionSequence;
@@ -28,15 +29,15 @@ public class MissionSystem implements Runnable {
 		isRunning = true;
 		mThread.start();
 	}
-
+	
 	@Override
-	public void run() {
+	public void loop(Game game, float[] projectionMatrix) {
 		
 		while(isRunning) {
 
 			//------MAIN--------------
 			if(!mainSequence.getCurMission().wasTriggered()) {
-				if(Collision.areIntersecting(World.getPlayer().getBounds(), mainSequence.getCurMission().mBounds)) {
+				if(Collision.areIntersecting(game.getWorld().getPlayer().getBounds(), mainSequence.getCurMission().mBounds)) {
 
 					mainSequence.getCurMission().trigger();
 
@@ -50,7 +51,7 @@ public class MissionSystem implements Runnable {
 			//-------SIDE-------------
 			for (MissionSequence sideSequence : sideSequences) {
 				if(!sideSequence.getCurMission().wasTriggered()){
-					if(Collision.areIntersecting(World.getPlayer().getBounds(), sideSequence.getCurMission().mBounds)){
+					if(Collision.areIntersecting(game.getWorld().getPlayer().getBounds(), sideSequence.getCurMission().mBounds)){
 
 						sideSequence.getCurMission().trigger();
 
@@ -64,7 +65,13 @@ public class MissionSystem implements Runnable {
 
 			removeCompletedSequences();
 
-		}
+		}		
+	}
+
+	@Override
+	public void run() {
+		
+		loop(game, game.getRenderer().projectionMatrix);
 
 	}
 	

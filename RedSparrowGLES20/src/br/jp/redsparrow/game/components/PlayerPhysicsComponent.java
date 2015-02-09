@@ -1,5 +1,6 @@
 package br.jp.redsparrow.game.components;
 
+import br.jp.redsparrow.engine.core.Game;
 import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.Vector2f;
 import br.jp.redsparrow.engine.core.components.PhysicsComponent;
@@ -15,7 +16,7 @@ public class PlayerPhysicsComponent extends PhysicsComponent {
 	}
 
 	@Override
-	public void update(GameObject parent) {			
+	public void update(Game game, GameObject parent) {			
 
 		//		if (!mMoved) {
 		//			mFric.setX(0.01f);

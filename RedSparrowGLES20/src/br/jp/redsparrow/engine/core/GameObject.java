@@ -42,12 +42,12 @@ public class GameObject {
 
 	}
 
-	public void update() {
+	public void update(Game game) {
 		
 		removeRecievedMessages();
 		
 		for (Component component : mUpdatableComponents) {
-			((Updatable) component).update(this);
+			((Updatable) component).update(game, this);
 		}
 	}
 

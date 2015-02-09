@@ -1,6 +1,6 @@
 package br.jp.redsparrow.engine.core.components;
 
-import android.util.Log;
+import br.jp.redsparrow.engine.core.Game;
 import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.Updatable;
 
@@ -20,7 +20,7 @@ public abstract class StatsComponent extends Component implements Updatable {
 	}
 	
 	@Override
-	public void update(GameObject object) {
+	public void update(Game game, GameObject object) {
 		if(mCurHealth <= 0) die();
 	}
 
@@ -34,7 +34,6 @@ public abstract class StatsComponent extends Component implements Updatable {
 	
 	public void takeDamage(int damage) {
 		mCurHealth -= damage;
-		Log.i("MessagingSystem", "!!!!!!!!!DMG!!!!!!!!!!!!!!!!");
 	}
 
 	protected abstract void die();

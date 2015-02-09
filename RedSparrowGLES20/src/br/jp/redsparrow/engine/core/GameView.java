@@ -1,4 +1,4 @@
-package br.jp.redsparrow.game;
+package br.jp.redsparrow.engine.core;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;

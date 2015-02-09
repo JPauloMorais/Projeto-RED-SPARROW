@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.media.MediaPlayer;
+import br.jp.redsparrow.engine.core.Game;
 import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.Updatable;
 
@@ -34,7 +35,7 @@ public class SoundComponent extends Component implements Updatable {
 	}
 
 	@Override
-	public void update(GameObject parent) {
+	public void update(Game game, GameObject parent) {
 		try {
 //			parent.getMessage("Collision");
 //			startSound(0, false);

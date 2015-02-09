@@ -1,5 +1,6 @@
 package br.jp.redsparrow.engine.core.components;
 
+import br.jp.redsparrow.engine.core.Game;
 import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.Updatable;
 import br.jp.redsparrow.engine.core.Vector2f;
@@ -28,7 +29,7 @@ public abstract class PhysicsComponent extends Component implements Updatable {
 	}
 
 	@Override
-	public void update(GameObject parent) {			
+	public void update(Game game, GameObject parent) {			
 
 		//Friccao
 

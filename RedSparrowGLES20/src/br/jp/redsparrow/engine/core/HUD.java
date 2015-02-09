@@ -2,18 +2,20 @@ package br.jp.redsparrow.engine.core;
 
 import java.util.ArrayList;
 
-public class HUD {
+public class HUD extends GameSystem {
 
 	private static ArrayList<HUDitem> mHudItems;
 	
-	public HUD(){
+	public HUD(Game game){
+		super(game);
 		mHudItems = new ArrayList<HUDitem>();
 	}
 	
-	public void loop(float[] projectionMatrix){
+	@Override
+	public void loop(Game game, float[] projectionMatrix){
 		
 		for (HUDitem hItem : mHudItems) {
-			hItem.update();
+			hItem.update(game);
 			hItem.render(projectionMatrix);
 		}
 		

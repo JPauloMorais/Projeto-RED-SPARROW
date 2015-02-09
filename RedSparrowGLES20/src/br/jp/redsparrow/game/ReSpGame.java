@@ -5,6 +5,7 @@ import java.util.Random;
 import android.content.Context;
 import android.opengl.Matrix;
 import br.jp.redsparrow.engine.core.Game;
+import br.jp.redsparrow.engine.core.GameRenderer;
 import br.jp.redsparrow.engine.core.Vector2f;
 import br.jp.redsparrow.engine.core.components.GunComponent;
 import br.jp.redsparrow.engine.core.components.SoundComponent;
@@ -12,11 +13,11 @@ import br.jp.redsparrow.game.ObjectFactory.HUDITEM_TYPE;
 import br.jp.redsparrow.game.ObjectFactory.OBJECT_TYPE;
 import br.jp.redsparrow.game.components.PlayerPhysicsComponent;
 
-public class RedSparrow extends Game {
+public class ReSpGame extends Game {
 
 	private Random random;
 	
-	public RedSparrow() {
+	public ReSpGame() {
 		random = new Random();
 	}
 
@@ -24,20 +25,20 @@ public class RedSparrow extends Game {
 	public void create(Context context) {
 		super.create(context);
 
-		mHUD.addItem(ObjectFactory.createHUDitem(context, HUDITEM_TYPE.AMMO_DISP));
-		mHUD.addItem(ObjectFactory.createHUDitem(context, HUDITEM_TYPE.LIFEBAR));
+		mHUD.addItem(mObjFactory.createHUDitem(context, HUDITEM_TYPE.AMMO_DISP));
+		mHUD.addItem(mObjFactory.createHUDitem(context, HUDITEM_TYPE.LIFEBAR));
 
-		mWorld.setPlayer(ObjectFactory.createObject(context, OBJECT_TYPE.PLAYER, 0f, 0f));
+		mWorld.setPlayer(mObjFactory.createObject(context, OBJECT_TYPE.PLAYER, 0f, 0f));
 		int qd = 1; int qd2 = 1;
 		for (int i = 0; i < 15; i++) {
-			mWorld.addObject(ObjectFactory.createObject(context, OBJECT_TYPE.BASIC_ENEMY, (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2));
+			mWorld.addObject(mObjFactory.createObject(context, OBJECT_TYPE.BASIC_ENEMY, (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2));
 			if(i%2==0) qd *= -1;
 			else qd2 *= -1;
 		}		
 
 		qd = 1; qd2 = 2;
 		for (int i = 0; i < 15; i++) {
-			mWorld.addObject(ObjectFactory.createObject(context, OBJECT_TYPE.BASIC_ENEMY_2, (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2));
+			mWorld.addObject(mObjFactory.createObject(context, OBJECT_TYPE.BASIC_ENEMY_2, (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2));
 			if(i%2==0) qd *= -1;
 			else qd2 *= -1;
 		}
@@ -52,9 +53,9 @@ public class RedSparrow extends Game {
 	@Override
 	public void loop(float[] viewMatrix, float[] projMatrix, float[] viewProjMatrix) {
 		
-		mWorld.loop(projMatrix);
+		mWorld.loop(this, projMatrix);
 		Matrix.multiplyMM(viewProjMatrix, 0, projMatrix, 0, viewMatrix, 0);
-		mHUD.loop(projMatrix);
+		mHUD.loop(this, projMatrix);
 		
 		//------------TESTE
 

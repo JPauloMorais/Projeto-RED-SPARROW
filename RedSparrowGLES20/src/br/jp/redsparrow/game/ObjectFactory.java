@@ -6,7 +6,9 @@ import android.content.Context;
 import android.media.MediaPlayer;
 import br.jp.redsparrow.R;
 import br.jp.redsparrow.engine.core.Animation;
+import br.jp.redsparrow.engine.core.Game;
 import br.jp.redsparrow.engine.core.GameObject;
+import br.jp.redsparrow.engine.core.GameSystem;
 import br.jp.redsparrow.engine.core.HUDitem;
 import br.jp.redsparrow.engine.core.Vector2f;
 import br.jp.redsparrow.engine.core.components.AnimatedSpriteComponent;
@@ -22,7 +24,11 @@ import br.jp.redsparrow.game.components.PlayerPhysicsComponent;
 import br.jp.redsparrow.game.components.PlayerStatsComponent;
 import br.jp.redsparrow.game.components.ProjectilePhysicsComponent;
 
-public class ObjectFactory {
+public class ObjectFactory extends GameSystem {
+
+	public ObjectFactory(Game game) {
+		super(game);
+	}
 
 	public enum OBJECT_TYPE{
 		PLAYER, 
@@ -35,7 +41,7 @@ public class ObjectFactory {
 
 	}
 
-	public static GameObject createObject(Context context, OBJECT_TYPE type,
+	public GameObject createObject(Context context, OBJECT_TYPE type,
 			float x, float y) {
 
 		GameObject obj = new GameObject(new AABB(new Vector2f(x, y), 0, 0));
@@ -198,14 +204,14 @@ public class ObjectFactory {
 		AMMO_DISP, LIFEBAR
 	}
 
-	public static HUDitem createHUDitem(Context context, HUDITEM_TYPE type ) {
+	public HUDitem createHUDitem(Context context, HUDITEM_TYPE type ) {
 
 		HUDitem item;
 
 		switch (type) {
 		case AMMO_DISP:
 
-			item = new HUDitem(context, -19, 38, 10, 10);
+			item = new HUDitem(context, game.getWorld(), -19, 38, 10, 10);
 			item.addComponent(new SpriteComponent(context, R.drawable.ammo_display_test, item, 0, 0));
 			item.addComponent(new RelSpriteComponent(context, R.drawable.projectile_1, item,
 					new Vector2f(0, 1f), 8, 8,
@@ -215,7 +221,7 @@ public class ObjectFactory {
 
 		case LIFEBAR:
 
-			item = new HUDitem(context, -14, 38, 9, 3);
+			item = new HUDitem(context, game.getWorld(), -14, 38, 9, 3);
 
 			item.addComponent(new LifeBarComponent(item));
 
@@ -234,12 +240,17 @@ public class ObjectFactory {
 			break;
 
 		default:
-			item = new HUDitem(context, 0, 0, 10, 10);
+			item = new HUDitem(context, game.getWorld(), 0, 0, 10, 10);
 			break;
 		}	
 
 		return item;
 
+	}
+
+	@Override
+	public void loop(Game game, float[] projectionMatrix) {
+		// TODO Auto-generated method stub
 	}
 
 }

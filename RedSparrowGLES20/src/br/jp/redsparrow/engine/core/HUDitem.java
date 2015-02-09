@@ -8,18 +8,18 @@ public class HUDitem extends GameObject {
 	
 	private Vector2f mRelPos;
 	
-	public HUDitem(Context context, float x, float y, float width, float height) {
-		super(new AABB(new Vector2f(World.getPlayer().getX()+x, World.getPlayer().getY()+y), width, height));
+	public HUDitem(Context context, World world, float x, float y, float width, float height) {
+		super(new AABB(new Vector2f(world.getPlayer().getX()+x, world.getPlayer().getY()+y), width, height));
 
 		mRelPos = new Vector2f(x, y);
 				
 	}
 	
 	@Override
-	public void update() {
-		super.update();
+	public void update(Game game) {
+		super.update(game);
 
-		setPosition(World.getPlayer().getPosition().add(mRelPos));
+		setPosition(game.getWorld().getPlayer().getPosition().add(mRelPos));
 		
 	}
 

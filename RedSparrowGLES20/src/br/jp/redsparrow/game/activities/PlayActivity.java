@@ -19,14 +19,13 @@ import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.widget.Toast;
 import br.jp.redsparrow.R;
-import br.jp.redsparrow.engine.core.World;
-import br.jp.redsparrow.game.GameRenderer;
-import br.jp.redsparrow.game.GameView;
+import br.jp.redsparrow.engine.core.GameView;
+import br.jp.redsparrow.game.ReSpGame;
 
 public class PlayActivity extends Activity implements OnTouchListener, SensorEventListener {
 
 	private GameView mGameView;
-	private GameRenderer mGameRenderer;
+	private ReSpGame game;
 
 	Sensor mSensorAccelerometer;
 	SensorManager mSensorManager;
@@ -53,8 +52,8 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 			mSensorAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 			mSensorManager.registerListener(this, mSensorAccelerometer, SensorManager.SENSOR_DELAY_GAME);
 
-			mGameRenderer = new GameRenderer(this);
-			mGameView.setRenderer(mGameRenderer);
+			
+			mGameView.setRenderer(game.getRenderer());
 			mGameView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
 			//			rendererSet = true;
 
@@ -75,7 +74,7 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 	protected void onResume() {
 		super.onResume();
 		mGameView.onResume();
-		World.resume();
+		game.getWorld().resume();
 		mSensorManager.registerListener(this, mSensorAccelerometer, SensorManager.SENSOR_DELAY_GAME);
 		//		gv.resume();
 	}
@@ -84,7 +83,7 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 	protected void onPause() {
 		super.onPause();
 		mGameView.onPause();
-		World.pause();
+		game.getWorld().pause();
 		mSensorManager.unregisterListener(this);
 		//		gv.pause();
 	}
@@ -92,7 +91,7 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 	@Override
 	protected void onStop() {
 		super.onStop();
-		World.stop();
+		game.getWorld().stop();
 		mSensorManager.unregisterListener(this);
 	}
 
@@ -124,7 +123,7 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 		if(event.values!=null) mGameView.queueEvent(new Runnable() {
 			@Override
 			public void run() {
-				mGameRenderer.handleSensorChange(se.values);
+				game.getRenderer().handleSensorChange(se.values);
 			}
 		});
 	}
@@ -148,21 +147,21 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 				mGameView.queueEvent(new Runnable() {
 					@Override
 					public void run() {
-						mGameRenderer.handleTouchPress(normalizedX,normalizedY);
+						game.getInputHandler().handleTouchPress(normalizedX,normalizedY);
 					}
 				});
 			}else if(event.getAction()==MotionEvent.ACTION_UP){
 				mGameView.queueEvent(new Runnable() {
 					@Override
 					public void run() {
-						mGameRenderer.handleTouchRelease(normalizedX,normalizedY);
+						game.getInputHandler().handleTouchRelease(normalizedX,normalizedY);
 					}
 				});
 			}else if(event.getAction()==MotionEvent.ACTION_MOVE){
 				mGameView.queueEvent(new Runnable() {
 					@Override
 					public void run() {
-						mGameRenderer.handleTouchDrag(normalizedX,normalizedY);
+						game.getInputHandler().handleTouchDrag(normalizedX,normalizedY);
 					}
 				});
 			}

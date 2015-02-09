@@ -1,11 +1,10 @@
 package br.jp.redsparrow.engine.core.components;
 
+import br.jp.redsparrow.engine.core.Game;
 import br.jp.redsparrow.engine.core.GameObject;
+import br.jp.redsparrow.engine.core.GameRenderer;
 import br.jp.redsparrow.engine.core.Updatable;
 import br.jp.redsparrow.engine.core.Vector2f;
-import br.jp.redsparrow.engine.core.World;
-import br.jp.redsparrow.game.GameRenderer;
-import br.jp.redsparrow.game.ObjectFactory;
 import br.jp.redsparrow.game.ObjectFactory.OBJECT_TYPE;
 import br.jp.redsparrow.game.components.ProjectilePhysicsComponent;
 
@@ -19,18 +18,18 @@ public class GunComponent extends Component implements Updatable {
 	}
 
 	@Override
-	public void update(GameObject parent) {
+	public void update(Game game, GameObject parent) {
 
 		if(toShoot){
 						
-			GameObject proj = ObjectFactory.createObject(GameRenderer.getContext(), OBJECT_TYPE.PROJECTILE, parent.getX(), parent.getY());
+			GameObject proj = game.getObjFactory().createObject(GameRenderer.getContext(), OBJECT_TYPE.PROJECTILE, parent.getX(), parent.getY());
 			
 //			((PhysicsComponent) parent.getUpdatableComponent(0)).collide(Collision.getColVector(parent.getBounds(), proj.getBounds()));
 			
 			((ProjectilePhysicsComponent) proj.getUpdatableComponent(0)).setShooterType(mParent.getType());
 			((ProjectilePhysicsComponent) proj.getUpdatableComponent(0)).shoot(mMoveVel.copy());
 			
-			World.addObject(proj);
+			game.getWorld().addObject(proj);
 
 			toShoot = false;
 		}

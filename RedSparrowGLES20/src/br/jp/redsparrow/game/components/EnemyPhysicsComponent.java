@@ -1,5 +1,6 @@
 package br.jp.redsparrow.game.components;
 
+import br.jp.redsparrow.engine.core.Game;
 import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.Vector2f;
 import br.jp.redsparrow.engine.core.components.PhysicsComponent;
@@ -18,7 +19,7 @@ public class EnemyPhysicsComponent extends PhysicsComponent {
 	}
 
 	@Override
-	public void update(GameObject parent) {			
+	public void update(Game game, GameObject parent) {			
 
 		//Input de Movimentacao
 		//		try { 

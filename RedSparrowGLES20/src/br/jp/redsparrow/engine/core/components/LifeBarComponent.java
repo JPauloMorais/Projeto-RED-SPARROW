@@ -1,8 +1,8 @@
 package br.jp.redsparrow.engine.core.components;
 
+import br.jp.redsparrow.engine.core.Game;
 import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.Updatable;
-import br.jp.redsparrow.engine.core.World;
 
 public class LifeBarComponent extends Component implements Updatable {
 
@@ -20,11 +20,11 @@ public class LifeBarComponent extends Component implements Updatable {
 	}
 
 	@Override
-	public void update(GameObject parent) {
+	public void update(Game game, GameObject parent) {
 
 		try {
 			
-			int dmg = Integer.valueOf(World.getPlayer().getMessage("Damage").getMessage().toString());
+			int dmg = Integer.valueOf(game.getWorld().getPlayer().getMessage("Damage").getMessage().toString());
 									
 			for (int i = 0; i < dmg; i++) {
 				((RelSpriteComponent) parent.getRenderableComponent(lifeSlotCount - 1))

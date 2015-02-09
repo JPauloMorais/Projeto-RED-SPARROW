@@ -16,12 +16,10 @@ import br.jp.redsparrow.engine.core.particles.ParticleSystem;
 import br.jp.redsparrow.engine.core.physics.Bounds;
 import br.jp.redsparrow.engine.core.physics.Collision;
 import br.jp.redsparrow.engine.core.util.LogConfig;
-import br.jp.redsparrow.game.GameRenderer;
-import br.jp.redsparrow.game.ObjectFactory;
 import br.jp.redsparrow.game.ObjectFactory.OBJECT_TYPE;
 import br.jp.redsparrow.game.components.ProjectilePhysicsComponent;
 
-public class World{
+public class World extends GameSystem{
 	
 	//TODO: Saveinstancestate stuff
 
@@ -47,8 +45,9 @@ public class World{
 	private static ParticleSystem mParticleSystem;
 	private static ArrayList<ParticleEmitter> mEmiters;
 
-	public World(Context context){
-
+	public World(Context context, Game game){
+		super(game);
+		
 		isRunning = false;
 
 		//Objetos
@@ -80,12 +79,13 @@ public class World{
 		float targetVol[] = { bgMusicLeftVol, bgMusicRightVol };
 		bgmSoundComponent.fadeIn(0, targetVol, 1, true);
 	}
-
-	public void loop(float[] projectionMatrix){
+	
+	@Override
+	public void loop(Game game, float[] projectionMatrix){
 		if (isRunning) {
 			//-------LIMPANDO---------
 			mQuadTree.clear();
-			removeDead();
+			removeDead(game);
 
 			//------PREECHENDO QUADTREE-------
 			for (int k=0; k < mGameObjects.size(); k++) {
@@ -141,7 +141,7 @@ public class World{
 							mGameObjects.get(i).getY() < getPlayer().getY()+mUPDATE_RANGE_Y &&
 							mGameObjects.get(i).getY() > getPlayer().getY()-mUPDATE_RANGE_Y)
 					{
-						mGameObjects.get(i).update();
+						mGameObjects.get(i).update(game);
 					}
 
 					if(mGameObjects.get(i).getX() < getPlayer().getX()+mRENDERING_RANGE_X &&
@@ -194,7 +194,7 @@ public class World{
 			}
 			mParticleSystem.render(projectionMatrix);
 
-			mPlayer.update();
+			mPlayer.update(game);
 			mPlayer.render(projectionMatrix);
 
 
@@ -298,7 +298,7 @@ public class World{
 		return mGameObjects.size();
 	}
 
-	private void removeDead(){
+	private void removeDead(Game game){
 		mToRemove.clear();
 		for (int i = 0; i < mGameObjects.size(); i++) {
 			if(mGameObjects.get(i).isDead()) {
@@ -310,14 +310,14 @@ public class World{
 		mGameObjects.removeAll(mToRemove);
 
 		if(mPlayer.isDead() && !mGameObjects.isEmpty()) {
-			onPlayerDeath();
+			onPlayerDeath(game);
 		}
 	}
 
-	private void onPlayerDeath() {
+	private void onPlayerDeath(Game game) {
 		//-----Teste------
 		//Isso e inevitavel Mr. Anderson.
-		mGameObjects.set(0, ObjectFactory.createObject(GameRenderer.getContext(), OBJECT_TYPE.PLAYER, mGameObjects.get(0).getX(), mGameObjects.get(0).getY()));
+		mGameObjects.set(0, game.getObjFactory().createObject(GameRenderer.getContext(), OBJECT_TYPE.PLAYER, mGameObjects.get(0).getX(), mGameObjects.get(0).getY()));
 		this.setPlayer(mGameObjects.get(0));
 		mGameObjects.remove(0);
 		//------------------
