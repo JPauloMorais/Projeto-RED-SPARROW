@@ -80,11 +80,11 @@ public class ReSpGame extends Game {
 		mDbgBackground1.render(viewProjMatrix);
 		Matrix.translateM(viewProjMatrix, 0, 0, 0, 10);
 		
-		mWorld.loop(this, projMatrix);
+		mWorld.loop(this, viewProjMatrix);
 		
 		Matrix.multiplyMM(viewProjMatrix, 0, projMatrix, 0, viewMatrix, 0);
 		
-		mHUD.loop(this, projMatrix);
+		mHUD.loop(this, viewProjMatrix);
 
 		//------------TESTE
 
