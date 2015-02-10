@@ -11,9 +11,12 @@ import br.jp.redsparrow.engine.core.Vector2f;
 import br.jp.redsparrow.engine.core.World;
 import br.jp.redsparrow.engine.core.components.GunComponent;
 import br.jp.redsparrow.engine.core.components.SoundComponent;
+import br.jp.redsparrow.engine.core.missions.MissionSequence;
+import br.jp.redsparrow.engine.core.missions.MissionSystem;
 import br.jp.redsparrow.game.ObjectFactory.HUDITEM_TYPE;
 import br.jp.redsparrow.game.ObjectFactory.OBJECT_TYPE;
 import br.jp.redsparrow.game.components.PlayerPhysicsComponent;
+import br.jp.redsparrow.game.missions.TestMission;
 
 public class ReSpGame extends Game {
 
@@ -27,6 +30,8 @@ public class ReSpGame extends Game {
 		random = new Random();
 		mRenderer = new ReSpRenderer(mContext, this);
 		mInputHandler = new ReSpInputHandle(this);	
+		mMissionSystem = new MissionSystem(this, new MissionSequence(new TestMission()));
+		
 	}
 
 	@Override
@@ -58,6 +63,7 @@ public class ReSpGame extends Game {
 		mHUD.addItem(mObjFactory.createHUDitem(mContext, HUDITEM_TYPE.AMMO_DISP));
 		mHUD.addItem(mObjFactory.createHUDitem(mContext, HUDITEM_TYPE.LIFEBAR));
 		
+		mMissionSystem.start();
 	}
 
 	//------------TESTE
@@ -145,17 +151,17 @@ public class ReSpGame extends Game {
 
 	@Override
 	public void pause() {
-
+		if(mWorld != null) mWorld.pause();
 	}
 
 	@Override
 	public void resume() {
-
+		if(mWorld != null) mWorld.resume();;
 	}
 
 	@Override
 	public void stop() {
-
+		if(mWorld != null) mWorld.stop();
 	}
 
 }

@@ -4,11 +4,11 @@ import android.content.Context;
 import android.opengl.GLES20;
 import br.jp.redsparrow.engine.core.Consts;
 import br.jp.redsparrow.engine.core.GameObject;
+import br.jp.redsparrow.engine.core.GameRenderer;
 import br.jp.redsparrow.engine.core.Renderable;
 import br.jp.redsparrow.engine.core.Vector2f;
 import br.jp.redsparrow.engine.core.VertexArray;
 import br.jp.redsparrow.engine.core.util.TextureUtil;
-import br.jp.redsparrow.engine.shaders.TextureShaderProg;
 
 public class SpriteComponent extends Component implements Renderable {
 
@@ -20,7 +20,6 @@ public class SpriteComponent extends Component implements Renderable {
 
 	private float[] mSizeOffset;
 
-	private TextureShaderProg mTextureProgram;
 	private int mTexture;
 
 	private float[] mVertsData;
@@ -31,7 +30,6 @@ public class SpriteComponent extends Component implements Renderable {
 	
 		super("Sprite", parent);
 
-		mTextureProgram = new TextureShaderProg(context);
 		mTexture = TextureUtil.loadTexture(context, imgId);
 
 		mVertsData = new float[30];
@@ -48,7 +46,6 @@ public class SpriteComponent extends Component implements Renderable {
 	public SpriteComponent(Context context, int imgId, GameObject parent, float sizeOffsetX, float sizeOffsetY) {
 		super("Sprite", parent);
 
-		mTextureProgram = new TextureShaderProg(context);
 		mTexture = TextureUtil.loadTexture(context, imgId);
 
 		mVertsData = new float[30];
@@ -178,12 +175,12 @@ public class SpriteComponent extends Component implements Renderable {
 
 		mVertsArray.setVertexAttribPointer(
 				0,
-				mTextureProgram.getPositionAttributeLocation(),
+				GameRenderer.textureProgram.getPositionAttributeLocation(),
 				Consts.POSITION_COUNT,
 				Consts.STRIDE);
 		mVertsArray.setVertexAttribPointer(
 				Consts.POSITION_COUNT,
-				mTextureProgram.getTextureCoordinatesAttributeLocation(),
+				GameRenderer.textureProgram.getTextureCoordinatesAttributeLocation(),
 				Consts.TEXTURE_COORDS_COUNT,
 				Consts.STRIDE);
 
@@ -193,8 +190,8 @@ public class SpriteComponent extends Component implements Renderable {
 	public void render(VertexArray vertexArray, float[] projectionMatrix) {
 
 		updateVertsData();
-		mTextureProgram.useProgram();
-		mTextureProgram.setUniforms(projectionMatrix, mTexture);
+		GameRenderer.textureProgram.useProgram();
+		GameRenderer.textureProgram.setUniforms(projectionMatrix, mTexture);
 		bindData();
 		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 6);
 

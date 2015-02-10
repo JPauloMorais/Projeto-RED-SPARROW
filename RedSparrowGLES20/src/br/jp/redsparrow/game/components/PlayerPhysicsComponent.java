@@ -10,7 +10,6 @@ public class PlayerPhysicsComponent extends PhysicsComponent {
 	public PlayerPhysicsComponent(GameObject parent) {
 		super(parent);
 
-		mMaxVels = new Vector2f(parent.getWidth()/10, parent.getHeight()/10);
 		mMass = parent.getWidth()+parent.getHeight();
 
 	}
@@ -52,6 +51,7 @@ public class PlayerPhysicsComponent extends PhysicsComponent {
 		//			
 		//		}
 
+		clampToMaxVel();
 		addVel(parent);
 		pointForwards(parent);
 		

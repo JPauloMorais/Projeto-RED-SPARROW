@@ -7,9 +7,8 @@ import br.jp.redsparrow.engine.core.Vector2f;
 
 public abstract class PhysicsComponent extends Component implements Updatable {
 
-	protected Vector2f mMaxVels;
+	protected float mMaxVel;
 
-	protected Vector2f mPosition; 
 	protected Vector2f mVelocity = new Vector2f(0f, 0f);
 	protected Vector2f mFric = new Vector2f(0f, 0f);
 
@@ -21,8 +20,7 @@ public abstract class PhysicsComponent extends Component implements Updatable {
 	public PhysicsComponent(GameObject parent) {
 		super("Physics", parent);
 
-		mPosition = parent.getPosition();
-		mMaxVels = new Vector2f(parent.getWidth(), parent.getHeight());
+		mMaxVel = parent.getWidth();
 		mMoved = false;
 		mCollided = false;
 
@@ -61,10 +59,14 @@ public abstract class PhysicsComponent extends Component implements Updatable {
 	}
 
 	public void addVel(GameObject parent){
-				
-		mPosition = mPosition.add(mVelocity);
-		parent.setPosition( mPosition );
 
+		parent.setPosition( mParent.getPosition().copy().add(mVelocity) );
+
+	}
+	
+	public void clampToMaxVel() {
+		if(mVelocity.length()>mMaxVel) 
+			mVelocity.setLength(mMaxVel);
 	}
 	
 	public void pointForwards(GameObject parent) {

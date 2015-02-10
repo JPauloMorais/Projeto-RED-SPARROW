@@ -7,10 +7,10 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView.Renderer;
 import br.jp.redsparrow.engine.core.util.FPSCounter;
 import br.jp.redsparrow.engine.core.util.LogConfig;
+import br.jp.redsparrow.engine.shaders.ParticleShaderProg;
+import br.jp.redsparrow.engine.shaders.TextureShaderProg;
 
 public class GameRenderer extends GameSystem implements Renderer {
-
-
 
 	private static boolean isRunning = false; 
 
@@ -20,9 +20,9 @@ public class GameRenderer extends GameSystem implements Renderer {
 	public final float[] viewMatrix = new float[16];
 	public final float[] projectionMatrix = new float[16];
 	public final float[] viewProjectionMatrix = new float[16];
-	//	private final float[] modelViewProjectionMatrix = new float[16];
-
-	//	private final float[] modelMatrix = new float[16];
+	
+	public static TextureShaderProg textureProgram;
+	public static ParticleShaderProg particleProgram;
 
 	private final FPSCounter fps = new FPSCounter();
 
@@ -34,30 +34,10 @@ public class GameRenderer extends GameSystem implements Renderer {
 	public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
 
 		setRunning(true);
-		//----TESTE----
-
+		textureProgram = new TextureShaderProg(game.getContext());
+		particleProgram = new ParticleShaderProg(game.getContext());
 		
-
-//		int qd = 1; int qd2 = 1;
-//		for (int i = 0; i < 15; i++) {
-//			World.addObject(ObjectFactory.createObject(mContext, OBJECT_TYPE.BASIC_ENEMY, (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2));
-//			if(i%2==0) qd *= -1;
-//			else qd2 *= -1;
-//		}		
-//
-//		int qd5 = 1; int qd6 = 1;
-//		for (int i = 0; i < 15; i++) {
-//			World.addObject(ObjectFactory.createObject(mContext, OBJECT_TYPE.BASIC_ENEMY_2, (qd5 * random.nextFloat() * random.nextInt(10)) + 2*qd5, (qd6 * random.nextFloat() * random.nextInt(10)) + 2*qd6));
-//			if(i%2==0) qd5 *= -1;
-//			else qd6 *= -1;
-//		}
-
-		//--------------
-
-
 	}
-
-	GameObject obj;
 
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {

@@ -8,6 +8,6 @@ public abstract class GameSystem {
 		this.game = game;
 	}
 	
-	public abstract void loop(Game game,float[] projectionMatrix);
+	public void loop(Game game,float[] projectionMatrix) { }
 	
 }

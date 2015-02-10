@@ -167,7 +167,6 @@ public class World extends GameSystem{
 						((PhysicsComponent) mToCheck.get(i).getUpdatableComponent(0)).collide(
 								Collision.getColVector((Bounds) mToCheck.get(i).getBounds(), (Bounds) mPlayer.getBounds()));
 						
-						mPlayer.die();
 					}else {
 						if(!((ProjectilePhysicsComponent) mToCheck.get(i).getUpdatableComponent(0))
 								.getShootertype().equals(OBJECT_TYPE.PLAYER)) {

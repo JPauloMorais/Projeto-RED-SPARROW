@@ -7,11 +7,11 @@ import android.opengl.GLES20;
 import br.jp.redsparrow.engine.core.Animation;
 import br.jp.redsparrow.engine.core.Consts;
 import br.jp.redsparrow.engine.core.GameObject;
+import br.jp.redsparrow.engine.core.GameRenderer;
 import br.jp.redsparrow.engine.core.Renderable;
 import br.jp.redsparrow.engine.core.Vector2f;
 import br.jp.redsparrow.engine.core.VertexArray;
 import br.jp.redsparrow.engine.core.util.TextureUtil;
-import br.jp.redsparrow.engine.shaders.TextureShaderProg;
 
 public class AnimatedSpriteComponent extends Component implements Renderable {
 
@@ -19,9 +19,7 @@ public class AnimatedSpriteComponent extends Component implements Renderable {
 
 	private float[] mOffset;
 
-	private TextureShaderProg mTextureProgram;
 	private ArrayList<Integer> mTextures;
-//	private int mTexture;
 
 	private float[] mVertsData;
 
@@ -33,7 +31,6 @@ public class AnimatedSpriteComponent extends Component implements Renderable {
 	public AnimatedSpriteComponent(Context context, int imgId, GameObject parent, Animation anim, float offsetX, float offsetY) {
 		super("Sprite", parent);
 
-		mTextureProgram = new TextureShaderProg(context);
 		mTextures = new ArrayList<Integer>();
 		mTextures.add(TextureUtil.loadTexture(context, imgId));
 
@@ -56,12 +53,12 @@ public class AnimatedSpriteComponent extends Component implements Renderable {
 
 		mVertsArray.setVertexAttribPointer(
 				0,
-				mTextureProgram.getPositionAttributeLocation(),
+				GameRenderer.textureProgram.getPositionAttributeLocation(),
 				Consts.POSITION_COUNT,
 				Consts.STRIDE);
 		mVertsArray.setVertexAttribPointer(
 				Consts.POSITION_COUNT,
-				mTextureProgram.getTextureCoordinatesAttributeLocation(),
+				GameRenderer.textureProgram.getTextureCoordinatesAttributeLocation(),
 				Consts.TEXTURE_COORDS_COUNT,
 				Consts.STRIDE);
 
@@ -161,8 +158,8 @@ public class AnimatedSpriteComponent extends Component implements Renderable {
 	public void render(VertexArray vertexArray, float[] projectionMatrix) {
 
 		updateVertsData();
-		mTextureProgram.useProgram();
-		mTextureProgram.setUniforms(projectionMatrix, mTextures.get(curAnim));
+		GameRenderer.textureProgram.useProgram();
+		GameRenderer.textureProgram.setUniforms(projectionMatrix, mTextures.get(curAnim));
 		bindData();
 		GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 6);
 

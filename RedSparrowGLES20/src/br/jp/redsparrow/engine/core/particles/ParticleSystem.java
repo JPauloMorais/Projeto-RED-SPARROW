@@ -4,8 +4,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.opengl.GLES20;
 import br.jp.redsparrow.engine.core.Consts;
+import br.jp.redsparrow.engine.core.GameRenderer;
 import br.jp.redsparrow.engine.core.VertexArray;
-import br.jp.redsparrow.engine.shaders.ParticleShaderProg;
 
 public class ParticleSystem{
 
@@ -23,8 +23,6 @@ public class ParticleSystem{
 	private float[] particles;
 
 	private VertexArray vertexArray;
-
-	private ParticleShaderProg particleProgram;
 	
 	private long startTime;
 	private float curTime;
@@ -38,9 +36,7 @@ public class ParticleSystem{
 		particles = new float[maxParticleCount * TOTAL_COMPONENT_COUNT];
 		vertexArray = new VertexArray(particles);
 		mMaxParticleCount = maxParticleCount;
-		
-		particleProgram = new ParticleShaderProg(context);
-		
+				
 		startTime = System.nanoTime();
 
 	}
@@ -81,19 +77,19 @@ public class ParticleSystem{
 	public void bindData() {
 		int dataOffset = 0;
 		vertexArray.setVertexAttribPointer(dataOffset,
-				particleProgram.getPositionAttributeLocation(),
+				GameRenderer.particleProgram.getPositionAttributeLocation(),
 				POSITION_COMPONENT_COUNT, STRIDE);
 		dataOffset += POSITION_COMPONENT_COUNT;
 		vertexArray.setVertexAttribPointer(dataOffset,
-				particleProgram.getColorAttributeLocation(),
+				GameRenderer.particleProgram.getColorAttributeLocation(),
 				COLOR_COMPONENT_COUNT, STRIDE);
 		dataOffset += COLOR_COMPONENT_COUNT;
 		vertexArray.setVertexAttribPointer(dataOffset,
-				particleProgram.getDirectionVectorAttributeLocation(),
+				GameRenderer.particleProgram.getDirectionVectorAttributeLocation(),
 				VECTOR_COMPONENT_COUNT, STRIDE);
 		dataOffset += VECTOR_COMPONENT_COUNT;
 		vertexArray.setVertexAttribPointer(dataOffset,
-				particleProgram.getParticleStartTimeAttributeLocation(),
+				GameRenderer.particleProgram.getParticleStartTimeAttributeLocation(),
 				PARTICLE_START_TIME_COMPONENT_COUNT, STRIDE);
 	}
 
@@ -101,8 +97,8 @@ public class ParticleSystem{
 		
 		curTime = (System.nanoTime() - startTime) / 1000000000f;
 		
-		particleProgram.useProgram();
-		particleProgram.setUniforms(projectionMatrix, curTime);
+		GameRenderer.particleProgram.useProgram();
+		GameRenderer.particleProgram.setUniforms(projectionMatrix, curTime);
 		bindData();
 		
 		GLES20.glDrawArrays(GLES20.GL_POINTS, 0, currentParticleCount);

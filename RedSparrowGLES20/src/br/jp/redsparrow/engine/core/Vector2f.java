@@ -1,5 +1,6 @@
 package br.jp.redsparrow.engine.core;
 
+
 public class Vector2f {
 
 	private float mX;
@@ -14,6 +15,11 @@ public class Vector2f {
 		return new Vector2f(mX, mY);
 	}
 	
+	public void set(Vector2f v) {
+		this.mX = v.getX();
+		this.mY = v.getY();
+	}
+	
 	public float length(){
 		return (float) Math.sqrt((mX*mX) + (mY*mY));
 	}
@@ -23,22 +29,12 @@ public class Vector2f {
 	}
 	
 	public Vector2f normalize (){
-		float length = length();
-		
-		mX /= length;
-		mY /= length;
-		
-		return this;
+		return div(length());
 	}
 	
 	public void setLength (float length) {
 		
-		float curLength = length();
-		
-		length /= curLength;
-		
-		mX /= length;
-		mY /= length;
+		set(normalize().mult(length));
 		
 	}
 	

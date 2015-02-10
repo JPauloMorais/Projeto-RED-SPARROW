@@ -4,17 +4,17 @@ import android.content.Context;
 import android.opengl.GLES20;
 import br.jp.redsparrow.engine.core.Consts;
 import br.jp.redsparrow.engine.core.GameObject;
+import br.jp.redsparrow.engine.core.GameRenderer;
 import br.jp.redsparrow.engine.core.Renderable;
 import br.jp.redsparrow.engine.core.Vector2f;
 import br.jp.redsparrow.engine.core.VertexArray;
 import br.jp.redsparrow.engine.core.util.TextureUtil;
-import br.jp.redsparrow.engine.shaders.TextureShaderProg;
 
 public class RelSpriteComponent extends Component implements Renderable   {
 
 	/*
 	 * Sprite component ligeiramente alterado para posicionar-se
-	 *  relativo ao centro do objeto a qual pertence.
+	 *  relativo ao centro do objeto ao qual pertence.
 	 * */
 	
 	private boolean isVisible;
@@ -27,7 +27,6 @@ public class RelSpriteComponent extends Component implements Renderable   {
 	private float mWidth;
 	private float mHeight;
 	
-	private TextureShaderProg mTextureProgram;
 	private int mTexture;
 	
 	private float[] mVertsData;	
@@ -40,7 +39,6 @@ public class RelSpriteComponent extends Component implements Renderable   {
 
 		isVisible = true;
 		
-		mTextureProgram = new TextureShaderProg(context);
 		mTexture = TextureUtil.loadTexture(context, imgId);
 
 		mRelPosition = relativePosition;
@@ -59,7 +57,6 @@ public class RelSpriteComponent extends Component implements Renderable   {
 			Vector2f relativePosition, float width, float height) {
 		super("RelativeSprite", parent);
 
-		mTextureProgram = new TextureShaderProg(context);
 		mTexture = TextureUtil.loadTexture(context, imgId);
 
 		mRelPosition = relativePosition;
@@ -194,12 +191,12 @@ public class RelSpriteComponent extends Component implements Renderable   {
 
 		mVertsArray.setVertexAttribPointer(
 				0,
-				mTextureProgram.getPositionAttributeLocation(),
+				GameRenderer.textureProgram.getPositionAttributeLocation(),
 				Consts.POSITION_COUNT,
 				Consts.STRIDE);
 		mVertsArray.setVertexAttribPointer(
 				Consts.POSITION_COUNT,
-				mTextureProgram.getTextureCoordinatesAttributeLocation(),
+				GameRenderer.textureProgram.getTextureCoordinatesAttributeLocation(),
 				Consts.TEXTURE_COORDS_COUNT,
 				Consts.STRIDE);
 
@@ -210,8 +207,8 @@ public class RelSpriteComponent extends Component implements Renderable   {
 
 		if (isVisible) {
 			updateVertsData();
-			mTextureProgram.useProgram();
-			mTextureProgram.setUniforms(projectionMatrix, mTexture);
+			GameRenderer.textureProgram.useProgram();
+			GameRenderer.textureProgram.setUniforms(projectionMatrix, mTexture);
 			bindData();
 			GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 6);
 		}

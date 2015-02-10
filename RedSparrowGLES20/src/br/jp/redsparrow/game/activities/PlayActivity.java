@@ -75,6 +75,7 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 	protected void onResume() {
 		super.onResume();
 		mGameView.onResume();
+		game.resume();
 		mSensorManager.registerListener(this, mSensorAccelerometer, SensorManager.SENSOR_DELAY_GAME);
 	}
 
@@ -82,12 +83,14 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 	protected void onPause() {
 		super.onPause();
 		mGameView.onPause();
+		game.pause();
 		mSensorManager.unregisterListener(this);
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
+		game.stop();
 		mSensorManager.unregisterListener(this);
 	}
 

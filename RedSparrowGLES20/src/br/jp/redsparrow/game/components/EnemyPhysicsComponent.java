@@ -10,10 +10,6 @@ public class EnemyPhysicsComponent extends PhysicsComponent {
 	public EnemyPhysicsComponent(GameObject parent) {
 		super(parent);
 
-		mPosition = parent.getPosition();
-
-		mMaxVels = new Vector2f(parent.getWidth()/10, parent.getHeight()/10);
-
 		mMass = (parent.getWidth()+parent.getHeight())*10;
 
 	}
@@ -72,6 +68,7 @@ public class EnemyPhysicsComponent extends PhysicsComponent {
 //				mVelocity.setY(-mMaxVels.getY());
 		}
 
+		clampToMaxVel();
 		addVel(parent);
 		pointForwards(parent);
 
