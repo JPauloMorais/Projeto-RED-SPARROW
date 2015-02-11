@@ -10,6 +10,7 @@ public class EnemyPhysicsComponent extends PhysicsComponent {
 	public EnemyPhysicsComponent(GameObject parent) {
 		super(parent);
 
+		mMaxVel = parent.getWidth()/15;
 		mMass = (parent.getWidth()+parent.getHeight())*10;
 
 	}

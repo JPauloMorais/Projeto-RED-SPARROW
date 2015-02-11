@@ -13,6 +13,7 @@ import br.jp.redsparrow.engine.core.components.StatsComponent;
 import br.jp.redsparrow.engine.core.messages.Message;
 import br.jp.redsparrow.engine.core.particles.ParticleEmitter;
 import br.jp.redsparrow.engine.core.particles.ParticleSystem;
+import br.jp.redsparrow.engine.core.physics.AABB;
 import br.jp.redsparrow.engine.core.physics.Bounds;
 import br.jp.redsparrow.engine.core.physics.Collision;
 import br.jp.redsparrow.engine.core.util.LogConfig;
@@ -33,10 +34,13 @@ public class World extends GameSystem{
 	private static ArrayList<GameObject> mToCheck;
 	private static Quadtree mQuadTree;
 
-	private static final float mUPDATE_RANGE_X = 26.0f;
-	private static final float mUPDATE_RANGE_Y = 30.0f;
-	private static final float mRENDERING_RANGE_X = 16.0f;
-	private static final float mRENDERING_RANGE_Y = 20.0f;
+//	private static final float mUPDATE_RANGE_X = 26.0f;
+//	private static final float mUPDATE_RANGE_Y = 30.0f;
+//	private static final float mRENDERING_RANGE_X = 16.0f;
+//	private static final float mRENDERING_RANGE_Y = 20.0f;
+	private static AABB mUpdatingBounds;
+	private static AABB mRenderingBounds;
+
 
 	private static SoundComponent bgmSoundComponent;
 	private static float bgMusicRightVol = 0.1f;
@@ -58,13 +62,17 @@ public class World extends GameSystem{
 		//Quadtree
 		mToCheck = new ArrayList<GameObject>();
 		mQuadTree = new Quadtree(0, new RectF(-200, -200, 200, 200));
+		
+		//Update/Render bounds
+		mUpdatingBounds = new AABB(new Vector2f(0, 0), 52, 70);
+		mRenderingBounds = new AABB(new Vector2f(0, 0), 32, 50);
 
 		//BGM
 		bgmSoundComponent = new SoundComponent(context, new GameObject());
 		bgmSoundComponent.addSound(R.raw.at_least_you_tried_greaf);
 
 		//Particulas
-		mParticleSystem = new ParticleSystem(1000, context);		
+		mParticleSystem = new ParticleSystem(10000, context);		
 		mEmiters = new ArrayList<ParticleEmitter>();
 		float[] pos = {0,0,0};
 		float[] dir = {0,0,0.5f};
@@ -86,13 +94,14 @@ public class World extends GameSystem{
 			//-------LIMPANDO---------
 			mQuadTree.clear();
 			removeDead(game);
+			
+			//-----SETANDO BOUNDS--------------
+			mUpdatingBounds.setCenter(mPlayer.getPosition());
+			mRenderingBounds.setCenter(mPlayer.getPosition());
 
 			//------PREECHENDO QUADTREE-------
 			for (int k=0; k < mGameObjects.size(); k++) {
-				if(mGameObjects.get(k).getPosition().getX() < getPlayer().getPosition().getX()+mUPDATE_RANGE_X &&
-						mGameObjects.get(k).getPosition().getX() > getPlayer().getPosition().getX()-mUPDATE_RANGE_X &&
-						mGameObjects.get(k).getPosition().getY() < getPlayer().getPosition().getY()+mUPDATE_RANGE_Y &&
-						mGameObjects.get(k).getPosition().getY() > getPlayer().getPosition().getY()-mUPDATE_RANGE_Y)
+				if(Collision.isInside(mGameObjects.get(k).getPosition(), mUpdatingBounds))
 				{
 					mQuadTree.add(mGameObjects.get(k));
 				}else if(mGameObjects.get(k).getType().equals(OBJECT_TYPE.PROJECTILE)) mGameObjects.get(k).die();
@@ -136,18 +145,12 @@ public class World extends GameSystem{
 					}			
 
 					//Update e Render se dentro limite
-					if(mGameObjects.get(i).getX() < getPlayer().getX()+mUPDATE_RANGE_X &&
-							mGameObjects.get(i).getX() > getPlayer().getX()-mUPDATE_RANGE_X &&
-							mGameObjects.get(i).getY() < getPlayer().getY()+mUPDATE_RANGE_Y &&
-							mGameObjects.get(i).getY() > getPlayer().getY()-mUPDATE_RANGE_Y)
+					if(Collision.isInside(mGameObjects.get(i).getPosition(), mUpdatingBounds))
 					{
 						mGameObjects.get(i).update(game);
 					}
 
-					if(mGameObjects.get(i).getX() < getPlayer().getX()+mRENDERING_RANGE_X &&
-							mGameObjects.get(i).getX() > getPlayer().getX()-mRENDERING_RANGE_X &&
-							mGameObjects.get(i).getY() < getPlayer().getY()+mRENDERING_RANGE_Y &&
-							mGameObjects.get(i).getY() > getPlayer().getY()-mRENDERING_RANGE_Y)
+					if(Collision.isInside(mGameObjects.get(i).getPosition(), mRenderingBounds))
 					{						
 						mGameObjects.get(i).render(projectionMatrix);
 					}
@@ -190,7 +193,7 @@ public class World extends GameSystem{
 			});
 
 			for (ParticleEmitter emitter : mEmiters) {
-				emitter.addParticles(mParticleSystem, mParticleSystem.getCurTime(), 20);
+				emitter.addParticles(mParticleSystem, mParticleSystem.getCurTime() , 20);
 			}
 			mParticleSystem.render(projectionMatrix);
 
@@ -234,7 +237,10 @@ public class World extends GameSystem{
 
 	public GameObject getPlayer() {
 		if(mPlayer!=null) return mPlayer;
-		else return new GameObject();
+		else {
+			GameObject tmp = new GameObject(new AABB(new Vector2f(0, 0), 0, 0));
+			return tmp;
+		}
 	}
 
 	public void setPlayer(GameObject mPlayer) {
@@ -267,12 +273,12 @@ public class World extends GameSystem{
 
 	}
 
-	public Vector2f getUpdatingRange(){
-		return new Vector2f(mUPDATE_RANGE_X, mUPDATE_RANGE_Y);
+	public AABB getUpdatingBounds(){
+		return mUpdatingBounds;
 	}
 
-	public Vector2f getRenderingRange(){
-		return new Vector2f(mRENDERING_RANGE_X, mRENDERING_RANGE_X);
+	public AABB getRenderingBounds(){
+		return mRenderingBounds;
 	}
 
 	public void addObject(GameObject object){

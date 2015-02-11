@@ -13,7 +13,7 @@ public class Quadtree {
 	 * */
 		private static final String TAG = "Quadtree";
 
-	private int MAX_OBJS = 10;
+	private int MAX_OBJS = 8;
 	private int MAX_LVLS = 10;
 
 	private int mLevel;

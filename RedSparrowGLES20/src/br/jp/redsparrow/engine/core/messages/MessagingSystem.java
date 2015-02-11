@@ -7,7 +7,7 @@ import br.jp.redsparrow.engine.core.Game;
 import br.jp.redsparrow.engine.core.GameSystem;
 import br.jp.redsparrow.engine.core.util.LogConfig;
 
-public class MessagingSystem extends GameSystem{
+public class MessagingSystem extends GameSystem implements Runnable{
 
 	private static final String TAG = "MessagingSystem";
 
@@ -16,6 +16,12 @@ public class MessagingSystem extends GameSystem{
 	public MessagingSystem(Game game){
 		super(game);
 		mMessages = new ArrayList<Message>();
+	}
+	
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	@Override

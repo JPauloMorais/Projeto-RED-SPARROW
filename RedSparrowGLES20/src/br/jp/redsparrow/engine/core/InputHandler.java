@@ -3,6 +3,8 @@ package br.jp.redsparrow.engine.core;
 
 public class InputHandler extends GameSystem {
 	
+	public final String TAG = "Input";
+	
 	public InputHandler(Game game) {
 		super(game);
 

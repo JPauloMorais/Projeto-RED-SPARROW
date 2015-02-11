@@ -152,6 +152,13 @@ public class ReSpGame extends Game {
 	@Override
 	public void pause() {
 		if(mWorld != null) mWorld.pause();
+		mMissionSystem.stop();
+		try {
+			mMissionSystem.getThread().join();
+			System.out.println(mMissionSystem.getThread().getState().toString());
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -162,6 +169,7 @@ public class ReSpGame extends Game {
 	@Override
 	public void stop() {
 		if(mWorld != null) mWorld.stop();
+		mMissionSystem.stop();
 	}
 
 }

@@ -18,36 +18,41 @@ public class MissionSystem extends GameSystem implements Runnable {
 
 	public MissionSystem(Game game, MissionSequence mainMissionSequence) {
 		super(game);
-		mThread = new Thread( this, "MissionSystem" );
 		
+		mThread = new Thread( this, TAG );
+		mThread.setPriority(Thread.MIN_PRIORITY);
+
 		mainSequence = mainMissionSequence;
 		sideSequences = new ArrayList<MissionSequence>();
 
 	}
-	
+
 	public void start() {
 		isRunning = true;
 		mThread.start();
 	}
-	
+
 	@Override
 	public void loop(Game game, float[] projectionMatrix) {
-		
+
 		while(isRunning) {
 
 			//------MAIN--------------
-			if(!mainSequence.getCurMission().wasTriggered()) {
-				if(Collision.areIntersecting(game.getWorld().getPlayer().getBounds(), mainSequence.getCurMission().mBounds)) {
+			if (!mainSequence.isComplete()) {
+				if (!mainSequence.getCurMission().wasTriggered()) {
 
-					mainSequence.getCurMission().trigger();
+					if (Collision.areIntersecting(game.getWorld().getPlayer()
+							.getBounds(), mainSequence.getCurMission().mBounds)) {
+
+						mainSequence.getCurMission().trigger();
+
+					}
+				} else {
+
+					mainSequence.update(game);
 
 				}
-			}else {
-
-				mainSequence.update(game);
-
 			}
-
 			//-------SIDE-------------
 			for (MissionSequence sideSequence : sideSequences) {
 				if(!sideSequence.getCurMission().wasTriggered()){
@@ -70,13 +75,17 @@ public class MissionSystem extends GameSystem implements Runnable {
 
 	@Override
 	public void run() {
-		
+
 		loop(game, game.getRenderer().projectionMatrix);
 
 	}
-	
+
 	public void stop() {
 		isRunning = false;
+	}
+	
+	public Thread getThread() {
+		return mThread;
 	}
 
 	private void removeCompletedSequences() {

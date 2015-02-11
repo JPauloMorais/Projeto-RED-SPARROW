@@ -20,7 +20,6 @@ public abstract class PhysicsComponent extends Component implements Updatable {
 	public PhysicsComponent(GameObject parent) {
 		super("Physics", parent);
 
-		mMaxVel = parent.getWidth();
 		mMoved = false;
 		mCollided = false;
 

@@ -10,6 +10,7 @@ public class PlayerPhysicsComponent extends PhysicsComponent {
 	public PlayerPhysicsComponent(GameObject parent) {
 		super(parent);
 
+		mMaxVel = parent.getWidth()/15;
 		mMass = parent.getWidth()+parent.getHeight();
 
 	}

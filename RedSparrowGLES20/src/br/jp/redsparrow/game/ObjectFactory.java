@@ -31,13 +31,14 @@ public class ObjectFactory extends GameSystem {
 	}
 
 	public enum OBJECT_TYPE{
+
 		PLAYER, 
 		BASIC_ENEMY,
 		BASIC_ENEMY_2,
 		BASIC_ENEMY_3,
 		PROJECTILE,
 		DBG_BG,
-		DBG_BG1,
+		DBG_BG1;
 
 	}
 
@@ -125,14 +126,14 @@ public class ObjectFactory extends GameSystem {
 			obj.addComponent(new SoundComponent(context, obj, soundsE_2));
 
 			obj.addComponent(new GunComponent(obj));
-			
+
 			//UPD 3
 			EnemyStatsComponent esc2 = new EnemyStatsComponent(obj, 5);
 			obj.addComponent(esc2);	
 
 			break;
 
-			
+
 		case BASIC_ENEMY_3:
 
 			obj.setWidth(1f);
@@ -156,7 +157,7 @@ public class ObjectFactory extends GameSystem {
 			obj.addComponent(new GunComponent(obj));
 
 			break;
-			
+
 		case PROJECTILE:
 
 			obj.setWidth(0.2f);

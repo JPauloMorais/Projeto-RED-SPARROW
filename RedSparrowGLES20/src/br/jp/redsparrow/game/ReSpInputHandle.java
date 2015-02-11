@@ -33,8 +33,9 @@ public class ReSpInputHandle extends InputHandler {
 	public void handleTouchPress(float normalizedX, float normalizedY) {
 		try {
 
-			Log.i("Input", " Touch em: (" + normalizedX + ", " + normalizedY + ")");
+			Log.i(TAG, " Touch em: (" + normalizedX + ", " + normalizedY + ")");
 
+			
 			if (!Collision.isInside(new Vector2f(normalizedX, normalizedY).add(game.getWorld().getPlayer().getPosition()),
 					game.getHUD().getItem(0).getBounds())) {
 				mVibrator.vibrate(100);

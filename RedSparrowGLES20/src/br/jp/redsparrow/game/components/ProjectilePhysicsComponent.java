@@ -11,7 +11,6 @@ public class ProjectilePhysicsComponent extends PhysicsComponent {
 	private OBJECT_TYPE mShooterType;
 	private boolean shot = false;
 
-	private Vector2f mVelocity = new Vector2f(0f, 0f);
 	//	private Vector2f location = new Vector2f(0f, 0f); 
 	
 	private int mDamage;
@@ -21,6 +20,7 @@ public class ProjectilePhysicsComponent extends PhysicsComponent {
 	public ProjectilePhysicsComponent(GameObject parent, int damage) {
 		super(parent);
 
+		mMaxVel = 0.2f;
 		hitTarget = false;
 		mDamage = damage;
 		
@@ -32,7 +32,8 @@ public class ProjectilePhysicsComponent extends PhysicsComponent {
 		if (!hitTarget) {
 //			super.update(parent);
 
-			parent.setPosition(	parent.getPosition().add(mVelocity) );
+			mVelocity.setLength(mMaxVel);
+			addVel(parent);
 
 		}else parent.die();
 		//			((LifeComponent) parent.getUpdatableComponent(1)).die();

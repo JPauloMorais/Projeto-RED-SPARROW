@@ -1,6 +1,7 @@
 package br.jp.redsparrow.engine.core;
 
 import android.content.Context;
+import br.jp.redsparrow.engine.core.missions.MissionSystem;
 import br.jp.redsparrow.game.ObjectFactory;
 
 public abstract class Game {
@@ -11,6 +12,7 @@ public abstract class Game {
 	protected HUD mHUD;
 	protected GameRenderer mRenderer;
 	protected InputHandler mInputHandler;
+	protected MissionSystem mMissionSystem;
 	
 	public Game(Context context) {
 		mContext = context;
