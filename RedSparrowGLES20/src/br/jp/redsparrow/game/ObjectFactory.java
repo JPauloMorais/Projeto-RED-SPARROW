@@ -85,7 +85,7 @@ public class ObjectFactory extends GameSystem {
 			Animation anim = new Animation(1, 1);
 			anim.setAmmoToWait(4);
 			//RDB 0
-			obj.addComponent(new AnimatedSpriteComponent(context, R.drawable.basic_enemy_ship, obj,
+			obj.addComponent(new AnimatedSpriteComponent(context, R.drawable.nave_f, obj,
 					anim, 0.3f, 0.3f));
 			((AnimatedSpriteComponent) obj.getRenderableComponent(0)).addAnimation( context, R.drawable.explosion_test,new Animation(5, 4));
 
@@ -115,7 +115,7 @@ public class ObjectFactory extends GameSystem {
 
 			Animation anim_2 = new Animation(1, 1);
 			anim_2.setAmmoToWait(4);
-			obj.addComponent(new AnimatedSpriteComponent(context, R.drawable.basic_enemy_shippp, obj,
+			obj.addComponent(new AnimatedSpriteComponent(context, R.drawable.nave_f_a, obj,
 					anim_2, 0.3f, 0.3f));
 			((AnimatedSpriteComponent) obj.getRenderableComponent(0)).addAnimation( context, R.drawable.explosion_test,new Animation(5, 4));
 
@@ -144,7 +144,7 @@ public class ObjectFactory extends GameSystem {
 
 			Animation anim_3 = new Animation(1, 1);
 			anim_3.setAmmoToWait(4);
-			obj.addComponent(new AnimatedSpriteComponent(context, R.drawable.basic_enemy_shippp, obj,
+			obj.addComponent(new AnimatedSpriteComponent(context, R.drawable.nave_f_b, obj,
 					anim_3, 0.3f, 0.3f));
 			((AnimatedSpriteComponent) obj.getRenderableComponent(0)).addAnimation( context, R.drawable.explosion_test,new Animation(5, 4));
 
@@ -155,6 +155,10 @@ public class ObjectFactory extends GameSystem {
 			obj.addComponent(new SoundComponent(context, obj, soundsE_3));
 
 			obj.addComponent(new GunComponent(obj));
+
+			//UPD 3
+			EnemyStatsComponent esc3 = new EnemyStatsComponent(obj, 5);
+			obj.addComponent(esc3);	
 
 			break;
 
