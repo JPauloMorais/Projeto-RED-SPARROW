@@ -54,6 +54,13 @@ public class ReSpGame extends Game {
 			if(i%2==0) qd *= -1;
 			else qd2 *= -1;
 		}
+
+		qd = 1; qd2 = 2;
+		for (int i = 0; i < 15; i++) {
+			mWorld.addObject(mObjFactory.create("BasicEnemy3", (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2));
+			if(i%2==0) qd *= -1;
+			else qd2 *= -1;
+		}
 		
 //		mHUD = new HUD(this);
 //		mHUD.addItem(mObjFactory.createHUDitem(mContext, HUDITEM_TYPE.AMMO_DISP));
@@ -73,7 +80,7 @@ public class ReSpGame extends Game {
 
 		//Setando o ponto central da perspectiva como a posicao do player
 		Matrix.setLookAtM(viewMatrix, 0,
-				mWorld.getPlayer().getX(), mWorld.getPlayer().getY(), 65f,
+				mWorld.getPlayer().getX(), mWorld.getPlayer().getY(), 6f,
 				mWorld.getPlayer().getX(), mWorld.getPlayer().getY(), 0f,
 				0f, 1f, 0f);
 		
