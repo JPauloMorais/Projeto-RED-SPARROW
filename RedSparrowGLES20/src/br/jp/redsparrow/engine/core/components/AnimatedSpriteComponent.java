@@ -7,14 +7,14 @@ import android.opengl.GLES20;
 import br.jp.redsparrow.engine.core.Animation;
 import br.jp.redsparrow.engine.core.Consts;
 import br.jp.redsparrow.engine.core.GameObject;
-import br.jp.redsparrow.engine.core.GameRenderer;
 import br.jp.redsparrow.engine.core.Renderable;
 import br.jp.redsparrow.engine.core.Vector2f;
 import br.jp.redsparrow.engine.core.VertexArray;
+import br.jp.redsparrow.engine.core.game.GameRenderer;
 import br.jp.redsparrow.engine.core.util.TextureUtil;
 
 public class AnimatedSpriteComponent extends Component implements Renderable {
-
+	
 	private VertexArray mVertsArray;
 
 	private float[] mOffset;
@@ -29,7 +29,7 @@ public class AnimatedSpriteComponent extends Component implements Renderable {
 	private boolean isPaused;
 
 	public AnimatedSpriteComponent(Context context, int imgId, GameObject parent, Animation anim, float offsetX, float offsetY) {
-		super("Sprite", parent);
+		super(parent);
 
 		mTextures = new ArrayList<Integer>();
 		mTextures.add(TextureUtil.loadTexture(context, imgId));
@@ -74,7 +74,7 @@ public class AnimatedSpriteComponent extends Component implements Renderable {
 		//X Y Z                                                                                           
 		mVertsData[0] = mParent.getX() + mParent.getWidth() / 2 + mOffset[0];  //right 
 		mVertsData[1] = mParent.getY() + mParent.getHeight() / 2 + mOffset[1]; //top
-		mVertsData[2] = 1f;
+		mVertsData[2] = 0f;
 		//U V
 		mVertsData[3] = mAnimations.get(curAnim).getUVs()[2];
 		mVertsData[4] = mAnimations.get(curAnim).getUVs()[1];
@@ -82,7 +82,7 @@ public class AnimatedSpriteComponent extends Component implements Renderable {
 		//X Y Z
 		mVertsData[5] = mParent.getX() - mParent.getWidth() / 2 - mOffset[0];  //left
 		mVertsData[6] = mVertsData[1];                                         //top		
-		mVertsData[7] = 1f;
+		mVertsData[7] = 0f;
 		//U V
 		mVertsData[8] = mAnimations.get(curAnim).getUVs()[0];
 		mVertsData[9] = mAnimations.get(curAnim).getUVs()[1];
@@ -90,7 +90,7 @@ public class AnimatedSpriteComponent extends Component implements Renderable {
 		//X Y Z
 		mVertsData[10] = mVertsData[5];                                         //left
 		mVertsData[11] = mParent.getY() - mParent.getHeight() / 2 - mOffset[1]; //bottom
-		mVertsData[12] = 1f;
+		mVertsData[12] = 0f;
 		//U V
 		mVertsData[13] = mAnimations.get(curAnim).getUVs()[0];
 		mVertsData[14] = mAnimations.get(curAnim).getUVs()[3];
@@ -98,7 +98,7 @@ public class AnimatedSpriteComponent extends Component implements Renderable {
 		//X Y Z
 		mVertsData[15] = mVertsData[0];                                          //right
 		mVertsData[16] = mVertsData[11];                                         //bottom
-		mVertsData[17] = 1f;
+		mVertsData[17] = 0f;
 		//U V
 		mVertsData[18] = mAnimations.get(curAnim).getUVs()[2];
 		mVertsData[19] = mAnimations.get(curAnim).getUVs()[3];
@@ -106,7 +106,7 @@ public class AnimatedSpriteComponent extends Component implements Renderable {
 		//X Y Z
 		mVertsData[20] = mVertsData[0];                                         //right
 		mVertsData[21] = mVertsData[1];                                         //top
-		mVertsData[22] = 1f;
+		mVertsData[22] = 0f;
 		//U V
 		mVertsData[23] = mAnimations.get(curAnim).getUVs()[2];
 		mVertsData[24] = mAnimations.get(curAnim).getUVs()[1];
@@ -114,7 +114,7 @@ public class AnimatedSpriteComponent extends Component implements Renderable {
 		//X Y Z
 		mVertsData[25] = mVertsData[5];                                         //left
 		mVertsData[26] = mVertsData[11];                                        //bottom
-		mVertsData[27] = 1f;
+		mVertsData[27] = 0f;
 		//U V
 		mVertsData[28] = mAnimations.get(curAnim).getUVs()[0];
 		mVertsData[29] = mAnimations.get(curAnim).getUVs()[3];

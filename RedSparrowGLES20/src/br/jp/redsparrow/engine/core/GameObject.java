@@ -1,24 +1,28 @@
 package br.jp.redsparrow.engine.core;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import br.jp.redsparrow.engine.core.components.Component;
+import br.jp.redsparrow.engine.core.game.Game;
+import br.jp.redsparrow.engine.core.game.ObjectType;
 import br.jp.redsparrow.engine.core.messages.Message;
 import br.jp.redsparrow.engine.core.physics.AABB;
 import br.jp.redsparrow.engine.core.physics.Bounds;
-import br.jp.redsparrow.game.ObjectFactory.OBJECT_TYPE;
 
 public class GameObject {
 
 	private boolean isDead;
 	private int mId;
-	private OBJECT_TYPE mType;
+	private ObjectType mType;
 	
 	private Bounds mBounds;
 	private double mRotation;
 
-	private ArrayList<Component> mUpdatableComponents;
-	private ArrayList<Component> mRenderableComponents;
+	private HashMap<String, Component> mUpdatableComponents;
+	private HashMap<String, Component> mRenderableComponents;
+//	private ArrayList<Component> mUpdatableComponents;
+//	private ArrayList<Component> mRenderableComponents;
 	
 	private ArrayList<Message> mCurMessages;
 	private ArrayList<Message> mMessagesToRemove;
@@ -30,10 +34,9 @@ public class GameObject {
 	public GameObject(Bounds bounds) {
 
 		mBounds = bounds;
-		setRotation(0);
 
-		mUpdatableComponents = new ArrayList<Component>();
-		mRenderableComponents = new ArrayList<Component>();
+		mUpdatableComponents = new HashMap<String,Component>();
+		mRenderableComponents = new HashMap<String,Component>();
 		
 		isDead = false;
 		
@@ -46,14 +49,15 @@ public class GameObject {
 		
 		removeRecievedMessages();
 		
-		for (Component component : mUpdatableComponents) {
-			((Updatable) component).update(game, this);
+		for (String key : mUpdatableComponents.keySet()) {
+			((Updatable) mUpdatableComponents.get(key)).update(game, this);
 		}
+		
 	}
 
 	public void render(float[] projMatrix) {
-		for (Component component : mRenderableComponents) {
-			((Renderable) component).render(null, projMatrix);
+		for (String key : mRenderableComponents.keySet()) {
+			((Renderable) mRenderableComponents.get(key)).render(null, projMatrix);
 		}
 	}
 
@@ -116,47 +120,43 @@ public class GameObject {
 	//--------------------------------
 
 	//-----COMPONENTS-----------------
-	public void addComponent(Component component) {
-		if(component instanceof Updatable) mUpdatableComponents.add(component);
-		if(component instanceof Renderable) mRenderableComponents.add(component);
+	public void addComponent(String name, Component component) {
+		if(component instanceof Updatable)	mUpdatableComponents.put(name, component);
+		if(component instanceof Renderable) mRenderableComponents.put(name, component);
 	}
 	
-	public ArrayList<Component> getUpdatableComponents() {
-		return mUpdatableComponents;
-	}
+//	public ArrayList<Component> getUpdatableComponents() {
+//		return (ArrayList<Component>) mUpdatableComponents.values();
+//	}
 	
 	public Component getUpdatableComponent(String name) {
-		for (Component component : mUpdatableComponents) {
-			if(component.getName().equals(name)) return component;
-		}
-		return new Component("Null", this);
+		if(mUpdatableComponents.containsKey(name)) return mUpdatableComponents.get(name);
+		else return new Component(this);
 	}
+//	
+//	public Component getUpdatableComponent(int indx) {
+//		return mUpdatableComponents.values().;
+//	}
 	
-	public Component getUpdatableComponent(int indx) {
-		return mUpdatableComponents.get(indx);
-	}
-	
-	public void removeUpdatableComponent(int indx) {
-		mUpdatableComponents.remove(indx);
+	public void removeUpdatableComponent(String name) {
+		mUpdatableComponents.remove(name);
 	}
 	
 	public ArrayList<Component> getRenderableComponents() {
-		return mRenderableComponents;
+		return (ArrayList<Component>) mRenderableComponents.values();
 	}
 	
 	public Component getRenderableComponent(String name) {
-		for (Component component : mRenderableComponents) {
-			if(component.getName().equals(name)) return component;
-		}
-		return new Component("Null", this);
+		if(mRenderableComponents.containsKey(name)) return mRenderableComponents.get(name);
+		else return new Component(this);
 	}
+//	
+//	public Component getRenderableComponent(int indx) {
+//		return mRenderableComponents.get(indx);
+//	}
 	
-	public Component getRenderableComponent(int indx) {
-		return mRenderableComponents.get(indx);
-	}
-	
-	public void removeRenderableComponent(int indx) {
-		mRenderableComponents.remove(indx);
+	public void removeRenderableComponent(String name) {
+		mRenderableComponents.remove(name);
 	}
 	//-------------------------------
 	
@@ -213,12 +213,12 @@ public class GameObject {
 		this.mId = mId;
 	}
 	
-	public OBJECT_TYPE getType() {
+	public ObjectType getType() {
 		return mType;
 	}
 	
-	public void setType(OBJECT_TYPE mType) {
-		this.mType = mType;
+	public void setType(ObjectType type) {
+		mType = type;
 	}
 	//-------------------------------
 }

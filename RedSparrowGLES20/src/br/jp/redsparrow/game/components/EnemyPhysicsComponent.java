@@ -1,9 +1,11 @@
 package br.jp.redsparrow.game.components;
 
-import br.jp.redsparrow.engine.core.Game;
 import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.Vector2f;
 import br.jp.redsparrow.engine.core.components.PhysicsComponent;
+import br.jp.redsparrow.engine.core.components.StatsComponent;
+import br.jp.redsparrow.engine.core.game.Game;
+import br.jp.redsparrow.engine.core.physics.Collision;
 
 public class EnemyPhysicsComponent extends PhysicsComponent {
 
@@ -18,57 +20,7 @@ public class EnemyPhysicsComponent extends PhysicsComponent {
 	@Override
 	public void update(Game game, GameObject parent) {			
 
-		//Input de Movimentacao
-		//		try { 
-		//
-		//			applyForce((Vector2f) (((Vector2f) parent.getMessage("MOVE").getMessage()).length() > 0.01f ? ((Vector2f) parent.getMessage("MOVE").getMessage()) : 0));
-		//
-		//			fric.setX(0);
-		//			fric.setY(0);
-
-		//		} catch (Exception e) {
-		//		}
-
-		//Colisao
-		//		try {
-		//
-		//			//			mVelocity = mVelocity.add((Vector2f) parent.getMessage("Collision").getMessage());
-		//			applyForce((Vector2f) parent.getMessage("Collision").getMessage());
-		//			//			mPosition.setX(mPosition.getX() + mVelocity.getX()/10);
-		//			//			mPosition.setY( mPosition.getY() + mVelocity.getY()/10);
-		//
-		//			fric.setX(0.009f);
-		//			fric.setY(0.009f);
-
-		//		} catch (Exception e) {
-
-		//Friccao
-
-		if (!mCollided) {
-
-			mFric = mVelocity.div(60);
-			applyForce(mFric);
-
-		}
-
-
-
-		//		}
-
-
-		if (!mCollided) {
-//			Clamp de vel
-//			if (mVelocity.getX() > mMaxVels.getX())
-//				mVelocity.setX(mMaxVels.getX());
-//			else if (mVelocity.getX() < -mMaxVels.getX())
-//				mVelocity.setX(-mMaxVels.getX());
-//
-//			if (mVelocity.getY() > mMaxVels.getY())
-//				mVelocity.setY(mMaxVels.getY());
-//			else if (mVelocity.getY() < -mMaxVels.getY())
-//				mVelocity.setY(-mMaxVels.getY());
-		}
-
+		applyFric();
 		clampToMaxVel();
 		addVel(parent);
 		pointForwards(parent);
@@ -83,7 +35,7 @@ public class EnemyPhysicsComponent extends PhysicsComponent {
 
 		pointForwards(mParent);
 
-//		mFric = mVelocity.div(60);
+		//		mFric = mVelocity.div(60);
 
 	}
 
@@ -92,8 +44,26 @@ public class EnemyPhysicsComponent extends PhysicsComponent {
 		applyForce(otherVel);
 		mCollided = true;
 
-//		mFric.setX(0);
-//		mFric.setY(0);
+		//		mFric.setX(0);
+		//		mFric.setY(0);
+
+	}
+
+	@Override
+	public void collide(GameObject other) {
+
+		if(!other.getType().getSuperType().getName().equals("Projectile")) {
+
+			applyForce(Collision.getColVector(mParent.getBounds(), other.getBounds()));
+			setupFric(60);
+
+		}else if(!((ProjectilePhysicsComponent) other.getUpdatableComponent("Physics"))
+				.getShooterSuperType().getName().equals("Enemy")) {
+
+			((StatsComponent) mParent.getUpdatableComponent("Stats")).takeDamage(
+					((ProjectilePhysicsComponent) other.getUpdatableComponent("Physics")).getDamage());
+
+		}
 
 	}
 

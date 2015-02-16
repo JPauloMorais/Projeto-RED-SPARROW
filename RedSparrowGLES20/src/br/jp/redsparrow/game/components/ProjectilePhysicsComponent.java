@@ -1,42 +1,31 @@
 package br.jp.redsparrow.game.components;
 
-import br.jp.redsparrow.engine.core.Game;
 import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.Vector2f;
 import br.jp.redsparrow.engine.core.components.PhysicsComponent;
-import br.jp.redsparrow.game.ObjectFactory.OBJECT_TYPE;
+import br.jp.redsparrow.engine.core.game.Game;
+import br.jp.redsparrow.engine.core.game.ObjectType;
 
 public class ProjectilePhysicsComponent extends PhysicsComponent {
 
-	private OBJECT_TYPE mShooterType;
+	private ObjectType mShooterSuperType;
 	private boolean shot = false;
 
 	//	private Vector2f location = new Vector2f(0f, 0f); 
-	
-	private int mDamage;
 
-	private boolean hitTarget;
+	private int mDamage;
 
 	public ProjectilePhysicsComponent(GameObject parent, int damage) {
 		super(parent);
 
 		mMaxVel = 0.2f;
-		hitTarget = false;
 		mDamage = damage;
-		
+
 	}
 
 	@Override
 	public void update(Game game, GameObject parent) {			
-
-		if (!hitTarget) {
-//			super.update(parent);
-
-			mVelocity.setLength(mMaxVel);
-			addVel(parent);
-
-		}else parent.die();
-		//			((LifeComponent) parent.getUpdatableComponent(1)).die();
+		addVel(parent);
 	}
 
 	public boolean wasShot() {
@@ -45,29 +34,24 @@ public class ProjectilePhysicsComponent extends PhysicsComponent {
 
 	public void shoot(Vector2f velocity) {
 		mVelocity = velocity;
-		mParent.setRotation(Math.atan2(velocity.getY(), velocity.getX()) - 1.5707963268d);
+		mVelocity.setLength(mMaxVel);
+		pointForwards(mParent);
 		shot = true;
 	}
 
-	public boolean hasHitTarget() {
-		return hitTarget;
-	}
-
-	public void hitTarget() {
-		this.hitTarget = true;
-	}
-	
 	@Override
-	public void collide(Vector2f otherVel) {
-		hitTarget();
+	public void collide(GameObject other) {
+		if(!other.getType().getSuperType().getName().equals("Projectile")){
+			mParent.die();
+		}
 	}
 
-	public OBJECT_TYPE getShootertype() {
-		return mShooterType;
+	public ObjectType getShooterSuperType() {
+		return mShooterSuperType;
 	}
 
-	public void setShooterType(OBJECT_TYPE shooterType) {
-		this.mShooterType = shooterType;
+	public void setShooterSuperType(ObjectType shooterType) {
+		this.mShooterSuperType = shooterType;
 	}
 
 	public int getDamage() {

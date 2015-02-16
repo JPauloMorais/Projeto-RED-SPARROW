@@ -1,6 +1,6 @@
 package br.jp.redsparrow.engine.core.missions;
 
-import br.jp.redsparrow.engine.core.Game;
+import br.jp.redsparrow.engine.core.game.Game;
 
 public class MissionSequence {
 

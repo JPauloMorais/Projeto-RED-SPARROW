@@ -2,6 +2,9 @@ package br.jp.redsparrow.engine.core;
 
 import java.util.ArrayList;
 
+import br.jp.redsparrow.engine.core.game.Game;
+import br.jp.redsparrow.engine.core.game.GameSystem;
+
 public class HUD extends GameSystem {
 
 	private static ArrayList<HUDitem> mHudItems;

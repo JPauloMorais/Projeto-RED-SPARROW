@@ -1,17 +1,17 @@
 package br.jp.redsparrow.engine.core.components;
 
-import br.jp.redsparrow.engine.core.Game;
 import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.Updatable;
+import br.jp.redsparrow.engine.core.game.Game;
 
 public abstract class StatsComponent extends Component implements Updatable {
-
+	
 	protected boolean isDying;
 	protected int mHealth;
 	protected int mCurHealth;
 	
 	public StatsComponent(GameObject parent, int health) {
-		super("Stats", parent);
+		super(parent);
 		
 		mHealth = health;
 		mCurHealth = health;
@@ -23,6 +23,8 @@ public abstract class StatsComponent extends Component implements Updatable {
 	public void update(Game game, GameObject object) {
 		if(mCurHealth <= 0) die();
 	}
+
+	protected abstract void die();
 
 	public int getCurHealth() {
 		return mCurHealth;
@@ -36,7 +38,6 @@ public abstract class StatsComponent extends Component implements Updatable {
 		mCurHealth -= damage;
 	}
 
-	protected abstract void die();
 
 	public int getHealth() {
 		return mHealth;

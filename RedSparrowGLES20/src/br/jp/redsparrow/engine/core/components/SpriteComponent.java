@@ -4,14 +4,14 @@ import android.content.Context;
 import android.opengl.GLES20;
 import br.jp.redsparrow.engine.core.Consts;
 import br.jp.redsparrow.engine.core.GameObject;
-import br.jp.redsparrow.engine.core.GameRenderer;
 import br.jp.redsparrow.engine.core.Renderable;
 import br.jp.redsparrow.engine.core.Vector2f;
 import br.jp.redsparrow.engine.core.VertexArray;
+import br.jp.redsparrow.engine.core.game.GameRenderer;
 import br.jp.redsparrow.engine.core.util.TextureUtil;
 
 public class SpriteComponent extends Component implements Renderable {
-
+	
 	/*
 	 * Sprite component simples que se posiciona no centro do objeto ao qual pertence.
 	 * */
@@ -28,7 +28,7 @@ public class SpriteComponent extends Component implements Renderable {
 			float sizeOffsetX, float sizeOffsetY, 
 			int spritesInX, int spritesInY, int row, int col) {
 	
-		super("Sprite", parent);
+		super(parent);
 
 		mTexture = TextureUtil.loadTexture(context, imgId);
 
@@ -44,7 +44,7 @@ public class SpriteComponent extends Component implements Renderable {
 	}
 	
 	public SpriteComponent(Context context, int imgId, GameObject parent, float sizeOffsetX, float sizeOffsetY) {
-		super("Sprite", parent);
+		super(parent);
 
 		mTexture = TextureUtil.loadTexture(context, imgId);
 

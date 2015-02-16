@@ -4,17 +4,14 @@ import java.util.Random;
 
 import android.content.Context;
 import android.opengl.Matrix;
-import br.jp.redsparrow.engine.core.Game;
 import br.jp.redsparrow.engine.core.GameObject;
-import br.jp.redsparrow.engine.core.HUD;
 import br.jp.redsparrow.engine.core.Vector2f;
-import br.jp.redsparrow.engine.core.World;
 import br.jp.redsparrow.engine.core.components.GunComponent;
 import br.jp.redsparrow.engine.core.components.SoundComponent;
+import br.jp.redsparrow.engine.core.game.Game;
+import br.jp.redsparrow.engine.core.game.World;
 import br.jp.redsparrow.engine.core.missions.MissionSequence;
 import br.jp.redsparrow.engine.core.missions.MissionSystem;
-import br.jp.redsparrow.game.ObjectFactory.HUDITEM_TYPE;
-import br.jp.redsparrow.game.ObjectFactory.OBJECT_TYPE;
 import br.jp.redsparrow.game.components.PlayerPhysicsComponent;
 import br.jp.redsparrow.game.missions.TestMission;
 
@@ -29,39 +26,38 @@ public class ReSpGame extends Game {
 		
 		random = new Random();
 		mRenderer = new ReSpRenderer(mContext, this);
-		mInputHandler = new ReSpInputHandle(this);	
+		mInputHandler = new ReSpInputHandler(this);	
 		mMissionSystem = new MissionSystem(this, new MissionSequence(new TestMission()));
+		mObjFactory = new ReSpObjectFactory(this);
 		
 	}
 
 	@Override
 	public void create() {
 		
-		mObjFactory = new ObjectFactory(this);
-		
-		mDbgBackground = mObjFactory.createObject(mContext, OBJECT_TYPE.DBG_BG, 0, 0);
-		mDbgBackground1 =mObjFactory.createObject(mContext, OBJECT_TYPE.DBG_BG1, 0, 0);
+		mDbgBackground = mObjFactory.create("BG1", 0, 0);
+		mDbgBackground1 =mObjFactory.create("BG2", 0, 0);
 
 		mWorld = new World(mContext, this);
-		mWorld.setPlayer(mObjFactory.createObject(mContext, OBJECT_TYPE.PLAYER, 0f, 0f));
+		mWorld.setPlayer(mObjFactory.create("BasicPlayer", 0f, 0f));
 		
 		int qd = 1; int qd2 = 1;
-		for (int i = 0; i < 15; i++) {
-			mWorld.addObject(mObjFactory.createObject(mContext, OBJECT_TYPE.BASIC_ENEMY, (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2));
+		for (int i = 0; i < 35; i++) {
+			mWorld.addObject(mObjFactory.create("BasicEnemy1", (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2));
 			if(i%2==0) qd *= -1;
 			else qd2 *= -1;
 		}		
 
-		qd = 1; qd2 = 2;
-		for (int i = 0; i < 15; i++) {
-			mWorld.addObject(mObjFactory.createObject(mContext, OBJECT_TYPE.BASIC_ENEMY_2, (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2));
+		qd = 1; qd2 = 1;
+		for (int i = 0; i < 35; i++) {
+			mWorld.addObject(mObjFactory.create("BasicEnemy2", (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2));
 			if(i%2==0) qd *= -1;
 			else qd2 *= -1;
 		}
 		
-		mHUD = new HUD(this);
-		mHUD.addItem(mObjFactory.createHUDitem(mContext, HUDITEM_TYPE.AMMO_DISP));
-		mHUD.addItem(mObjFactory.createHUDitem(mContext, HUDITEM_TYPE.LIFEBAR));
+//		mHUD = new HUD(this);
+//		mHUD.addItem(mObjFactory.createHUDitem(mContext, HUDITEM_TYPE.AMMO_DISP));
+//		mHUD.addItem(mObjFactory.createHUDitem(mContext, HUDITEM_TYPE.LIFEBAR));
 		
 		mMissionSystem.start();
 	}
@@ -77,7 +73,7 @@ public class ReSpGame extends Game {
 
 		//Setando o ponto central da perspectiva como a posicao do player
 		Matrix.setLookAtM(viewMatrix, 0,
-				mWorld.getPlayer().getX(), mWorld.getPlayer().getY(), 45f,
+				mWorld.getPlayer().getX(), mWorld.getPlayer().getY(), 65f,
 				mWorld.getPlayer().getX(), mWorld.getPlayer().getY(), 0f,
 				0f, 1f, 0f);
 		
@@ -90,19 +86,18 @@ public class ReSpGame extends Game {
 		
 		Matrix.multiplyMM(viewProjMatrix, 0, projMatrix, 0, viewMatrix, 0);
 		
-		mHUD.loop(this, viewProjMatrix);
+//		mHUD.loop(this, viewProjMatrix);
 
 		//------------TESTE
 
-		if(times < 50) times++;
+		if(times < 10) times++;
 		else {
 			times = 0;
 
 			if ( objIds < mWorld.getObjectCount() ) {
 
 				try {
-					if( mWorld.getObject(objIds).getType().equals(OBJECT_TYPE.BASIC_ENEMY) || 
-							mWorld.getObject(objIds).getType().equals(OBJECT_TYPE.BASIC_ENEMY_2)){
+					if( mWorld.getObject(objIds).getType().getSuperType().getName().equals("Enemy")){
 
 						//						World.getPlayer().recieveMessage(new Message(-2, "Damage", 1));
 
@@ -112,11 +107,11 @@ public class ReSpGame extends Game {
 
 
 						((SoundComponent) mWorld.getObject(objIds)
-								.getUpdatableComponent(1)).setSoundVolume(0, 0.05f, 0.05f);
+								.getUpdatableComponent("Sound")).setSoundVolume(0, 0.05f, 0.05f);
 						((SoundComponent) mWorld.getObject(objIds)
-								.getUpdatableComponent(1)).startSound(0, false);
+								.getUpdatableComponent("Sound")).startSound(0, false);
 						((GunComponent) mWorld.getObject(objIds)
-								.getUpdatableComponent(2)).shoot(new Vector2f(0, 0.2f));
+								.getUpdatableComponent("Gun")).shoot(new Vector2f(0, 0.2f));
 
 						objIds++;
 					}
@@ -134,14 +129,14 @@ public class ReSpGame extends Game {
 
 		//-------------------------------
 
-		if (((ReSpInputHandle)mInputHandler).move) {
+		if (((ReSpInputHandler)mInputHandler).move) {
 			try {
 				((PlayerPhysicsComponent) mWorld.getPlayer()
-						.getUpdatableComponent(0)).move(((ReSpInputHandle)mInputHandler).playerMoveVel);
+						.getUpdatableComponent("Physics")).move(((ReSpInputHandler)mInputHandler).playerMoveVel);
 				
-				((ReSpInputHandle) mInputHandler).playerMoveVel.setX(0);
-				((ReSpInputHandle)mInputHandler).playerMoveVel.setY(0);
-				((ReSpInputHandle)mInputHandler).move = false;
+				((ReSpInputHandler) mInputHandler).playerMoveVel.setX(0);
+				((ReSpInputHandler)mInputHandler).playerMoveVel.setY(0);
+				((ReSpInputHandler)mInputHandler).move = false;
 			} catch (Exception e) {
 				//				e.printStackTrace();
 			}

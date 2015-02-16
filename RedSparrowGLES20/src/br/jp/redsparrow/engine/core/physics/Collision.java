@@ -16,7 +16,9 @@ public class Collision {
 		return false;
 	}
 	
-//	determina se um ponto se encontra dentro dos limites
+/**
+ * Determina se um ponto se encontra dentro dos limites
+ */	
 	public static boolean isInside(Vector2f a, Bounds b) {
 		
 		if(Math.abs(b.getCenter().getX() - a.getX()) < b.getWidth()/2){
@@ -96,7 +98,7 @@ public class Collision {
 		}
 		else
 		{
-			// Push the object on one axis only (least resistance)
+			
 			if (Math.abs(offsetx) < Math.abs(offsety))
 				offsety = 0;
 			else

@@ -4,34 +4,35 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.media.MediaPlayer;
-import br.jp.redsparrow.engine.core.Game;
+import br.jp.redsparrow.R;
 import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.Updatable;
+import br.jp.redsparrow.engine.core.game.Game;
 
 public class SoundComponent extends Component implements Updatable {
-
+	
 	private Context mContext;
 
 	private ArrayList<MediaPlayer> mSounds;
 	private ArrayList<float[]> mSoundVolumes;
 
 	public SoundComponent(Context context, GameObject parent){
-		this(context, parent, new ArrayList<MediaPlayer>());
+		this(context, parent, R.raw.test_missionaccomplished);
 	}
 	
-	public SoundComponent(Context context, GameObject parent, ArrayList<MediaPlayer> sounds) {
-		super("Sound", parent);
+	public SoundComponent(Context context, GameObject parent, int ... soundFileIDs) {
+		super(parent);
 		mContext = context;
 		
-		mSounds = sounds;
+		float defVols[] = { 1.0f, 1.0f };
 		
+		mSounds = new ArrayList<MediaPlayer>();
 		mSoundVolumes = new ArrayList<float[]>();
-		for (int i = 0; i < mSounds.size(); i++) {			
-			float defVols[] = { 1.0f, 1.0f };
-			
-			mSounds.get(i).setVolume( defVols[0], defVols[1] );
+		for (int i = 0; i < soundFileIDs.length; i++) {
+			mSounds.add(MediaPlayer.create(context, soundFileIDs[i]));
 			mSoundVolumes.add(defVols);
 		}
+		
 	}
 
 	@Override
@@ -45,11 +46,20 @@ public class SoundComponent extends Component implements Updatable {
 	}
 	
 	public void startSound(int soundIndex, boolean toLoop){
-		if(toLoop) mSounds.get(soundIndex).setLooping(true);
-		if(!mSounds.get(soundIndex).isPlaying()) mSounds.get(soundIndex).start();
-		else mSounds.get(soundIndex).seekTo(0);
+		if(toLoop) {
+			mSounds.get(soundIndex).setLooping(true);
+		}
+		if(!mSounds.get(soundIndex).isPlaying()) {
+			mSounds.get(soundIndex).setVolume(mSoundVolumes.get(soundIndex)[0], mSoundVolumes.get(soundIndex)[1]);
+			mSounds.get(soundIndex).start();
+		}
+		else {
+			mSounds.get(soundIndex).seekTo(0);
+		}
 
 	}
+	
+	//TODO: Sistema coerente de fades
 	
 	public void fadeIn(final int soundIndex, final float[] targetVol, final int fadeVel, final boolean toLoop){
 		new Thread(new Runnable() {

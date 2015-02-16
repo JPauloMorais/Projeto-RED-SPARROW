@@ -4,8 +4,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.opengl.GLES20;
 import br.jp.redsparrow.engine.core.Consts;
-import br.jp.redsparrow.engine.core.GameRenderer;
 import br.jp.redsparrow.engine.core.VertexArray;
+import br.jp.redsparrow.engine.core.game.GameRenderer;
 
 public class ParticleSystem{
 
@@ -107,5 +107,18 @@ public class ParticleSystem{
 
 	public float getCurTime() {
 		return curTime;
+	}
+	
+	public int getMaxParticleCount() {
+		return mMaxParticleCount;
+	}
+	
+	public void setMaxParticleCount(int count) {
+		mMaxParticleCount = count;
+		float[] aux = particles;
+		particles = new float[mMaxParticleCount * TOTAL_COMPONENT_COUNT];
+		for (int i = 0; i < aux.length; i++) {
+			particles[i] = aux[i];
+		}
 	}
 }

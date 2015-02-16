@@ -19,7 +19,7 @@ import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.widget.Toast;
 import br.jp.redsparrow.R;
-import br.jp.redsparrow.engine.core.GameView;
+import br.jp.redsparrow.engine.core.game.GameView;
 import br.jp.redsparrow.game.ReSpGame;
 
 public class PlayActivity extends Activity implements OnTouchListener, SensorEventListener {

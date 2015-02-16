@@ -3,8 +3,8 @@ package br.jp.redsparrow.engine.core.messages;
 import java.util.ArrayList;
 
 import android.util.Log;
-import br.jp.redsparrow.engine.core.Game;
-import br.jp.redsparrow.engine.core.GameSystem;
+import br.jp.redsparrow.engine.core.game.Game;
+import br.jp.redsparrow.engine.core.game.GameSystem;
 import br.jp.redsparrow.engine.core.util.LogConfig;
 
 public class MessagingSystem extends GameSystem implements Runnable{

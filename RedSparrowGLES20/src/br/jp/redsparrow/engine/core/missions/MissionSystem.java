@@ -2,8 +2,8 @@ package br.jp.redsparrow.engine.core.missions;
 
 import java.util.ArrayList;
 
-import br.jp.redsparrow.engine.core.Game;
-import br.jp.redsparrow.engine.core.GameSystem;
+import br.jp.redsparrow.engine.core.game.Game;
+import br.jp.redsparrow.engine.core.game.GameSystem;
 import br.jp.redsparrow.engine.core.physics.Collision;
 
 public class MissionSystem extends GameSystem implements Runnable {
@@ -45,7 +45,8 @@ public class MissionSystem extends GameSystem implements Runnable {
 							.getBounds(), mainSequence.getCurMission().mBounds)) {
 
 						mainSequence.getCurMission().trigger();
-
+						mainSequence.getCurMission().onTrigger(game);
+						
 					}
 				} else {
 

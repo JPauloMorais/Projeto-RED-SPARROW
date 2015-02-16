@@ -3,7 +3,6 @@ package br.jp.redsparrow.engine.core;
 import java.util.ArrayList;
 
 import android.graphics.RectF;
-import android.util.Log;
 import br.jp.redsparrow.engine.core.physics.Bounds;
 
 public class Quadtree {
@@ -11,7 +10,7 @@ public class Quadtree {
 	/*
 	 * Estrutura de dados para auxiliar na broad phase da deteccao de colisao
 	 * */
-		private static final String TAG = "Quadtree";
+	public static final String TAG = "Quadtree";
 
 	private int MAX_OBJS = 8;
 	private int MAX_LVLS = 10;
@@ -72,7 +71,7 @@ public class Quadtree {
 		if(indx != -1 && mNodes[0] != null) mNodes[indx].getToCheck(toCheck, objBounds);
 
 		toCheck.addAll(mObjects);
-				Log.i(TAG, toCheck.size() + " objs na leaf");
+		//				Log.i(TAG, toCheck.size() + " objs na leaf");
 
 		return toCheck;
 	}

@@ -1,6 +1,8 @@
 package br.jp.redsparrow.engine.core;
 
 import android.content.Context;
+import br.jp.redsparrow.engine.core.game.Game;
+import br.jp.redsparrow.engine.core.game.World;
 import br.jp.redsparrow.engine.core.physics.AABB;
 
 

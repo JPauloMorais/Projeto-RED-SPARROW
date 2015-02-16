@@ -2,7 +2,7 @@ package br.jp.redsparrow.game.missions;
 
 import android.media.MediaPlayer;
 import br.jp.redsparrow.R;
-import br.jp.redsparrow.engine.core.Game;
+import br.jp.redsparrow.engine.core.game.Game;
 import br.jp.redsparrow.engine.core.missions.Mission;
 
 public class TestMission extends Mission {
@@ -21,6 +21,11 @@ public class TestMission extends Mission {
 		mp.start();
 		this.mComplete = true;
 		
+	}
+
+	@Override
+	public void onTrigger(Game game) {
+//		Toast.makeText(game.getContext(), this.mDescription, Toast.LENGTH_LONG).show();
 	}
 
 }
