@@ -12,6 +12,7 @@ import br.jp.redsparrow.engine.core.game.Game;
 import br.jp.redsparrow.engine.core.game.World;
 import br.jp.redsparrow.engine.core.missions.MissionSequence;
 import br.jp.redsparrow.engine.core.missions.MissionSystem;
+import br.jp.redsparrow.engine.core.tilemaps.Tilemap;
 import br.jp.redsparrow.game.components.PlayerPhysicsComponent;
 import br.jp.redsparrow.game.missions.TestMission;
 
@@ -41,6 +42,8 @@ public class ReSpGame extends Game {
 		mWorld = new World(mContext, this);
 		mWorld.setPlayer(mObjFactory.create("BasicPlayer", 0f, 0f));
 		
+		mTilemap = new Tilemap(this, 10, 10, 200);
+		
 		int qd = 1; int qd2 = 1;
 		for (int i = 0; i < 35; i++) {
 			mWorld.addObject(mObjFactory.create("BasicEnemy1", (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2));
@@ -48,25 +51,25 @@ public class ReSpGame extends Game {
 			else qd2 *= -1;
 		}		
 
-		qd = 1; qd2 = 1;
-		for (int i = 0; i < 35; i++) {
-			mWorld.addObject(mObjFactory.create("BasicEnemy2", (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2));
-			if(i%2==0) qd *= -1;
-			else qd2 *= -1;
-		}
-
-		qd = 1; qd2 = 2;
-		for (int i = 0; i < 15; i++) {
-			mWorld.addObject(mObjFactory.create("BasicEnemy3", (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2));
-			if(i%2==0) qd *= -1;
-			else qd2 *= -1;
-		}
+//		qd = 1; qd2 = 1;
+//		for (int i = 0; i < 35; i++) {
+//			mWorld.addObject(mObjFactory.create("BasicEnemy2", (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2));
+//			if(i%2==0) qd *= -1;
+//			else qd2 *= -1;
+//		}
+//
+//		qd = 1; qd2 = 2;
+//		for (int i = 0; i < 15; i++) {
+//			mWorld.addObject(mObjFactory.create("BasicEnemy3", (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2));
+//			if(i%2==0) qd *= -1;
+//			else qd2 *= -1;
+//		}
 		
 //		mHUD = new HUD(this);
 //		mHUD.addItem(mObjFactory.createHUDitem(mContext, HUDITEM_TYPE.AMMO_DISP));
 //		mHUD.addItem(mObjFactory.createHUDitem(mContext, HUDITEM_TYPE.LIFEBAR));
 		
-		mMissionSystem.start();
+//		mMissionSystem.start();
 	}
 
 	//------------TESTE
@@ -80,7 +83,7 @@ public class ReSpGame extends Game {
 
 		//Setando o ponto central da perspectiva como a posicao do player
 		Matrix.setLookAtM(viewMatrix, 0,
-				mWorld.getPlayer().getX(), mWorld.getPlayer().getY(), 6f,
+				mWorld.getPlayer().getX(), mWorld.getPlayer().getY(), 55f,
 				mWorld.getPlayer().getX(), mWorld.getPlayer().getY(), 0f,
 				0f, 1f, 0f);
 		
@@ -91,13 +94,15 @@ public class ReSpGame extends Game {
 		
 		mWorld.loop(this, viewProjMatrix);
 		
+		mTilemap.render(viewProjMatrix);
+		
 		Matrix.multiplyMM(viewProjMatrix, 0, projMatrix, 0, viewMatrix, 0);
 		
 //		mHUD.loop(this, viewProjMatrix);
 
 		//------------TESTE
 
-		if(times < 10) times++;
+		if(times < 30) times++;
 		else {
 			times = 0;
 
@@ -155,12 +160,6 @@ public class ReSpGame extends Game {
 	public void pause() {
 		if(mWorld != null) mWorld.pause();
 		mMissionSystem.stop();
-		try {
-			mMissionSystem.getThread().join();
-			System.out.println(mMissionSystem.getThread().getState().toString());
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 
 	@Override

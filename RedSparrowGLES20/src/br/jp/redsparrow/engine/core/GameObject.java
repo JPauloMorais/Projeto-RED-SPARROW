@@ -133,6 +133,10 @@ public class GameObject {
 		if(mUpdatableComponents.containsKey(name)) return mUpdatableComponents.get(name);
 		else return new Component(this);
 	}
+	
+	public void setUpdatableComponent(String name, Component component) {
+		mUpdatableComponents.put(name, component);
+	}
 //	
 //	public Component getUpdatableComponent(int indx) {
 //		return mUpdatableComponents.values().;

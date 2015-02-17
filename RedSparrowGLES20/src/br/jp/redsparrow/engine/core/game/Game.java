@@ -3,11 +3,13 @@ package br.jp.redsparrow.engine.core.game;
 import android.content.Context;
 import br.jp.redsparrow.engine.core.HUD;
 import br.jp.redsparrow.engine.core.missions.MissionSystem;
+import br.jp.redsparrow.engine.core.tilemaps.Tilemap;
 
 public abstract class Game {
 	
 	protected Context mContext;
 	protected World mWorld;
+	protected Tilemap mTilemap;
 	protected ObjectFactory mObjFactory;
 	protected HUD mHUD;
 	protected GameRenderer mRenderer;

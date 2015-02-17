@@ -8,19 +8,31 @@ import br.jp.redsparrow.game.components.ProjectilePhysicsComponent;
 
 public class GunComponent extends Component implements Updatable {
 	
+	//TODO: shootPoint
+	
 	private boolean toShoot = false;
 	private Vector2f mMoveVel;
+//	private Vector2f mShootPoint;
 	
-	public GunComponent(GameObject parent) {
-		super(parent);		
+	public GunComponent(GameObject parent, float shootPointRelX, float shootPointRelY) {
+		super(parent);
+//		mShootPoint = new Vector2f(parent.getX() + shootPointRelX, parent.getY() + shootPointRelY);
 	}
 
 	@Override
 	public void update(Game game, GameObject parent) {
-
+		
+//		mShootPoint.set(parent.getPosition().add(mShootPoint));
+//		
+//		float cos = (float) Math.cos(mParent.getRotation());
+//		float sen = (float) Math.sin(mParent.getRotation());
+//		
+//		mShootPoint.setX(cos * (mShootPoint.getX() - mParent.getX()) - sen * (mShootPoint.getY() - mParent.getY()) + mParent.getX());
+//		mShootPoint.setY(sen * (mShootPoint.getX() - mParent.getX()) + cos * (mShootPoint.getY() - mParent.getY()) + mParent.getY());
+//		
 		if(toShoot){
 						
-			GameObject proj = game.getObjFactory().create("BasicProjectile", parent.getX(), parent.getY());
+			GameObject proj = game.getObjFactory().create("BasicProjectile", mParent.getX(), mParent.getY());
 			
 //			((PhysicsComponent) parent.getUpdatableComponent(0)).collide(Collision.getColVector(parent.getBounds(), proj.getBounds()));
 			

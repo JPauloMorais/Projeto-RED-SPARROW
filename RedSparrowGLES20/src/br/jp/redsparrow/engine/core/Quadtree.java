@@ -12,7 +12,7 @@ public class Quadtree {
 	 * */
 	public static final String TAG = "Quadtree";
 
-	private int MAX_OBJS = 8;
+	private int MAX_OBJS = 10;
 	private int MAX_LVLS = 10;
 
 	private int mLevel;
@@ -46,7 +46,7 @@ public class Quadtree {
 	public void add(GameObject obj){
 
 		if(mNodes[0] != null) {
-			int indx = getIndex(obj.getBounds());
+			int indx = getQuadrant(obj.getBounds());
 			if(indx != -1){
 				mNodes[indx].add(obj);
 			}
@@ -58,7 +58,7 @@ public class Quadtree {
 			if(mNodes[0]==null) split();
 
 			for (int i = 0; i < mObjects.size(); i++) {
-				int indx = getIndex(mObjects.get(i).getBounds());
+				int indx = getQuadrant(mObjects.get(i).getBounds());
 				if(indx != -1) mNodes[indx].add(mObjects.remove(i));
 			}
 		}
@@ -67,34 +67,35 @@ public class Quadtree {
 
 	public ArrayList<GameObject> getToCheck(ArrayList<GameObject> toCheck, Bounds objBounds){
 
-		int indx = getIndex(objBounds);
-		if(indx != -1 && mNodes[0] != null) mNodes[indx].getToCheck(toCheck, objBounds);
+		int qd = getQuadrant(objBounds);
+		if(qd != -1 && mNodes[0] != null) mNodes[qd].getToCheck(toCheck, objBounds);
 
 		toCheck.addAll(mObjects);
-		//				Log.i(TAG, toCheck.size() + " objs na leaf");
 
 		return toCheck;
 	}
 
-	private int getIndex(Bounds bounds){
+	public int getQuadrant(Bounds bounds){
 
-		int indx = -1;
+		int qd = -1;
 		float middleX = mBounds.left + (mBounds.width()/2);
 		float middleY = mBounds.top + (mBounds.height()/2);
 
-		boolean upprQ = (bounds.getCenter().getX()-bounds.getWidth() < middleY && bounds.getCenter().getY()+bounds.getHeight() < middleY);
-		boolean lwrQ =  (bounds.getCenter().getY()+bounds.getHeight() > middleY && bounds.getCenter().getX()-bounds.getWidth() > middleY); 
+		boolean upprQ =  (bounds.getCenter().getY()+(bounds.getHeight()/2) > middleY && 
+				bounds.getCenter().getY()-(bounds.getHeight()/2) > middleY); 
+		boolean lwrQ = (bounds.getCenter().getY()-(bounds.getHeight()/2) < middleY && 
+				bounds.getCenter().getY()+(bounds.getHeight()/2) < middleY);
 
-		if( bounds.getCenter().getX()+bounds.getWidth() < middleX ){
-			if(upprQ) indx = 1;
-			else if(lwrQ) indx = 2;
+		if( bounds.getCenter().getX()+(bounds.getWidth()/2) < middleX ){
+			if(upprQ) qd = 1;
+			else if(lwrQ) qd = 2;
 		}
-		if( bounds.getCenter().getX()-bounds.getWidth() > middleX ){
-			if(upprQ) indx = 0;
-			else if(lwrQ) indx = 3;
+		if( bounds.getCenter().getX()-(bounds.getWidth()/2) > middleX ){
+			if(upprQ) qd = 0;
+			else if(lwrQ) qd = 3;
 		}
 
-		return indx;
+		return qd;
 	}
 
 	public void clear(){

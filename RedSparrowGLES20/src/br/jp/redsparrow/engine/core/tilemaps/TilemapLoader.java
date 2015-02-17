@@ -1,45 +1,49 @@
 package br.jp.redsparrow.engine.core.tilemaps;
 
+import android.app.IntentService;
+import android.content.Intent;
+import android.util.Log;
 
 
-public class TilemapLoader implements Runnable {
 
-	private Thread mThread;
-	private boolean isRunning;
-	
-	@SuppressWarnings("unused")
+public class TilemapLoader extends IntentService {
+
+	private static final String TAG = "TilemapLoaderService";
+
 	private Tilemap mTilemap;
-//	private int mCurPlayerTile;
-//	private int mPlayerTile;
-	
-	public TilemapLoader(Tilemap tilemap) {
+	private int[] mCurPlayerTile;
+	private int[] mPlayerTile;
 
-//		mCurPlayerTile = World.getPlayer().
-		mThread = new Thread(this, "TilemapLoader");
-		
+	public TilemapLoader(Tilemap tilemap) {
+		super(TAG);
+
+		mCurPlayerTile = new int[2];
+		mPlayerTile = new int[2];
+
 		mTilemap = tilemap;
-		
-	}
-	
-	public void start() {
-		isRunning = true;
-		mThread.start();
+		Intent i = new Intent(mTilemap.getGame().getContext(), this.getClass());
+		mTilemap.getGame().getContext().startService(i);
+
 	}
 
 	@Override
-	public void run() {
+	protected void onHandleIntent(Intent intent) {
 
-		while (isRunning) {
+		mPlayerTile = mTilemap.getTileIndexes(mTilemap.getGame().getWorld().getPlayer().getBounds());
+
+		while (mTilemap.getGame().getWorld().isRunning()) {
+			Log.i("Tilemap", "Cool");
+
+			mCurPlayerTile = mTilemap.getTileIndexes(mTilemap.getGame().getWorld().getPlayer().getBounds());
 			
-//			Tilemap.setCurrentTiles(, top);
-			
+			if(mCurPlayerTile[0] != mPlayerTile [0] || mCurPlayerTile[1] != mPlayerTile [1]) {
+				mPlayerTile = mCurPlayerTile;
+				mTilemap.setCurrentTiles(mPlayerTile[0], mPlayerTile[1]);
+			}
+
 		}
-		
+
 	}
-	
-	public void stop() {
-		isRunning = false;
-	}
-	
+
 
 }

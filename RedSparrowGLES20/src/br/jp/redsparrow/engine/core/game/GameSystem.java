@@ -10,4 +10,8 @@ public abstract class GameSystem {
 	
 	public void loop(Game game,float[] projectionMatrix) { }
 	
+	public Game getGame() {
+		return game;
+	}
+	
 }

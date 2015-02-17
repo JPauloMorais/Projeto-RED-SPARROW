@@ -73,7 +73,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 				.setSoundVolume(0, 0.005f, 0.005f);
 
 				obj.addComponent("Gun",
-						new GunComponent(obj));
+						new GunComponent(obj, 0, 0));
 
 				obj.addComponent("Stats",
 						new PlayerStatsComponent(obj, 5));
@@ -105,7 +105,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 				((SoundComponent) obj.getUpdatableComponent("Sound"))
 				.setSoundVolume(0, 0.005f, 0.005f);
 
-				obj.addComponent("Gun", new GunComponent(obj));
+				obj.addComponent("Gun", new GunComponent(obj, 0, 0));
 
 				obj.addComponent("Stats", new EnemyStatsComponent(obj, 5));		
 
@@ -136,7 +136,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 				((SoundComponent) obj.getUpdatableComponent("Sound"))
 				.setSoundVolume(0, 0.005f, 0.005f);
 
-				obj.addComponent("Gun", new GunComponent(obj));
+				obj.addComponent("Gun", new GunComponent(obj, 0, 0));
 
 				obj.addComponent("Stats", new EnemyStatsComponent(obj, 5));		
 
@@ -167,7 +167,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 				((SoundComponent) obj.getUpdatableComponent("Sound"))
 				.setSoundVolume(0, 0.005f, 0.005f);
 
-				obj.addComponent("Gun", new GunComponent(obj));
+				obj.addComponent("Gun", new GunComponent(obj, 0, 0));
 
 				obj.addComponent("Stats", new EnemyStatsComponent(obj, 5));		
 

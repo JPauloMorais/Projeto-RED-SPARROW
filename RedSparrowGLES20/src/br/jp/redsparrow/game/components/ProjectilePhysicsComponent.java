@@ -41,7 +41,8 @@ public class ProjectilePhysicsComponent extends PhysicsComponent {
 
 	@Override
 	public void collide(GameObject other) {
-		if(!other.getType().getSuperType().getName().equals("Projectile")){
+		if(!other.getType().getSuperType().getName().equals("Projectile") &&
+				!other.getType().getSuperType().getName().equals(mShooterSuperType.getName())){
 			mParent.die();
 		}
 	}

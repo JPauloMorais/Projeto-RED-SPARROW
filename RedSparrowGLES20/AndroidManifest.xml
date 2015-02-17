@@ -5,8 +5,8 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="19"
-        android:targetSdkVersion="19" />
+        android:minSdkVersion="16"
+        android:targetSdkVersion="21" />
     <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
@@ -27,7 +27,7 @@
         </activity>
         
          <service
-            android:name="br.redsparrow.engine.core.missions.MissionSystem"
+            android:name="br.redsparrow.engine.core.tilemaps.TilemapLoader"
             android:exported="false"/>
          
     </application>

@@ -22,7 +22,7 @@ public class World extends GameSystem{
 
 	private final String TAG = "World";
 	private boolean isRunning;
-
+	
 	private GameObject mPlayer;
 	private ArrayList<GameObject> mGameObjects;
 	private ArrayList<GameObject> mToRemove;
@@ -45,7 +45,7 @@ public class World extends GameSystem{
 		super(game);
 
 		isRunning = false;
-
+		
 		//Objetos
 		mPlayer = new GameObject();
 		mGameObjects = new ArrayList<GameObject>();
@@ -103,6 +103,7 @@ public class World extends GameSystem{
 			//------LOOP DO PLAYER-------------
 			mToCheck.clear();
 			mQuadTree.getToCheck(mToCheck, mPlayer.getBounds());
+			Log.i("Quadtree", mToCheck.size() + " objs na leaf");
 
 			for (int i = 0; i < mToCheck.size(); i++) {
 				if(Collision.areIntersecting( mPlayer.getBounds(), mToCheck.get(i).getBounds())){
@@ -161,6 +162,7 @@ public class World extends GameSystem{
 	}
 
 	public void pause(){
+		isRunning = false;
 		try {
 			bgmSoundComponent.pauseSound(0);
 		} catch (Exception e) {
@@ -173,6 +175,7 @@ public class World extends GameSystem{
 	}
 
 	public void stop(){
+		isRunning = false;
 		try {
 			bgmSoundComponent.stopSound(0);
 			bgmSoundComponent.releaseSound(0);
@@ -250,6 +253,10 @@ public class World extends GameSystem{
 	public int getObjectCount(){
 		return mGameObjects.size();
 	}
+	
+	public ArrayList<GameObject> getObjects() {
+		return mGameObjects;
+	}
 
 	private void removeDead(Game game){
 		mToRemove.clear();
@@ -301,6 +308,7 @@ public class World extends GameSystem{
 			this.getObject(objectId).recieveMessages(curMessages);
 		} catch (Exception e) {	}
 	}
+	
 }
 
 
