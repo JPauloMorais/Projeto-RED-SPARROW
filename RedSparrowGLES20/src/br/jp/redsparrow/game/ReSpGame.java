@@ -35,14 +35,14 @@ public class ReSpGame extends Game {
 
 	@Override
 	public void create() {
-		
-		mDbgBackground = mObjFactory.create("BG1", 100, 100);
-		mDbgBackground1 =mObjFactory.create("BG2", 100, 100);
 
 		mWorld = new World(mContext, this);
 		mWorld.setPlayer(mObjFactory.create("BasicPlayer", 0f, 0f));
 		
-		mTilemap = new Tilemap(this, 2, 2, 200);
+		mTilemap = new Tilemap(this, 2, 10, 200);
+		
+		mDbgBackground = mObjFactory.create("BG1", mTilemap.getTiles()[1][2].getX(), mTilemap.getTiles()[1][4].getY());
+		mDbgBackground1 =mObjFactory.create("BG2", mTilemap.getTiles()[1][2].getX(), mTilemap.getTiles()[1][4].getY());
 		
 		int qd = 1; int qd2 = 1;
 		for (int i = 0; i < 35; i++) {

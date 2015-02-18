@@ -8,6 +8,10 @@ import br.jp.redsparrow.engine.core.physics.Bounds;
 
 public class Tilemap extends GameSystem{
 
+	/**
+	 * Mapas compostos por tiles, com chunks relativos a um centro
+	 * ()
+	 */
 	private static final String TAG = "Tilemap";
 	//TODO: distancias baseadas no tamanho do player e tamanho dos tiles
 	public static final int DISTANCE_NEAR = 3;
@@ -40,11 +44,15 @@ public class Tilemap extends GameSystem{
 		mCurrentTiles = new Tile[mDistance][mDistance];
 		mTiles = new Tile[tilesInX][tilesInY];
 
-		mBounds = new RectF(-((tilesInX*tileSize)/2), -((tilesInY*tileSize)/2), (tilesInX*tileSize)/2, (tilesInY*tileSize)/2);
+		mBounds = new RectF(((tilesInX*tileSize)/2)*-1, ((tilesInY*tileSize)/2), (tilesInX*tileSize)/2, (tilesInY*tileSize)/2 * -1);
 
+		float firstX = mBounds.left + (tileSize/2);
+		float firstY = mBounds.top - (tileSize/2);
+		
 		for (int i = 0; i < tilesInX; i++) {
 			for (int j = 0; j < tilesInY; j++) {
-				mTiles[i][j] = new Tile((i*tileSize)-((tilesInX*tileSize)/2)+tileSize/2, (j*tileSize)+((tilesInY*tileSize)/2)+tileSize/2);
+				mTiles[i][j] = 
+						new Tile( firstX + (i*tileSize), firstY - (j*tileSize));
 			}
 		}
 
@@ -131,13 +139,13 @@ public class Tilemap extends GameSystem{
 		case 0:
 
 			tilesIndxs[0] = (int) ( bounds.getCenter().getX() / mTileSize) + (mTilesInX/2);                        //right
-			tilesIndxs[1] = ( ( (mTilesInY/2)-1) - (int) ( bounds.getCenter().getY() / mTileSize));                //top
+			tilesIndxs[1] = ( (mTilesInY/2)-1) - (int) ( bounds.getCenter().getY() / mTileSize);                //top
 			Log.i( TAG,"QD: "+0+", ("+tilesIndxs[0]+","+tilesIndxs[1]+")");
 
 			break;
 		case 1:
 
-			tilesIndxs[0] = ( ( (mTilesInX/2)-1) - (int) Math.abs(( bounds.getCenter().getX() / mTileSize))); //left
+			tilesIndxs[0] = ( (mTilesInX/2)-1) - (int) Math.abs(( bounds.getCenter().getX() / mTileSize)); //left
 			tilesIndxs[1] = ( ( (mTilesInY/2)-1) - (int) ( bounds.getCenter().getY() / mTileSize));                //top
 			Log.i( TAG,"QD: "+1+", ("+tilesIndxs[0]+","+tilesIndxs[1]+")");
 
@@ -165,5 +173,12 @@ public class Tilemap extends GameSystem{
 		return tilesIndxs;
 	}
 
+	public Tile[][] getTiles() {
+		return mTiles;
+	}
+
+	public void setTiles(Tile[][] mTiles) {
+		this.mTiles = mTiles;
+	}
 
 }
