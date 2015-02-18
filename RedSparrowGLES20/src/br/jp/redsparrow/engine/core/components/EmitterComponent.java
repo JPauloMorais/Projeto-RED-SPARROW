@@ -35,8 +35,9 @@ public class EmitterComponent extends Component implements Updatable {
 	public void update(Game game, GameObject parent) {
 		for (ParticleEmitter particleEmitter : mEmitters) {
 			particleEmitter.setPosition(parent.getX(), parent.getY(), 0);
-			particleEmitter.setColor(Color.rgb(0, 0, v));
-			particleEmitter.addParticles(game.getWorld().getBottomParticleSystem(), game.getWorld().getBottomParticleSystem().getCurTime(), 20);
+			particleEmitter.setColor(Color.rgb(v, 0, 0));
+			particleEmitter.addParticles(game.getWorld().getBottomParticleSystem(), game.getWorld().getBottomParticleSystem().getCurTime(), 18);
+			particleEmitter.addParticles(game.getWorld().getTopParticleSystem(), game.getWorld().getBottomParticleSystem().getCurTime(), 2);
 		}
 		v++;
 	}

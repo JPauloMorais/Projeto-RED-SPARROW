@@ -137,6 +137,10 @@ public class GameObject {
 	public void setUpdatableComponent(String name, Component component) {
 		mUpdatableComponents.put(name, component);
 	}
+	
+	public boolean containsUpdatableComponent(String name) {
+		return mUpdatableComponents.containsKey(name);
+	}
 //	
 //	public Component getUpdatableComponent(int indx) {
 //		return mUpdatableComponents.values().;

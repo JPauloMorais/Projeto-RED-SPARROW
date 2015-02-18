@@ -27,6 +27,7 @@ public abstract class PhysicsComponent extends Component implements Updatable {
 	public void addVel(GameObject parent){
 
 		parent.setPosition( mParent.getPosition().copy().add(mVelocity) );
+//		mVelocity = mVelocity.mult(0);
 
 	}
 	
@@ -73,6 +74,14 @@ public abstract class PhysicsComponent extends Component implements Updatable {
 
 	public Vector2f getVelocity(){
 		return mVelocity;
+	}
+
+	public float getMaxVel() {
+		return mMaxVel;
+	}
+
+	public void setMaxVel(float mMaxVel) {
+		this.mMaxVel = mMaxVel;
 	}
 
 }

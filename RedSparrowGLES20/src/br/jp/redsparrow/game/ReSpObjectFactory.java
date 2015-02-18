@@ -13,6 +13,7 @@ import br.jp.redsparrow.engine.core.game.Game;
 import br.jp.redsparrow.engine.core.game.ObjectFactory;
 import br.jp.redsparrow.engine.core.game.ObjectType;
 import br.jp.redsparrow.engine.core.physics.AABB;
+import br.jp.redsparrow.game.components.EnemyAIComponent;
 import br.jp.redsparrow.game.components.EnemyPhysicsComponent;
 import br.jp.redsparrow.game.components.EnemyStatsComponent;
 import br.jp.redsparrow.game.components.PlayerPhysicsComponent;
@@ -77,7 +78,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 						new GunComponent(obj, 0, 0));
 
 				obj.addComponent("Stats",
-						new PlayerStatsComponent(obj, 5));
+						new PlayerStatsComponent(obj, 500));
 				
 				obj.addComponent("Emitter", 
 						new EmitterComponent(game, obj, 60, new float[]{0,0,0}, 360, 2));
@@ -112,6 +113,8 @@ public class ReSpObjectFactory extends ObjectFactory {
 				obj.addComponent("Gun", new GunComponent(obj, 0, 0));
 
 				obj.addComponent("Stats", new EnemyStatsComponent(obj, 5));		
+				
+				obj.addComponent("AI", new EnemyAIComponent(obj));
 
 				return obj;
 			}

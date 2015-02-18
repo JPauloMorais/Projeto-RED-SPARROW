@@ -16,13 +16,12 @@ import br.jp.redsparrow.engine.core.particles.ParticleSystem;
 import br.jp.redsparrow.engine.core.physics.AABB;
 import br.jp.redsparrow.engine.core.physics.Collision;
 import br.jp.redsparrow.engine.core.util.LogConfig;
-import br.jp.redsparrow.game.components.PlayerPhysicsComponent;
 
 public class World extends GameSystem{
 
 	private final String TAG = "World";
 	private boolean isRunning;
-	
+
 	private GameObject mPlayer;
 	private ArrayList<GameObject> mGameObjects;
 	private ArrayList<GameObject> mToRemove;
@@ -45,7 +44,7 @@ public class World extends GameSystem{
 		super(game);
 
 		isRunning = false;
-		
+
 		//Objetos
 		mPlayer = new GameObject();
 		mGameObjects = new ArrayList<GameObject>();
@@ -103,14 +102,22 @@ public class World extends GameSystem{
 			//------LOOP DO PLAYER-------------
 			mToCheck.clear();
 			mQuadTree.getToCheck(mToCheck, mPlayer.getBounds());
-			Log.i("Quadtree", mToCheck.size() + " objs na leaf");
+			if(LogConfig.ON)Log.i("Quadtree", mToCheck.size() + " objs na leaf");
 
 			for (int i = 0; i < mToCheck.size(); i++) {
-				if(Collision.areIntersecting( mPlayer.getBounds(), mToCheck.get(i).getBounds())){
+				if (mToCheck.get(i).containsUpdatableComponent("Physics")) {
+					if (Collision.areIntersecting(mPlayer.getBounds(), mToCheck
+							.get(i).getBounds())) {
 
-					((PhysicsComponent) mPlayer.getUpdatableComponent("Physics")).collide(mToCheck.get(i));
-					((PhysicsComponent) mToCheck.get(i).getUpdatableComponent("Physics")).collide(mPlayer);
-					
+						((PhysicsComponent) mToCheck.get(i)
+								.getUpdatableComponent("Physics"))
+								.collide(mPlayer);
+						if (mPlayer.containsUpdatableComponent("Physics"))
+							((PhysicsComponent) mPlayer
+									.getUpdatableComponent("Physics"))
+									.collide(mToCheck.get(i));
+
+					}
 				}
 			}
 
@@ -124,17 +131,21 @@ public class World extends GameSystem{
 					mToCheck.clear();
 					mQuadTree.getToCheck(mToCheck, mGameObjects.get(i).getBounds());
 
-					//CHECANDO COLISAO
-					for (int j=0; j < mToCheck.size(); j++) {
+					if (mGameObjects.get(i).containsUpdatableComponent("Physics")) {
+						//CHECANDO COLISAO
+						for (int j = 0; j < mToCheck.size(); j++) {
 
-						if (Collision.areIntersecting(mGameObjects.get(i).getBounds(), mToCheck.get(j).getBounds())) {
+							if (Collision.areIntersecting(mGameObjects.get(i)
+									.getBounds(), mToCheck.get(j).getBounds())) {
 
-							((PhysicsComponent) mGameObjects.get(i).getUpdatableComponent("Physics")).collide(mToCheck.get(j));
+								((PhysicsComponent) mGameObjects.get(i)
+										.getUpdatableComponent("Physics"))
+										.collide(mToCheck.get(j));
+
+							}
 
 						}
-
 					}
-
 					//Update e Render se dentro limite
 					if(Collision.isInside(mGameObjects.get(i).getPosition(), mUpdatingBounds))
 					{
@@ -235,7 +246,7 @@ public class World extends GameSystem{
 	}
 
 	public void addObject(GameObject object){
-		
+
 		object.setId(mNextObjID);
 		mNextObjID++;
 
@@ -253,7 +264,7 @@ public class World extends GameSystem{
 	public int getObjectCount(){
 		return mGameObjects.size();
 	}
-	
+
 	public ArrayList<GameObject> getObjects() {
 		return mGameObjects;
 	}
@@ -279,9 +290,8 @@ public class World extends GameSystem{
 		//Isso e inevitavel Mr. Anderson.
 		//		mGameObjects.set(0, game.getObjFactory().createObject(game.getContext(), OBJECT_TYPE.PLAYER, mGameObjects.get(0).getX(), mGameObjects.get(0).getY()));
 
-		mGameObjects.get(0).removeUpdatableComponent("Physics");
-		mGameObjects.get(0).addComponent("Physics", new PlayerPhysicsComponent(mGameObjects.get(0)));
-		
+//		mGameObjects.get(0).setUpdatableComponent("Physics", new PlayerPhysicsComponent(mGameObjects.get(0)));
+
 		setPlayer(mGameObjects.get(0));
 		mGameObjects.remove(0);
 		//------------------
@@ -325,7 +335,7 @@ public class World extends GameSystem{
 			this.getObject(objectId).recieveMessages(curMessages);
 		} catch (Exception e) {	}
 	}
-	
+
 }
 
 

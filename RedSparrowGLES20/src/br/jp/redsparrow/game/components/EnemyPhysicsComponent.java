@@ -21,7 +21,7 @@ public class EnemyPhysicsComponent extends PhysicsComponent {
 	public void update(Game game, GameObject parent) {			
 
 		applyFric();
-		clampToMaxVel();
+//		clampToMaxVel();
 		addVel(parent);
 		pointForwards(parent);
 
