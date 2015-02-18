@@ -295,6 +295,23 @@ public class World extends GameSystem{
 		mGameObjects.remove(object);
 	}
 
+	public ParticleSystem getBottomParticleSystem() {
+		return mBottomParticleSystem;
+	}
+
+	public void setBottomParticleSystem(
+			ParticleSystem mBottomParticleSystem) {
+		this.mBottomParticleSystem = mBottomParticleSystem;
+	}
+
+	public ParticleSystem getTopParticleSystem() {
+		return mTopParticleSystem;
+	}
+
+	public void setTopParticleSystem(ParticleSystem mTopParticleSystem) {
+		this.mTopParticleSystem = mTopParticleSystem;
+	}
+
 	public boolean isRunning() {
 		return isRunning;
 	}

@@ -36,13 +36,13 @@ public class ReSpGame extends Game {
 	@Override
 	public void create() {
 		
-		mDbgBackground = mObjFactory.create("BG1", 0, 0);
-		mDbgBackground1 =mObjFactory.create("BG2", 0, 0);
+		mDbgBackground = mObjFactory.create("BG1", 100, 100);
+		mDbgBackground1 =mObjFactory.create("BG2", 100, 100);
 
 		mWorld = new World(mContext, this);
 		mWorld.setPlayer(mObjFactory.create("BasicPlayer", 0f, 0f));
 		
-		mTilemap = new Tilemap(this, 10, 10, 200);
+		mTilemap = new Tilemap(this, 2, 2, 200);
 		
 		int qd = 1; int qd2 = 1;
 		for (int i = 0; i < 35; i++) {
@@ -83,7 +83,7 @@ public class ReSpGame extends Game {
 
 		//Setando o ponto central da perspectiva como a posicao do player
 		Matrix.setLookAtM(viewMatrix, 0,
-				mWorld.getPlayer().getX(), mWorld.getPlayer().getY(), 55f,
+				mWorld.getPlayer().getX(), mWorld.getPlayer().getY(), 45f,
 				mWorld.getPlayer().getX(), mWorld.getPlayer().getY(), 0f,
 				0f, 1f, 0f);
 		
@@ -94,7 +94,7 @@ public class ReSpGame extends Game {
 		
 		mWorld.loop(this, viewProjMatrix);
 		
-		mTilemap.render(viewProjMatrix);
+		mTilemap.loop(this, viewProjMatrix);
 		
 		Matrix.multiplyMM(viewProjMatrix, 0, projMatrix, 0, viewMatrix, 0);
 		
@@ -124,7 +124,7 @@ public class ReSpGame extends Game {
 								.getUpdatableComponent("Sound")).startSound(0, false);
 						((GunComponent) mWorld.getObject(objIds)
 								.getUpdatableComponent("Gun")).shoot(new Vector2f(0, 0.2f));
-
+						
 						objIds++;
 					}
 				} catch (Exception e) {

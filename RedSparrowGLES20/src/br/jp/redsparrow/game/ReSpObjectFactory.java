@@ -5,6 +5,7 @@ import br.jp.redsparrow.engine.core.Animation;
 import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.Vector2f;
 import br.jp.redsparrow.engine.core.components.AnimatedSpriteComponent;
+import br.jp.redsparrow.engine.core.components.EmitterComponent;
 import br.jp.redsparrow.engine.core.components.GunComponent;
 import br.jp.redsparrow.engine.core.components.SoundComponent;
 import br.jp.redsparrow.engine.core.components.SpriteComponent;
@@ -77,6 +78,9 @@ public class ReSpObjectFactory extends ObjectFactory {
 
 				obj.addComponent("Stats",
 						new PlayerStatsComponent(obj, 5));
+				
+				obj.addComponent("Emitter", 
+						new EmitterComponent(game, obj, 60, new float[]{0,0,0}, 360, 2));
 
 				return obj;
 			}

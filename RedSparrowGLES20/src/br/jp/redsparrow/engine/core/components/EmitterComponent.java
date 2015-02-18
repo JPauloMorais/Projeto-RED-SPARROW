@@ -19,7 +19,7 @@ public class EmitterComponent extends Component implements Updatable {
 
 		mEmitters = new ArrayList<ParticleEmitter>();
 		mEmitters.add(new ParticleEmitter(new float[]{parent.getX()+relPos[0],parent.getY()+relPos[1],relPos[2]},
-				new float[]{ 0,0,0.1f},
+				new float[]{ 0,0,-0.1f},
 				Color.rgb(128, 128, 128),
 				dispAngle,
 				speedVar));
@@ -30,10 +30,15 @@ public class EmitterComponent extends Component implements Updatable {
 
 	}
 
+	int v = 0;
 	@Override
 	public void update(Game game, GameObject parent) {
-		// TODO Auto-generated method stub
-
+		for (ParticleEmitter particleEmitter : mEmitters) {
+			particleEmitter.setPosition(parent.getX(), parent.getY(), 0);
+			particleEmitter.setColor(Color.rgb(0, 0, v));
+			particleEmitter.addParticles(game.getWorld().getBottomParticleSystem(), game.getWorld().getBottomParticleSystem().getCurTime(), 20);
+		}
+		v++;
 	}
 
 	public void addEmitter(ParticleEmitter emitter, int lifetimeFrames) {
