@@ -80,6 +80,7 @@ public class MenuActivity extends Activity implements OnTouchListener {
 		ImageButton playB = new ImageButton(this);
 		playB.setBackgroundResource(R.drawable.play_button_v1);
 		playB.setLayoutParams(layoutParams1);
+		
 		final Intent intent = new Intent(this, PlayActivity.class);
 		playB.setOnClickListener(new OnClickListener() {
 			
