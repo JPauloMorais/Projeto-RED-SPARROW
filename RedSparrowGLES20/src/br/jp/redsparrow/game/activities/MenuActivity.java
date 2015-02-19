@@ -78,8 +78,7 @@ public class MenuActivity extends Activity implements OnTouchListener {
 		RelativeLayout.LayoutParams layoutParams1 = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		layoutParams1.addRule(RelativeLayout.CENTER_IN_PARENT);
 		ImageButton playB = new ImageButton(this);
-		playB.setBackgroundResource(R.drawable.ammo_display_test);
-		playB.setRotation(-90);
+		playB.setBackgroundResource(R.drawable.play_button_v1);
 		playB.setLayoutParams(layoutParams1);
 		final Intent intent = new Intent(this, PlayActivity.class);
 		playB.setOnClickListener(new OnClickListener() {
