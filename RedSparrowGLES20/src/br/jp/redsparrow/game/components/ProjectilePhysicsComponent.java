@@ -1,10 +1,12 @@
 package br.jp.redsparrow.game.components;
 
+import android.graphics.Color;
 import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.Vector2f;
 import br.jp.redsparrow.engine.core.components.PhysicsComponent;
 import br.jp.redsparrow.engine.core.game.Game;
 import br.jp.redsparrow.engine.core.game.ObjectType;
+import br.jp.redsparrow.engine.core.particles.ParticleEmitter;
 
 public class ProjectilePhysicsComponent extends PhysicsComponent {
 
@@ -44,6 +46,7 @@ public class ProjectilePhysicsComponent extends PhysicsComponent {
 		if(!other.getType().getSuperType().getName().equals("Projectile") &&
 				!other.getType().getSuperType().getName().equals(mShooterSuperType.getName())){
 			mParent.die();
+
 		}
 	}
 

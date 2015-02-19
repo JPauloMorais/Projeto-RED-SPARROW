@@ -20,10 +20,10 @@ public class PlayerPhysicsComponent extends PhysicsComponent {
 	@Override
 	public void update(Game game, GameObject parent) {			
 
-		applyFric();
+//		applyFric();
 		clampToMaxVel();
-		addVel(parent);
-//		pointForwards(parent);
+		if(mCollided || mMoved) addVel(parent);
+		pointForwards(parent);
 
 		mCollided = false;
 		mMoved = false;

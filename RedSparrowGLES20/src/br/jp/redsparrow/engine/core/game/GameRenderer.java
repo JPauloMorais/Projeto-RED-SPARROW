@@ -22,7 +22,7 @@ public class GameRenderer extends GameSystem implements Renderer {
 	public final float[] viewProjectionMatrix = new float[16];
 	
 	public static TextureShaderProg textureProgram;
-	public static ParticleShaderProg particleProgram;
+	public ParticleShaderProg particleProgram;
 
 	private final FPSCounter fps = new FPSCounter();
 

@@ -15,8 +15,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Toast;
 import br.jp.redsparrow.R;
 import br.jp.redsparrow.engine.core.game.GameView;
@@ -24,6 +28,7 @@ import br.jp.redsparrow.game.ReSpGame;
 
 public class PlayActivity extends Activity implements OnTouchListener, SensorEventListener {
 
+	private RelativeLayout mRelLayout;
 	private GameView mGameView;
 	private ReSpGame game;
 
@@ -62,8 +67,31 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 			Toast.makeText(this, " Aparelho não suporta OpenGL ES 2.0 ", Toast.LENGTH_LONG).show();
 			return;
 		}
-
-		setContentView(mGameView);
+		mRelLayout = new RelativeLayout(this);
+		
+		mRelLayout.addView(mGameView);
+		
+		Button ammoDisplay = new Button(this);
+//		ImageView ammo = new ImageView(this);
+		
+		RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		layoutParams.addRule(RelativeLayout.ALIGN_TOP);
+		ammoDisplay.setLayoutParams(layoutParams);
+		ammoDisplay.setBackgroundResource(R.drawable.ammo_display_test);
+		ammoDisplay.setAlpha(0.2f);
+		ammoDisplay.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+					Toast.makeText(getApplication(), "Click", Toast.LENGTH_SHORT).show();
+			}
+		});
+		mRelLayout.addView(ammoDisplay);
+		
+//		ammo.setBackgroundResource(R.drawable.projectile_1);
+//		ammo.setLayoutParams(layoutParams);
+//		mRelLayout.addView(ammo);
+		
+		setContentView(mRelLayout);
 		
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 	

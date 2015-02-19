@@ -5,7 +5,7 @@ import android.graphics.Color;
 import android.opengl.GLES20;
 import br.jp.redsparrow.engine.core.Consts;
 import br.jp.redsparrow.engine.core.VertexArray;
-import br.jp.redsparrow.engine.core.game.GameRenderer;
+import br.jp.redsparrow.engine.shaders.ParticleShaderProg;
 
 public class ParticleSystem{
 
@@ -74,32 +74,32 @@ public class ParticleSystem{
 
 	}
 
-	public void bindData() {
+	public void bindData(ParticleShaderProg shader) {
 		int dataOffset = 0;
 		vertexArray.setVertexAttribPointer(dataOffset,
-				GameRenderer.particleProgram.getPositionAttributeLocation(),
+				shader.getPositionAttributeLocation(),
 				POSITION_COMPONENT_COUNT, STRIDE);
 		dataOffset += POSITION_COMPONENT_COUNT;
 		vertexArray.setVertexAttribPointer(dataOffset,
-				GameRenderer.particleProgram.getColorAttributeLocation(),
+				shader.getColorAttributeLocation(),
 				COLOR_COMPONENT_COUNT, STRIDE);
 		dataOffset += COLOR_COMPONENT_COUNT;
 		vertexArray.setVertexAttribPointer(dataOffset,
-				GameRenderer.particleProgram.getDirectionVectorAttributeLocation(),
+				shader.getDirectionVectorAttributeLocation(),
 				VECTOR_COMPONENT_COUNT, STRIDE);
 		dataOffset += VECTOR_COMPONENT_COUNT;
 		vertexArray.setVertexAttribPointer(dataOffset,
-				GameRenderer.particleProgram.getParticleStartTimeAttributeLocation(),
+				shader.getParticleStartTimeAttributeLocation(),
 				PARTICLE_START_TIME_COMPONENT_COUNT, STRIDE);
 	}
 
-	public void render(float[] projectionMatrix) {
+	public void render(ParticleShaderProg shader, float[] projectionMatrix) {
 		
 		curTime = (System.nanoTime() - startTime) / 1000000000f;
 		
-		GameRenderer.particleProgram.useProgram();
-		GameRenderer.particleProgram.setUniforms(projectionMatrix, curTime);
-		bindData();
+		shader.useProgram();
+		shader.setUniforms(projectionMatrix, curTime);
+		bindData(shader);
 		
 		GLES20.glDrawArrays(GLES20.GL_POINTS, 0, currentParticleCount);
 		

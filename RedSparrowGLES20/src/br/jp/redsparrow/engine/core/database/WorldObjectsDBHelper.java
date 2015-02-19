@@ -8,13 +8,18 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class WorldObjectsDBHelper extends SQLiteOpenHelper {
 
-	private static final String DB_NAME = "worldobjs.sqlite";
-	private static final int VERSION = 1;
+	private final static String DB_NAME = "game.db";
+	private final static int VERSION = 1;
 
-	private static final String TABLE_WORLDOBJECTS = "objects";
-	private static final String COL_OBJ_POSITION_X = "position_x";
-	private static final String COL_OBJ_POSITION_Y = "position_y";
-	private static final String COL_OBJ_TYPE = "type";
+	private final String TABLE_WORLDOBJECTS = "objects";
+	private final String COL_OBJ_POSITION_X = "position_x";
+	private final String COL_OBJ_POSITION_Y = "position_y";
+	private final String COL_OBJ_TYPE = "type";
+	
+	private final String TABLE_CREATE = "CREATE TABLE " + TABLE_WORLDOBJECTS + " (" + "_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+			+ COL_OBJ_POSITION_X + " FLOAT, "
+			+ COL_OBJ_POSITION_Y + " FLOAT, "
+			+ COL_OBJ_TYPE + " TEXT)";
 
 	public WorldObjectsDBHelper(Context context) {
 		super(context, DB_NAME, null, VERSION);
@@ -24,10 +29,7 @@ public class WorldObjectsDBHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 
-		db.execSQL("CREATE TABLE " + TABLE_WORLDOBJECTS + " (" + "_id INTEGER PRIMARY KEY AUTOINCREMENT, "
-				+ COL_OBJ_POSITION_X + " FLOAT, "
-				+ COL_OBJ_POSITION_Y + " FLOAT, "
-				+ COL_OBJ_TYPE + " BLOB)");
+		db.execSQL(TABLE_CREATE);
 
 	}
 
@@ -43,8 +45,7 @@ public class WorldObjectsDBHelper extends SQLiteOpenHelper {
 		
 		contVals.put(COL_OBJ_POSITION_X, object.getX());
 		contVals.put(COL_OBJ_POSITION_Y, object.getY());
-		contVals.putNull(COL_OBJ_TYPE);
-//		contVals.put(COL_OBJ_TYPE, object.getType());
+		contVals.put(COL_OBJ_TYPE, object.getType().getName());
 		
 		return getWritableDatabase().insert(TABLE_WORLDOBJECTS, null, contVals);
 	}

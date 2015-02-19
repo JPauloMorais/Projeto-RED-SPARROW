@@ -18,7 +18,7 @@ public class PlayerStatsComponent extends StatsComponent {
 	}
 
 	@Override
-	protected void die() {
+	protected void die(Game game) {
 		if (!isDying) {
 			mParent.removeUpdatableComponent("Physics");
 			((AnimatedSpriteComponent) mParent.getRenderableComponent("AnimatedSprite")).setCurAnim(1);

@@ -18,7 +18,7 @@ public class ReSpInputHandler extends InputHandler {
 
 
 	public Vector2f playerMoveVel = new Vector2f(0, 0);
-	public Vector2f projMoveVel = new Vector2f(0.6f, 0.6f);
+	public Vector2f projMoveVel = new Vector2f(0, 0);
 
 	public boolean move = false;
 
@@ -36,65 +36,65 @@ public class ReSpInputHandler extends InputHandler {
 
 
 			//			if (!Collision.isInside(new Vector2f(normalizedX, normalizedY).add(game.getWorld().getPlayer().getPosition()),
-//			game.getHUD().getItem(0).getBounds())) {
-				mVibrator.vibrate(100);
-				projMoveVel.setX(normalizedX);
-				projMoveVel.setY(normalizedY);
-				((SoundComponent) game.getWorld().getPlayer().getUpdatableComponent("Sound"))
-				.setSoundVolume(0, 0.05f, 0.05f);
-				((SoundComponent) game.getWorld().getPlayer().getUpdatableComponent("Sound"))
-				.startSound(0, false);
-				((GunComponent) game.getWorld().getPlayer().getUpdatableComponent("Gun"))
-				.shoot(projMoveVel);
-				//			}
+			//			game.getHUD().getItem(0).getBounds())) {
+			mVibrator.vibrate(100);
+			projMoveVel.setX(normalizedX);
+			projMoveVel.setY(normalizedY);
+			((SoundComponent) game.getWorld().getPlayer().getUpdatableComponent("Sound"))
+			.setSoundVolume(0, 0.05f, 0.05f);
+			((SoundComponent) game.getWorld().getPlayer().getUpdatableComponent("Sound"))
+			.startSound(0, false);
+			((GunComponent) game.getWorld().getPlayer().getUpdatableComponent("Gun"))
+			.shoot(projMoveVel);
+			//			}
 
-			} catch (Exception e) {
-			}
+		} catch (Exception e) {
 		}
+	}
 
-		@Override
-		public void handleTouchRelease(float normalizedX, float normalizedY) {
+	@Override
+	public void handleTouchRelease(float normalizedX, float normalizedY) {
+		try {
+			//			((SoundComponent) World.getPlayer().getComponent("Sound")).pauseSound(0);
+		} catch (Exception e) {
+
+		}
+	}
+
+	@Override
+	public void handleTouchDrag(float normalizedX, float normalizedY) {
+		if (!accelControls) {
+			//TODO Movimentacao correta
+			playerMoveVel.setX(normalizedX/100);
+			playerMoveVel.setY(normalizedY/100);
+
 			try {
-				//			((SoundComponent) World.getPlayer().getComponent("Sound")).pauseSound(0);
+				((PlayerPhysicsComponent) game.getWorld().getPlayer().getUpdatableComponent("Physics")).move(playerMoveVel);
 			} catch (Exception e) {
-
-			}
+				e.printStackTrace();
+			}		
 		}
+	}
 
-		@Override
-		public void handleTouchDrag(float normalizedX, float normalizedY) {
-			if (!accelControls) {
-				//TODO Movimentacao correta
-				playerMoveVel.setX(normalizedX/100);
-				playerMoveVel.setY(normalizedY/100);
+	@Override
+	public void handleSensorChange(float[] values) {
+		if (accelControls) {
 
-				try {
-					((PlayerPhysicsComponent) game.getWorld().getPlayer().getUpdatableComponent("Physics")).move(playerMoveVel);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}		
-			}
-		}
-
-		@Override
-		public void handleSensorChange(float[] values) {
-			if (accelControls) {
-
-				playerMoveVel.setX(-values[0]/500);
-				playerMoveVel.setY(-values[1]/500);
-				//			playerMoveVel = playerMoveVel.normalize();
-				if(playerMoveVel.length() > 0.001f) {
-					move = true;
-					//				Log.i("Physics", "(" + values[0] + "," + values[1] + ")");
-				}
-
-			}
-		}
-
-		@Override
-		public void loop(Game game, float[] projectionMatrix) {
-			// TODO Auto-generated method stub
+			playerMoveVel.setX(-values[0]/500);
+			playerMoveVel.setY(-values[1]/500);
+			//			playerMoveVel = playerMoveVel.normalize();
+			if(playerMoveVel.length() < 0.01f) {
+				playerMoveVel.mult(0);
+				move = false;
+			}else move = true;
 
 		}
+	}
+
+	@Override
+	public void loop(Game game, float[] projectionMatrix) {
+		// TODO Auto-generated method stub
 
 	}
+
+}

@@ -63,8 +63,8 @@ public class World extends GameSystem{
 		bgmSoundComponent = new SoundComponent(context, new GameObject(), R.raw.at_least_you_tried_greaf);
 
 		//Particulas
-		mBottomParticleSystem = new ParticleSystem(10000, context);		
-		mTopParticleSystem = new ParticleSystem(10000, context);		
+		mBottomParticleSystem = new ParticleSystem(1000, context);		
+		mTopParticleSystem = new ParticleSystem(1000, context);		
 
 		//		mEmiters.add(new ParticleEmitter(pos, dir, Color.rgb(255, 0, 0), 90, 1, 100));
 		//		mEmiters.add(new ParticleEmitter(pos, dir, Color.rgb(255, 255, 0), 45, 1));		
@@ -97,7 +97,7 @@ public class World extends GameSystem{
 			}
 
 			//-----PARTICULAS BOTTOM-----------
-			mBottomParticleSystem.render(projectionMatrix);
+			mBottomParticleSystem.render(game.getRenderer().particleProgram, projectionMatrix);
 
 			//------LOOP DO PLAYER-------------
 			mToCheck.clear();
@@ -120,9 +120,6 @@ public class World extends GameSystem{
 					}
 				}
 			}
-
-			mPlayer.update(game);
-			mPlayer.render(projectionMatrix);
 
 			//------LOOP DOS OBJETOS-----------
 			if(mGameObjects!=null && !mGameObjects.isEmpty()){
@@ -161,10 +158,13 @@ public class World extends GameSystem{
 
 
 			}
+			
+			mPlayer.update(game);
+			mPlayer.render(projectionMatrix);
 
 			//------PARTICULAS TOP-----------
 
-			mTopParticleSystem.render(projectionMatrix);
+			mTopParticleSystem.render(game.getRenderer().particleProgram, projectionMatrix);
 
 
 		}else {

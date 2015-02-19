@@ -52,7 +52,7 @@ public class Tilemap extends GameSystem{
 		for (int i = 0; i < tilesInX; i++) {
 			for (int j = 0; j < tilesInY; j++) {
 				mTiles[i][j] = 
-						new Tile( firstX + (i*tileSize), firstY - (j*tileSize));
+						new Tile( firstX + (i*tileSize), firstY - (j*tileSize), 'a');
 			}
 		}
 
@@ -102,6 +102,9 @@ public class Tilemap extends GameSystem{
 			l=0;
 		}
 
+		Log.i(TAG, mCurrentTiles[0][0].getT()+mCurrentTiles[0][1].getT()+mCurrentTiles[0][2].getT()+"/n"+
+				mCurrentTiles[1][0].getT()+mCurrentTiles[1][1].getT()+mCurrentTiles[1][2].getT()+"/n"+
+				mCurrentTiles[2][0].getT()+mCurrentTiles[2][1].getT()+mCurrentTiles[2][2].getT());
 	}
 
 	public int getQuadrant(Bounds bounds){

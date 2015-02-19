@@ -16,7 +16,7 @@ public class EnemyAIComponent extends AIComponent {
 	public EnemyAIComponent(GameObject parent) {
 		super(parent);
 		mMaxSteer = parent.getWidth();
-		shootInterval = 80+new Random().nextInt(100);
+		shootInterval = 60+new Random().nextInt(100);
 	}
 
 	@Override

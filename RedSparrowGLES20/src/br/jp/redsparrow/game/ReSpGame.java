@@ -23,7 +23,7 @@ public class ReSpGame extends Game {
 		super(context);
 
 		random = new Random();
-		mRenderer = new ReSpRenderer(mContext, this);
+		mRenderer = new ReSpGameRenderer(mContext, this);
 		mInputHandler = new ReSpInputHandler(this);	
 		mMissionSystem = new MissionSystem(this, new MissionSequence(new TestMission()));
 		mObjFactory = new ReSpObjectFactory(this);
@@ -36,7 +36,11 @@ public class ReSpGame extends Game {
 		mWorld = new World(mContext, this);
 		mWorld.setPlayer(mObjFactory.create("BasicPlayer", 0f, 0f));
 
-		mTilemap = new Tilemap(this, 2, 10, 200);
+		mTilemap = new Tilemap(this, 10, 10, 200);
+		mTilemap.getTiles()[4][4].setT('c');
+		mTilemap.getTiles()[5][4].setT('c');
+		mTilemap.getTiles()[4][5].setT('c');
+		mTilemap.getTiles()[5][5].setT('c');
 
 		mDbgBackground = mObjFactory.create("BG1", mTilemap.getTiles()[1][2].getX(), mTilemap.getTiles()[1][4].getY());
 		mDbgBackground1 =mObjFactory.create("BG2", mTilemap.getTiles()[1][2].getX(), mTilemap.getTiles()[1][4].getY());
@@ -140,7 +144,7 @@ public class ReSpGame extends Game {
 
 		//-------------------------------
 
-		if (((ReSpInputHandler)mInputHandler).move) {
+//		if (((ReSpInputHandler)mInputHandler).move) {
 			try {
 				((PlayerPhysicsComponent) mWorld.getPlayer()
 						.getUpdatableComponent("Physics")).move(((ReSpInputHandler)mInputHandler).playerMoveVel);
@@ -151,7 +155,7 @@ public class ReSpGame extends Game {
 			} catch (Exception e) {
 				//				e.printStackTrace();
 			}
-		}
+//		}
 
 	}
 

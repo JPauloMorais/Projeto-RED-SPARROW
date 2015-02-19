@@ -8,10 +8,12 @@ public class Tile implements Renderable {
 
 	private float mX;
 	private float mY;
+	private char t;
 	
-	public Tile(float x, float y) {
+	public Tile(float x, float y, char t) {
 		setX(x);
 		setY(y);
+		this.setT(t);
 	}
 	
 	@Override
@@ -34,6 +36,14 @@ public class Tile implements Renderable {
 
 	public void setY(float mY) {
 		this.mY = mY;
+	}
+
+	public char getT() {
+		return t;
+	}
+
+	public void setT(char t) {
+		this.t = t;
 	}
 	
 }

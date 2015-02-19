@@ -21,10 +21,10 @@ public abstract class StatsComponent extends Component implements Updatable {
 	
 	@Override
 	public void update(Game game, GameObject object) {
-		if(mCurHealth <= 0) die();
+		if(mCurHealth <= 0) die(game);
 	}
 
-	protected abstract void die();
+	protected abstract void die(Game game);
 
 	public int getCurHealth() {
 		return mCurHealth;
