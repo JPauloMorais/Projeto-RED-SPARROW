@@ -185,13 +185,13 @@ public class ReSpObjectFactory extends ObjectFactory {
 
 			@Override
 			public GameObject create(Game game, float positionX, float positionY) {
-				GameObject obj = new GameObject(new AABB(new Vector2f(positionX, positionY), .2f, .4f));
+				GameObject obj = new GameObject(new AABB(new Vector2f(positionX, positionY), .08f, .08f));
 				
 				obj.setType(this);
 
 				obj.addComponent("Physics", new EnemyProjectilePhysicsComponent(obj,1));
 
-				obj.addComponent("Sprite", new SpriteComponent(game.getContext(), R.drawable.projectile_1, obj, 0.2f,0.2f,
+				obj.addComponent("Sprite", new SpriteComponent(game.getContext(), R.drawable.player_projectile_1, obj, 0.2f,0.2f,
 						2, 1, 0, 1));
 				
 				return obj;
@@ -210,7 +210,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 
 				obj.addComponent("Physics", new EnemyProjectilePhysicsComponent(obj,1));
 
-				obj.addComponent("Sprite", new SpriteComponent(game.getContext(), R.drawable.enemy_projectile_2, obj, 0.2f,0.2f,
+				obj.addComponent("Sprite", new SpriteComponent(game.getContext(), R.drawable.enemy_projectile_1, obj, 0.2f,0.2f,
 						2, 1, 0, 1));
 				
 				return obj;
