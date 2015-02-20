@@ -32,7 +32,7 @@ public class ReSpCamera extends Camera {
 	@Override
 	public void loop(Game game, float[] projectionMatrix) {
 		
-		distInterpor += 0.01f;
+		distInterpor += 0.00f;
 		
 		mFollowX = game.getWorld().getPlayer().getX();
 		mFollowY  = game.getWorld().getPlayer().getY();
