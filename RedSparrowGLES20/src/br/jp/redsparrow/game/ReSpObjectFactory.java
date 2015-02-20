@@ -98,7 +98,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 
 				Animation anim = new Animation(1, 1);
 				anim.setAmmoToWait(4);
-				obj.addComponent("AnimatedSprite", new AnimatedSpriteComponent(game.getContext(), R.drawable.basic_enemy_ship, obj,
+				obj.addComponent("AnimatedSprite", new AnimatedSpriteComponent(game.getContext(), R.drawable.nave_f, obj,
 						anim, 0.3f, 0.3f));
 				((AnimatedSpriteComponent) obj.getRenderableComponent("AnimatedSprite")).addAnimation( game.getContext(), R.drawable.explosion_test,new Animation(5, 4));
 
@@ -131,7 +131,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 
 				Animation anim = new Animation(1, 1);
 				anim.setAmmoToWait(4);
-				obj.addComponent("AnimatedSprite", new AnimatedSpriteComponent(game.getContext(), R.drawable.basic_enemy_shippp, obj,
+				obj.addComponent("AnimatedSprite", new AnimatedSpriteComponent(game.getContext(), R.drawable.nave_f_a, obj,
 						anim, 0.3f, 0.3f));
 				((AnimatedSpriteComponent) obj.getRenderableComponent("AnimatedSprite")).addAnimation( game.getContext(), R.drawable.explosion_test,new Animation(5, 4));
 
@@ -162,7 +162,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 
 				Animation anim = new Animation(1, 1);
 				anim.setAmmoToWait(4);
-				obj.addComponent("AnimatedSprite", new AnimatedSpriteComponent(game.getContext(), R.drawable.basic_enemy_shippp, obj,
+				obj.addComponent("AnimatedSprite", new AnimatedSpriteComponent(game.getContext(), R.drawable.nave_f_b, obj,
 						anim, 0.3f, 0.3f));
 				((AnimatedSpriteComponent) obj.getRenderableComponent("AnimatedSprite")).addAnimation( game.getContext(), R.drawable.explosion_test,new Animation(5, 4));
 
@@ -185,7 +185,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 
 			@Override
 			public GameObject create(Game game, float positionX, float positionY) {
-				GameObject obj = new GameObject(new AABB(new Vector2f(positionX, positionY), .08f, .08f));
+				GameObject obj = new GameObject(new AABB(new Vector2f(positionX, positionY), 10.08f, 10.08f));
 				
 				obj.setType(this);
 
@@ -204,7 +204,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 
 			@Override
 			public GameObject create(Game game, float positionX, float positionY) {
-				GameObject obj = new GameObject(new AABB(new Vector2f(positionX, positionY), .03f, .03f));
+				GameObject obj = new GameObject(new AABB(new Vector2f(positionX, positionY), .08f, .08f));
 				
 				obj.setType(this);
 
