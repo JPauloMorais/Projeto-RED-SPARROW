@@ -204,7 +204,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 
 			@Override
 			public GameObject create(Game game, float positionX, float positionY) {
-				GameObject obj = new GameObject(new AABB(new Vector2f(positionX, positionY), .2f, .2f));
+				GameObject obj = new GameObject(new AABB(new Vector2f(positionX, positionY), .05f, .05f));
 				
 				obj.setType(this);
 
