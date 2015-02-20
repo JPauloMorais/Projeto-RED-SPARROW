@@ -27,20 +27,21 @@ public final class R {
         public static final int basic_enemy_ship_dark=0x7f020002;
         public static final int basic_enemy_shipp=0x7f020003;
         public static final int basic_enemy_shippp=0x7f020004;
-        public static final int explosion_test=0x7f020005;
-        public static final int eyes_test=0x7f020006;
-        public static final int ic_launcher=0x7f020007;
-        public static final int life_gauge_test=0x7f020008;
-        public static final int nave_f=0x7f020009;
-        public static final int nave_f_a=0x7f02000a;
-        public static final int nave_f_b=0x7f02000b;
-        public static final int nova_nave=0x7f02000c;
-        public static final int particula_1=0x7f02000d;
-        public static final int play_button_v1=0x7f02000e;
-        public static final int player_ship=0x7f02000f;
-        public static final int projectile_1=0x7f020010;
-        public static final int red_sparrow_test_2=0x7f020011;
-        public static final int stars_test1=0x7f020012;
+        public static final int enemy_projectile_1=0x7f020005;
+        public static final int enemy_projectile_2=0x7f020006;
+        public static final int explosion_test=0x7f020007;
+        public static final int eyes_test=0x7f020008;
+        public static final int ic_launcher=0x7f020009;
+        public static final int life_gauge_test=0x7f02000a;
+        public static final int nave_f=0x7f02000b;
+        public static final int nave_f_a=0x7f02000c;
+        public static final int nave_f_b=0x7f02000d;
+        public static final int nova_nave=0x7f02000e;
+        public static final int play_button_v1=0x7f02000f;
+        public static final int player_ship=0x7f020010;
+        public static final int projectile_1=0x7f020011;
+        public static final int red_sparrow_test_2=0x7f020012;
+        public static final int stars_test1=0x7f020013;
     }
     public static final class id {
         public static final int action_settings=0x7f080000;
