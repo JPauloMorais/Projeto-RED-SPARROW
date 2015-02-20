@@ -45,6 +45,8 @@ public class ReSpGame extends Game {
 		mDbgBackground = mObjFactory.create("BG1", mTilemap.getTiles()[1][2].getX(), mTilemap.getTiles()[1][4].getY());
 		mDbgBackground1 =mObjFactory.create("BG2", mTilemap.getTiles()[1][2].getX(), mTilemap.getTiles()[1][4].getY());
 
+		mCamera = new ReSpCamera(this);
+		
 		int qd = 1; int qd2 = 1;
 		for (int i = 0; i < 30; i++) {
 			mWorld.addObject(mObjFactory
@@ -84,12 +86,6 @@ public class ReSpGame extends Game {
 	@Override
 	public void loop(float[] viewMatrix, float[] projMatrix, float[] viewProjMatrix) {
 
-		//Setando o ponto central da perspectiva como a posicao do player
-		Matrix.setLookAtM(viewMatrix, 0,
-				mWorld.getPlayer().getX(), mWorld.getPlayer().getY(), 45f, //45
-				mWorld.getPlayer().getX(), mWorld.getPlayer().getY(), 0f,
-				0f, 1f, 0f);
-
 		mDbgBackground.render(viewProjMatrix);
 		Matrix.translateM(viewProjMatrix, 0, 0, 0, 25);
 		mDbgBackground1.render(viewProjMatrix);
@@ -98,8 +94,8 @@ public class ReSpGame extends Game {
 		mWorld.loop(this, viewProjMatrix);
 
 		mTilemap.loop(this, viewProjMatrix);
-
-		Matrix.multiplyMM(viewProjMatrix, 0, projMatrix, 0, viewMatrix, 0);
+		
+		mCamera.loop(this, viewProjMatrix);
 
 		//		mHUD.loop(this, viewProjMatrix);
 

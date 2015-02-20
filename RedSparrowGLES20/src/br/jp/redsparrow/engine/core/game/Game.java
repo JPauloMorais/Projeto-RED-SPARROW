@@ -15,6 +15,7 @@ public abstract class Game {
 	protected GameRenderer mRenderer;
 	protected InputHandler mInputHandler;
 	protected MissionSystem mMissionSystem;
+	protected Camera mCamera;
 	
 	public Game(Context context) {
 		mContext = context;
