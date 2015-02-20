@@ -14,7 +14,9 @@ import br.jp.redsparrow.engine.core.game.ObjectFactory;
 import br.jp.redsparrow.engine.core.game.ObjectType;
 import br.jp.redsparrow.engine.core.physics.AABB;
 import br.jp.redsparrow.game.components.EnemyAIComponent;
+import br.jp.redsparrow.game.components.EnemyGunComponent;
 import br.jp.redsparrow.game.components.EnemyPhysicsComponent;
+import br.jp.redsparrow.game.components.EnemyProjectilePhysicsComponent;
 import br.jp.redsparrow.game.components.EnemyStatsComponent;
 import br.jp.redsparrow.game.components.PlayerPhysicsComponent;
 import br.jp.redsparrow.game.components.PlayerStatsComponent;
@@ -110,7 +112,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 				((SoundComponent) obj.getUpdatableComponent("Sound"))
 				.setSoundVolume(0, 0.005f, 0.005f);
 
-				obj.addComponent("Gun", new GunComponent(obj, 0, 0));
+				obj.addComponent("Gun", new EnemyGunComponent(obj, 0, 0));
 
 				obj.addComponent("Stats", new EnemyStatsComponent(obj, 5));		
 				
@@ -202,6 +204,25 @@ public class ReSpObjectFactory extends ObjectFactory {
 			
 		};
 		mTypes.put(basicProjectile.getName(), basicProjectile);
+		
+		ObjectType basicEnemyProjectile = new ObjectType("BasicEnemyProjectile", mSupertypes.get(2)) {
+
+			@Override
+			public GameObject create(Game game, float positionX, float positionY) {
+				GameObject obj = new GameObject(new AABB(new Vector2f(positionX, positionY), .2f, .4f));
+				
+				obj.setType(this);
+
+				obj.addComponent("Physics", new EnemyProjectilePhysicsComponent(obj,1));
+
+				obj.addComponent("Sprite", new SpriteComponent(game.getContext(), R.drawable.projectile_1, obj, 0.2f,0.2f,
+						2, 1, 0, 1));
+				
+				return obj;
+			}
+			
+		};
+		mTypes.put(basicEnemyProjectile.getName(), basicEnemyProjectile);
 		
 		ObjectType bg1 = new ObjectType("BG1", mSupertypes.get(3)) {
 

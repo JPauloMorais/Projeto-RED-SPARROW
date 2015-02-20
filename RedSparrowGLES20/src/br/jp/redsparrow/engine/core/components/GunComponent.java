@@ -10,8 +10,8 @@ public class GunComponent extends Component implements Updatable {
 	
 	//TODO: shootPoint
 	
-	private boolean toShoot = false;
-	private Vector2f mMoveVel;
+	protected boolean toShoot = false;
+	protected Vector2f mMoveVel;
 //	private Vector2f mShootPoint;
 	
 	public GunComponent(GameObject parent, float shootPointRelX, float shootPointRelY) {

@@ -1,17 +1,15 @@
 package br.jp.redsparrow.game.components;
 
-import android.graphics.Color;
 import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.Vector2f;
 import br.jp.redsparrow.engine.core.components.PhysicsComponent;
 import br.jp.redsparrow.engine.core.game.Game;
 import br.jp.redsparrow.engine.core.game.ObjectType;
-import br.jp.redsparrow.engine.core.particles.ParticleEmitter;
 
 public class ProjectilePhysicsComponent extends PhysicsComponent {
 
-	private ObjectType mShooterSuperType;
-	private boolean shot = false;
+	protected ObjectType mShooterSuperType;
+	protected boolean shot = false;
 
 	//	private Vector2f location = new Vector2f(0f, 0f); 
 
@@ -42,7 +40,7 @@ public class ProjectilePhysicsComponent extends PhysicsComponent {
 	}
 
 	@Override
-	public void collide(GameObject other) {
+	public void collide(Game game, GameObject other) {
 		if(!other.getType().getSuperType().getName().equals("Projectile") &&
 				!other.getType().getSuperType().getName().equals(mShooterSuperType.getName())){
 			mParent.die();

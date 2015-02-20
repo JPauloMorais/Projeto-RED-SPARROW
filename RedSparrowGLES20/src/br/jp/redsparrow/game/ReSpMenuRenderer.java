@@ -57,7 +57,7 @@ public class ReSpMenuRenderer implements GLSurfaceView.Renderer {
 
 		//criando e ajustando matriz de projecao em perspectiva
 		Matrix.perspectiveM(projectionMatrix, 0, 100, (float) width
-				/ (float) height, 1, 100);
+				/ (float) height, 1, 45);
 		Matrix.setLookAtM(viewMatrix, 0,
 				0f, 0f, 45f,
 				0f, 0f, 0f,

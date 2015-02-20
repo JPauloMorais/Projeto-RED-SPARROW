@@ -111,11 +111,11 @@ public class World extends GameSystem{
 
 						((PhysicsComponent) mToCheck.get(i)
 								.getUpdatableComponent("Physics"))
-								.collide(mPlayer);
+								.collide(game, mPlayer);
 						if (mPlayer.containsUpdatableComponent("Physics"))
 							((PhysicsComponent) mPlayer
 									.getUpdatableComponent("Physics"))
-									.collide(mToCheck.get(i));
+									.collide(game, mToCheck.get(i));
 
 					}
 				}
@@ -137,7 +137,7 @@ public class World extends GameSystem{
 
 								((PhysicsComponent) mGameObjects.get(i)
 										.getUpdatableComponent("Physics"))
-										.collide(mToCheck.get(j));
+										.collide(game, mToCheck.get(j));
 
 							}
 

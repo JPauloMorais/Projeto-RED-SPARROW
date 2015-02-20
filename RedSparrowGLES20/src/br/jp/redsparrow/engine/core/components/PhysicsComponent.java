@@ -3,6 +3,7 @@ package br.jp.redsparrow.engine.core.components;
 import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.Updatable;
 import br.jp.redsparrow.engine.core.Vector2f;
+import br.jp.redsparrow.engine.core.game.Game;
 
 public abstract class PhysicsComponent extends Component implements Updatable {
 	
@@ -69,8 +70,8 @@ public abstract class PhysicsComponent extends Component implements Updatable {
 		mCollided = true;
 
 	}
-	
-	public abstract void collide(GameObject other);
+		
+	public abstract void collide(Game game, GameObject other);
 
 	public Vector2f getVelocity(){
 		return mVelocity;
