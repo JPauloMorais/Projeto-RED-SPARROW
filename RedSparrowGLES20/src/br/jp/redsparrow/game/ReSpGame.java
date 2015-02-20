@@ -10,8 +10,8 @@ import br.jp.redsparrow.engine.core.game.World;
 import br.jp.redsparrow.engine.core.missions.MissionSequence;
 import br.jp.redsparrow.engine.core.missions.MissionSystem;
 import br.jp.redsparrow.engine.core.tilemaps.Tilemap;
-import br.jp.redsparrow.game.components.PlayerPhysicsComponent;
 import br.jp.redsparrow.game.missions.TestMission;
+import br.jp.redsparrow.game.objecttypes.basicplayer.PlayerPhysicsComponent;
 
 public class ReSpGame extends Game {
 

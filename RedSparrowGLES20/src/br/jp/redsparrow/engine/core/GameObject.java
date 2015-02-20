@@ -49,15 +49,15 @@ public class GameObject {
 		
 		removeRecievedMessages();
 		
-		for (String key : mUpdatableComponents.keySet()) {
-			((Updatable) mUpdatableComponents.get(key)).update(game, this);
+		for (Component comp : mUpdatableComponents.values()) {
+			((Updatable) comp).update(game, this);
 		}
 		
 	}
 
 	public void render(float[] projMatrix) {
-		for (String key : mRenderableComponents.keySet()) {
-			((Renderable) mRenderableComponents.get(key)).render(null, projMatrix);
+		for (Component comp : mRenderableComponents.values()) {
+			((Renderable) comp).render(null, projMatrix);
 		}
 	}
 

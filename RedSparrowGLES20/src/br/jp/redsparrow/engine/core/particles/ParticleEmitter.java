@@ -48,11 +48,15 @@ public class ParticleEmitter {
 	}
 
 	public void setPosition(float x, float y, float z) {
-		mPosition = new float[]{x,y,z};
+		mPosition[0] = x;
+		mPosition[1] = y;
+		mPosition[2] = z;
 	}
 
 	public void setDirection(float x, float y, float z) {
-		mDirVector = new float[]{x,y,z};
+		mDirVector[0] = x;
+		mDirVector[1] = y;
+		mDirVector[2] = z;
 	}
 
 	public void setColor(int color) {

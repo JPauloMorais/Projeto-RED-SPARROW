@@ -3,7 +3,7 @@ package br.jp.redsparrow.engine.core.components;
 import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.Updatable;
 import br.jp.redsparrow.engine.core.Vector2f;
-import br.jp.redsparrow.game.components.EnemyPhysicsComponent;
+import br.jp.redsparrow.game.objecttypes.basicenemy.EnemyPhysicsComponent;
 
 public abstract class AIComponent extends Component implements Updatable {
 

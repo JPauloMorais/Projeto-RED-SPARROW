@@ -8,7 +8,7 @@ import br.jp.redsparrow.engine.core.components.GunComponent;
 import br.jp.redsparrow.engine.core.components.SoundComponent;
 import br.jp.redsparrow.engine.core.game.Game;
 import br.jp.redsparrow.engine.core.game.InputHandler;
-import br.jp.redsparrow.game.components.PlayerPhysicsComponent;
+import br.jp.redsparrow.game.objecttypes.basicplayer.PlayerPhysicsComponent;
 
 public class ReSpInputHandler extends InputHandler {
 

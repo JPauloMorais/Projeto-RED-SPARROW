@@ -102,9 +102,9 @@ public class Tilemap extends GameSystem{
 			l=0;
 		}
 
-		Log.i(TAG, mCurrentTiles[0][0].getT()+mCurrentTiles[0][1].getT()+mCurrentTiles[0][2].getT()+"/n"+
-				mCurrentTiles[1][0].getT()+mCurrentTiles[1][1].getT()+mCurrentTiles[1][2].getT()+"/n"+
-				mCurrentTiles[2][0].getT()+mCurrentTiles[2][1].getT()+mCurrentTiles[2][2].getT());
+//		Log.i(TAG, mCurrentTiles[0][0].getT()+mCurrentTiles[0][1].getT()+mCurrentTiles[0][2].getT()+"/n"+
+//				mCurrentTiles[1][0].getT()+mCurrentTiles[1][1].getT()+mCurrentTiles[1][2].getT()+"/n"+
+//				mCurrentTiles[2][0].getT()+mCurrentTiles[2][1].getT()+mCurrentTiles[2][2].getT());
 	}
 
 	public int getQuadrant(Bounds bounds){
@@ -143,7 +143,7 @@ public class Tilemap extends GameSystem{
 
 			tilesIndxs[0] = (int) ( bounds.getCenter().getX() / mTileSize) + (mTilesInX/2);                        //right
 			tilesIndxs[1] = ( (mTilesInY/2)-1) - (int) ( bounds.getCenter().getY() / mTileSize);                //top
-			Log.i( TAG,"QD: "+0+", ("+tilesIndxs[0]+","+tilesIndxs[1]+")");
+			Log.i( TAG,"QD: "+0+", ("+tilesIndxs[0]+","+tilesIndxs[1]+")" );
 
 			break;
 		case 1:

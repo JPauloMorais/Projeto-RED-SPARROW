@@ -5,22 +5,20 @@ import br.jp.redsparrow.engine.core.Animation;
 import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.Vector2f;
 import br.jp.redsparrow.engine.core.components.AnimatedSpriteComponent;
-import br.jp.redsparrow.engine.core.components.EmitterComponent;
-import br.jp.redsparrow.engine.core.components.GunComponent;
 import br.jp.redsparrow.engine.core.components.SoundComponent;
 import br.jp.redsparrow.engine.core.components.SpriteComponent;
 import br.jp.redsparrow.engine.core.game.Game;
 import br.jp.redsparrow.engine.core.game.ObjectFactory;
 import br.jp.redsparrow.engine.core.game.ObjectType;
 import br.jp.redsparrow.engine.core.physics.AABB;
-import br.jp.redsparrow.game.components.EnemyAIComponent;
-import br.jp.redsparrow.game.components.EnemyGunComponent;
-import br.jp.redsparrow.game.components.EnemyPhysicsComponent;
-import br.jp.redsparrow.game.components.EnemyProjectilePhysicsComponent;
-import br.jp.redsparrow.game.components.EnemyStatsComponent;
-import br.jp.redsparrow.game.components.PlayerPhysicsComponent;
-import br.jp.redsparrow.game.components.PlayerStatsComponent;
-import br.jp.redsparrow.game.components.ProjectilePhysicsComponent;
+import br.jp.redsparrow.game.objecttypes.basicenemy.EnemyAIComponent;
+import br.jp.redsparrow.game.objecttypes.basicenemy.EnemyGunComponent;
+import br.jp.redsparrow.game.objecttypes.basicenemy.EnemyPhysicsComponent;
+import br.jp.redsparrow.game.objecttypes.basicenemy.EnemyProjectilePhysicsComponent;
+import br.jp.redsparrow.game.objecttypes.basicenemy.EnemyStatsComponent;
+import br.jp.redsparrow.game.objecttypes.basicplayer.PlayerGunComponent;
+import br.jp.redsparrow.game.objecttypes.basicplayer.PlayerPhysicsComponent;
+import br.jp.redsparrow.game.objecttypes.basicplayer.PlayerStatsComponent;
 
 public class ReSpObjectFactory extends ObjectFactory {
 
@@ -77,13 +75,10 @@ public class ReSpObjectFactory extends ObjectFactory {
 				.setSoundVolume(0, 0.005f, 0.005f);
 
 				obj.addComponent("Gun",
-						new GunComponent(obj, 0, 0));
+						new PlayerGunComponent(obj));
 
 				obj.addComponent("Stats",
 						new PlayerStatsComponent(obj, 500));
-				
-				obj.addComponent("Emitter", 
-						new EmitterComponent(game, obj, 60, new float[]{0,0,0}, 360, 2));
 
 				return obj;
 			}
@@ -145,7 +140,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 				((SoundComponent) obj.getUpdatableComponent("Sound"))
 				.setSoundVolume(0, 0.005f, 0.005f);
 
-				obj.addComponent("Gun", new GunComponent(obj, 0, 0));
+				obj.addComponent("Gun", new EnemyGunComponent(obj, 0, 0));
 
 				obj.addComponent("Stats", new EnemyStatsComponent(obj, 5));		
 
@@ -176,7 +171,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 				((SoundComponent) obj.getUpdatableComponent("Sound"))
 				.setSoundVolume(0, 0.005f, 0.005f);
 
-				obj.addComponent("Gun", new GunComponent(obj, 0, 0));
+				obj.addComponent("Gun", new EnemyGunComponent(obj, 0, 0));
 
 				obj.addComponent("Stats", new EnemyStatsComponent(obj, 5));		
 
@@ -194,7 +189,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 				
 				obj.setType(this);
 
-				obj.addComponent("Physics", new ProjectilePhysicsComponent(obj,1));
+				obj.addComponent("Physics", new EnemyProjectilePhysicsComponent(obj,1));
 
 				obj.addComponent("Sprite", new SpriteComponent(game.getContext(), R.drawable.projectile_1, obj, 0.2f,0.2f,
 						2, 1, 0, 1));

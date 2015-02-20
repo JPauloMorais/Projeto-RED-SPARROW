@@ -16,6 +16,7 @@ import br.jp.redsparrow.engine.core.particles.ParticleSystem;
 import br.jp.redsparrow.engine.core.physics.AABB;
 import br.jp.redsparrow.engine.core.physics.Collision;
 import br.jp.redsparrow.engine.core.util.LogConfig;
+import br.jp.redsparrow.game.objecttypes.basicplayer.PlayerPhysicsComponent;
 
 public class World extends GameSystem{
 
@@ -53,7 +54,7 @@ public class World extends GameSystem{
 
 		//Quadtree
 		mToCheck = new ArrayList<GameObject>();
-		mQuadTree = new Quadtree(0, new RectF(-200, -200, 200, 200));
+		mQuadTree = new Quadtree(0, new RectF(-50, 50, 50, -50));
 
 		//Update/Render bounds
 		mUpdatingBounds = new AABB(new Vector2f(0, 0), 52, 70);
@@ -63,8 +64,8 @@ public class World extends GameSystem{
 		bgmSoundComponent = new SoundComponent(context, new GameObject(), R.raw.at_least_you_tried_greaf);
 
 		//Particulas
-		mBottomParticleSystem = new ParticleSystem(1000, context);		
-		mTopParticleSystem = new ParticleSystem(1000, context);		
+		mBottomParticleSystem = new ParticleSystem(10000, context);		
+		mTopParticleSystem = new ParticleSystem(10000, context);		
 
 		//		mEmiters.add(new ParticleEmitter(pos, dir, Color.rgb(255, 0, 0), 90, 1, 100));
 		//		mEmiters.add(new ParticleEmitter(pos, dir, Color.rgb(255, 255, 0), 45, 1));		
@@ -102,7 +103,7 @@ public class World extends GameSystem{
 			//------LOOP DO PLAYER-------------
 			mToCheck.clear();
 			mQuadTree.getToCheck(mToCheck, mPlayer.getBounds());
-			if(LogConfig.ON)Log.i("Quadtree", mToCheck.size() + " objs na leaf");
+			if(LogConfig.ON) Log.i("Quadtree", mToCheck.size() + " objs na leaf");
 
 			for (int i = 0; i < mToCheck.size(); i++) {
 				if (mToCheck.get(i).containsUpdatableComponent("Physics")) {
@@ -291,7 +292,9 @@ public class World extends GameSystem{
 		//		mGameObjects.set(0, game.getObjFactory().createObject(game.getContext(), OBJECT_TYPE.PLAYER, mGameObjects.get(0).getX(), mGameObjects.get(0).getY()));
 
 //		mGameObjects.get(0).setUpdatableComponent("Physics", new PlayerPhysicsComponent(mGameObjects.get(0)));
-
+		mGameObjects.get(0).removeUpdatableComponent("Physics");
+		mGameObjects.get(0).addComponent("Physics", new PlayerPhysicsComponent(mGameObjects.get(0)));
+		
 		setPlayer(mGameObjects.get(0));
 		mGameObjects.remove(0);
 		//------------------
