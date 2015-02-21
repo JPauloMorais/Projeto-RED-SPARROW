@@ -28,7 +28,7 @@ public final class R {
         public static final int explosion_test=0x7f020003;
         public static final int eyes_test=0x7f020004;
         public static final int ic_launcher=0x7f020005;
-        public static final int ic_launcher3=0x7f020006;
+        public static final int ic_launcher2=0x7f020006;
         public static final int ic_launcher4=0x7f020007;
         public static final int life_gauge_test=0x7f020008;
         public static final int nave_f=0x7f020009;
