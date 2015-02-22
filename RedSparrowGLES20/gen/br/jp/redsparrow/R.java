@@ -63,7 +63,6 @@ public final class R {
         public static final int texture_fragment=0x7f030008;
         public static final int texture_vertex=0x7f030009;
         public static final int tilemap_test=0x7f03000a;
-        public static final int tilemap_test_1=0x7f03000b;
     }
     public static final class string {
         public static final int action_settings=0x7f050001;
