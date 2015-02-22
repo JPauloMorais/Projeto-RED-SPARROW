@@ -12,7 +12,7 @@ public class ReSpCamera extends Camera {
 	private float distInterpor = 0;
 	
 	public ReSpCamera(Game game) {
-		super(game, game.getWorld().getPlayer().getX(), game.getWorld().getPlayer().getY(), 45);
+		super(game, game.getWorld().getPlayer().getX(), game.getWorld().getPlayer().getY(), 50);
 		
 //		GLES20.glClearColor(0.0f, 0.749f, 1.0f, 0.0f);
 		GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -32,7 +32,7 @@ public class ReSpCamera extends Camera {
 	@Override
 	public void loop(Game game, float[] projectionMatrix) {
 		
-		distInterpor += 0.00f;
+//		distInterpor += 0.00f;
 		
 		mFollowX = game.getWorld().getPlayer().getX();
 		mFollowY  = game.getWorld().getPlayer().getY();

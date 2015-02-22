@@ -18,9 +18,9 @@ public class EnemyProjectilePhysicsComponent extends ProjectilePhysicsComponent 
 			
 			mParent.die();
 			
-			if(other.getType().getSuperType().getName().equals("Player")){
-				game.getWorld().addObject(game.getObjFactory().create("BasicEnemy1", mParent.getX(), mParent.getY()));
-			}
+//			if(other.getType().getSuperType().getName().equals("Player")){
+//				game.getWorld().addObject(game.getObjFactory().create("BasicEnemy1", mParent.getX(), mParent.getY()));
+//			}
 			
 		}
 	}

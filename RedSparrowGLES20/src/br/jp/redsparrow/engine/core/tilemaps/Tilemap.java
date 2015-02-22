@@ -1,10 +1,17 @@
 package br.jp.redsparrow.engine.core.tilemaps;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.graphics.RectF;
+import android.opengl.Matrix;
 import android.util.Log;
+import br.jp.redsparrow.R;
 import br.jp.redsparrow.engine.core.game.Game;
 import br.jp.redsparrow.engine.core.game.GameSystem;
 import br.jp.redsparrow.engine.core.physics.Bounds;
+import br.jp.redsparrow.engine.core.util.TextFileReader;
 
 public class Tilemap extends GameSystem{
 
@@ -13,28 +20,62 @@ public class Tilemap extends GameSystem{
 	 * ()
 	 */
 	private static final String TAG = "Tilemap";
+
+	private JSONObject mSource;
+	private JSONArray tileArray;
+
+
 	//TODO: distancias baseadas no tamanho do player e tamanho dos tiles
 	public static final int DISTANCE_NEAR = 3;
 	public static final int DISTANCE_MID = 5;
 	public static final int DISTANCE_FAR = 7;
 
-	@SuppressWarnings("unused")
-	private TilemapLoader mTilemapLoader;
 	private int mDistance;
 	private float mTileSize;
 	private int mTilesInX;
 	private int mTilesInY;
-	private Tile[][] mTiles;
-	private Tile[][] mCurrentTiles;
 	private RectF mBounds;
+	
+	private volatile Tile[][] mCurrentTiles;
 
 	private int[] mCurCenterTile;
 	private int[] mCenterTile;
 	private int mCurQuadrant;
 	private int mQuadrant;
-
-	public Tilemap(Game game, int tilesInX, int tilesInY, float tileSize) {
+	
+	private final int[] mTileTextures;
+	
+	public Tilemap( int fileResID, Game game, int ... tileTextures) {
 		super(game);
+		
+		mTileTextures = tileTextures;
+		
+		try {
+
+			mSource = new JSONObject(TextFileReader.readTextFromFile(game.getContext(), fileResID));
+			tileArray = mSource.getJSONArray("textures");
+
+			create(mSource.getInt("tilesInX"), mSource.getInt("tilesInY"), mSource.getInt("tileSize"));
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+			create(2, 2, 200);
+		}
+
+	}
+
+	public Tilemap(Game game, 
+			int tilesInX, int tilesInY, float tileSize,
+			int ... tileTextures) {
+		super(game);
+		
+		mTileTextures = tileTextures;
+		create(tilesInX, tilesInY, tileSize);
+
+	}
+
+	private void create(int tilesInX, int tilesInY, float tileSize) {
 
 		mDistance = DISTANCE_NEAR;
 		mTilesInX = tilesInX;
@@ -42,80 +83,115 @@ public class Tilemap extends GameSystem{
 		mTileSize = tileSize;
 
 		mCurrentTiles = new Tile[mDistance][mDistance];
-		mTiles = new Tile[tilesInX][tilesInY];
 
 		mBounds = new RectF(((tilesInX*tileSize)/2)*-1, ((tilesInY*tileSize)/2), (tilesInX*tileSize)/2, (tilesInY*tileSize)/2 * -1);
 
-		float firstX = mBounds.left + (tileSize/2);
-		float firstY = mBounds.top - (tileSize/2);
-		
-		for (int i = 0; i < tilesInX; i++) {
-			for (int j = 0; j < tilesInY; j++) {
-				mTiles[i][j] = 
-						new Tile( firstX + (i*tileSize), firstY - (j*tileSize), 'a');
-			}
-		}
-
-		//		mTilemapLoader = new TilemapLoader(this);
-		mCurCenterTile = new int[] {0,0};
-		mCenterTile = getTileIndexes(game.getWorld().getPlayer().getBounds());
+		mCurCenterTile = new int[2];
+		mCenterTile = new int[]{mCurCenterTile[0], mCurCenterTile[1]};
 		mCurQuadrant = getQuadrant(game.getWorld().getPlayer().getBounds());
 		mQuadrant = mCurQuadrant;
+		
+		setCurrentTiles(mCurCenterTile[0], mCurCenterTile[1]);
 
 	}
-	
+
 	@Override
 	public void loop(Game game, float[] projectionMatrix) {
-		mCurCenterTile = getTileIndexes(getGame().getWorld().getPlayer().getBounds());
+		
+		setCurrentCenterTile(getGame().getWorld().getPlayer().getBounds());
 
-		if(mCurCenterTile[0] != mCenterTile [0] || mCurCenterTile[1] != mCenterTile [1]) {
-			mCenterTile = mCurCenterTile;
-			setCurrentTiles(mCenterTile[0], mCenterTile[1]);
+		if(mCurCenterTile[0] != mCenterTile [0] || 
+				mCurCenterTile[1] != mCenterTile [1]) {
+			
+			mCenterTile = new int[]{mCurCenterTile[0], mCurCenterTile[1]};
+			setCurrentTiles(mCurCenterTile[0], mCurCenterTile[1]);
+			
 		}
+
+		Matrix.translateM(projectionMatrix, 0, 0, 0, -5);
+		for (int i = 0; i < mDistance; i++) {
+			for (int j = 0; j < mDistance; j++) {
+					mCurrentTiles[i][j].render(game, projectionMatrix);
+			}
+		}
+		Matrix.translateM(projectionMatrix, 0, 0, 0, 5);
 	}
 
 	public Tile[][] getCurrentTiles() {
 		return mCurrentTiles;
 	}
 
-	public void setCurrentTiles(int tileX, int tileY) {
+	int left;
+	int right;
+	int top;
+	int bottom;
+	int lx;
+	int ly;
+	int tileFileLoc;
+	
+	public synchronized void setCurrentTiles(int tileX, int tileY) {
 
-		int left = tileX - mDistance/2;
-		if(left<0) left = tileX;
-		int right = tileX + mDistance/2;
-		if(right>mTilesInX) right = tileX;
+		left = tileX - mDistance/2;
+//		if(left<0) left = tileX;
+		right = tileX + mDistance/2;
+//		if(right>mTilesInX) right = tileX;
 
-		int top = tileY - mDistance/2;
-		if(top<0) top = tileY;
-		int bottom = tileY + mDistance/2;
-		if(bottom>mTilesInY) bottom = tileY;
+		top = tileY - mDistance/2;
+//		if(top<0) top = tileY;
+		bottom = tileY + mDistance/2;
+//		if(bottom>mTilesInY) bottom = tileY;
 
-		int k = 0;
-		int l = 0;
 
-		for ( int i = left; i < right; i++) {
-			for (int j = top; j < bottom ; j++) {
-				mCurrentTiles[k][l] = mTiles[i][j]; //TODO: obter da db
-				l++;
+		ly = 0;
+		lx = 0;
+		//localizacao do index da textura no array de tiles do json
+		tileFileLoc = mTilesInX * (top ) - (mTilesInX - (left ));
+		Log.i(TAG, "left: " + left + 
+				";right: " + right +
+				";top: " + top +
+				";bottom: " + bottom);
+		Log.i("Tilemap", "CHANGE!! - TileFileLoc Top Left: " + tileFileLoc);
+
+
+		try {
+			
+		for (int y = top; y <= bottom ; y++){
+			
+			for ( int x = left; x <= right; x++) {
+				
+				mCurrentTiles[lx][ly] = new Tile( this,
+						(x*mTileSize)+mTileSize/2, (y*mTileSize)+mTileSize/2,
+						(tileArray.getInt(tileFileLoc) <= mTileTextures.length ? mTileTextures[tileArray.getInt(tileFileLoc)] : R.drawable.stars_test1));
+
+				lx++;
+				tileFileLoc++;
 			}
-			k++;
-			l=0;
+			ly++;
+			lx=0;
 		}
 
-//		Log.i(TAG, mCurrentTiles[0][0].getT()+mCurrentTiles[0][1].getT()+mCurrentTiles[0][2].getT()+"/n"+
-//				mCurrentTiles[1][0].getT()+mCurrentTiles[1][1].getT()+mCurrentTiles[1][2].getT()+"/n"+
-//				mCurrentTiles[2][0].getT()+mCurrentTiles[2][1].getT()+mCurrentTiles[2][2].getT());
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		//		Log.i(TAG, mCurrentTiles[0][0].getT()+mCurrentTiles[0][1].getT()+mCurrentTiles[0][2].getT()+"/n"+
+		//				mCurrentTiles[1][0].getT()+mCurrentTiles[1][1].getT()+mCurrentTiles[1][2].getT()+"/n"+
+		//				mCurrentTiles[2][0].getT()+mCurrentTiles[2][1].getT()+mCurrentTiles[2][2].getT());
 	}
 
+	float middleX;
+	float middleY;
+	boolean upprQ;
+	boolean lwrQ;
+	
 	public int getQuadrant(Bounds bounds){
 
 		mCurQuadrant = -1;
-		float middleX = mBounds.left + (mBounds.width()/2);
-		float middleY = mBounds.top + (mBounds.height()/2);
+		middleX = mBounds.left + (mBounds.width()/2);
+		middleY = mBounds.top + (mBounds.height()/2);
 
-		boolean upprQ =  (bounds.getCenter().getY()+(bounds.getHeight()/2) > middleY && 
+		upprQ =  (bounds.getCenter().getY()+(bounds.getHeight()/2) > middleY && 
 				bounds.getCenter().getY()-(bounds.getHeight()/2) > middleY); 
-		boolean lwrQ = (bounds.getCenter().getY()-(bounds.getHeight()/2) < middleY && 
+		lwrQ = (bounds.getCenter().getY()-(bounds.getHeight()/2) < middleY && 
 				bounds.getCenter().getY()+(bounds.getHeight()/2) < middleY);
 
 		if( bounds.getCenter().getX()+(bounds.getWidth()/2) < middleX ){
@@ -126,45 +202,43 @@ public class Tilemap extends GameSystem{
 			if(upprQ) mCurQuadrant = 0;
 			else if(lwrQ) mCurQuadrant = 3;
 		}
-		
+
 		if(mCurQuadrant==-1) mCurQuadrant = mQuadrant;
 		else mQuadrant = mCurQuadrant;
 
 		return mCurQuadrant;
 	}
 
-	//Obtem o index do tile com base nos bounds fornecidos
-	public int[] getTileIndexes(Bounds bounds) {
-
-		int[] tilesIndxs = mCurCenterTile;
+	//Atribui valores aos index do tile central atual
+	public void setCurrentCenterTile(Bounds bounds) {
 
 		switch (getQuadrant(bounds)) {
 		case 0:
 
-			tilesIndxs[0] = (int) ( bounds.getCenter().getX() / mTileSize) + (mTilesInX/2);                        //right
-			tilesIndxs[1] = ( (mTilesInY/2)-1) - (int) ( bounds.getCenter().getY() / mTileSize);                //top
-			Log.i( TAG,"QD: "+0+", ("+tilesIndxs[0]+","+tilesIndxs[1]+")" );
+			mCurCenterTile[0] = (int) ( bounds.getCenter().getX() / mTileSize) + (mTilesInX/2);                        //right
+			mCurCenterTile[1] = ( (mTilesInY/2)-1) - (int) ( bounds.getCenter().getY() / mTileSize);                //top
+			Log.i( TAG,"QD: "+0+", ("+mCurCenterTile[0]+","+mCurCenterTile[1]+")" );
 
 			break;
 		case 1:
 
-			tilesIndxs[0] = ( (mTilesInX/2)-1) - (int) Math.abs(( bounds.getCenter().getX() / mTileSize)); //left
-			tilesIndxs[1] = ( ( (mTilesInY/2)-1) - (int) ( bounds.getCenter().getY() / mTileSize));                //top
-			Log.i( TAG,"QD: "+1+", ("+tilesIndxs[0]+","+tilesIndxs[1]+")");
+			mCurCenterTile[0] = ( (mTilesInX/2)-1) - (int) Math.abs(( bounds.getCenter().getX() / mTileSize)); //left
+			mCurCenterTile[1] = ( ( (mTilesInY/2)-1) - (int) ( bounds.getCenter().getY() / mTileSize));                //top
+			Log.i( TAG,"QD: "+1+", ("+mCurCenterTile[0]+","+mCurCenterTile[1]+")");
 
 			break;
 		case 2:
 
-			tilesIndxs[0] = ( ( (mTilesInX/2)-1) - (int) Math.abs(( bounds.getCenter().getX() / mTileSize))); //left
-			tilesIndxs[1] = (int) (Math.abs( bounds.getCenter().getY() / mTileSize) + (mTilesInY/2));          //bottom
-			Log.i( TAG,"QD: "+2+", ("+tilesIndxs[0]+","+tilesIndxs[1]+")");
-			
+			mCurCenterTile[0] = ( ( (mTilesInX/2)-1) - (int) Math.abs(( bounds.getCenter().getX() / mTileSize))); //left
+			mCurCenterTile[1] = (int) (Math.abs( bounds.getCenter().getY() / mTileSize) + (mTilesInY/2));          //bottom
+			Log.i( TAG,"QD: "+2+", ("+mCurCenterTile[0]+","+mCurCenterTile[1]+")");
+
 			break;
 		case 3:
 
-			tilesIndxs[0] = (int) ( bounds.getCenter().getX() / mTileSize) + (mTilesInX/2);                       //right
-			tilesIndxs[1] = (int) (Math.abs( bounds.getCenter().getY() / mTileSize) + (mTilesInY/2));        //bottom
-			Log.i( TAG,"QD: "+3+", ("+tilesIndxs[0]+","+tilesIndxs[1]+")");
+			mCurCenterTile[0] = (int) ( bounds.getCenter().getX() / mTileSize) + (mTilesInX/2);                       //right
+			mCurCenterTile[1] = (int) (Math.abs( bounds.getCenter().getY() / mTileSize) + (mTilesInY/2));        //bottom
+			Log.i( TAG,"QD: "+3+", ("+mCurCenterTile[0]+","+mCurCenterTile[1]+")");
 
 			break;
 
@@ -172,16 +246,10 @@ public class Tilemap extends GameSystem{
 			break;
 		}
 
-
-		return tilesIndxs;
 	}
 
-	public Tile[][] getTiles() {
-		return mTiles;
-	}
-
-	public void setTiles(Tile[][] mTiles) {
-		this.mTiles = mTiles;
+	public float getTileSize() {
+		return mTileSize;
 	}
 
 }

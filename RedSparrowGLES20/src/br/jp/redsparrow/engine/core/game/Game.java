@@ -1,5 +1,6 @@
 package br.jp.redsparrow.engine.core.game;
 
+import android.app.Activity;
 import android.content.Context;
 import br.jp.redsparrow.engine.core.HUD;
 import br.jp.redsparrow.engine.core.missions.MissionSystem;
@@ -8,6 +9,7 @@ import br.jp.redsparrow.engine.core.tilemaps.Tilemap;
 public abstract class Game {
 	
 	protected Context mContext;
+	protected Activity mActivity;
 	protected World mWorld;
 	protected Tilemap mTilemap;
 	protected ObjectFactory mObjFactory;
@@ -17,8 +19,9 @@ public abstract class Game {
 	protected MissionSystem mMissionSystem;
 	protected Camera mCamera;
 	
-	public Game(Context context) {
-		mContext = context;
+	public Game(Activity activity) {
+		mContext = activity;
+		mActivity = activity;
 	}
 	
 	public abstract void create();
@@ -75,5 +78,14 @@ public abstract class Game {
 	public void setContext(Context context) {
 		this.mContext = context;
 	}
+
+	public Activity getActivity() {
+		return mActivity;
+	}
+
+	public void setActivity(Activity activity) {
+		this.mActivity = activity;
+	}
+
 
 }

@@ -2,14 +2,13 @@ package br.jp.redsparrow.game;
 
 import java.util.Random;
 
-import android.content.Context;
+import android.app.Activity;
 import android.opengl.Matrix;
 import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.game.Game;
 import br.jp.redsparrow.engine.core.game.World;
 import br.jp.redsparrow.engine.core.missions.MissionSequence;
 import br.jp.redsparrow.engine.core.missions.MissionSystem;
-import br.jp.redsparrow.engine.core.tilemaps.Tilemap;
 import br.jp.redsparrow.game.missions.TestMission;
 import br.jp.redsparrow.game.objecttypes.basicplayer.PlayerPhysicsComponent;
 
@@ -19,8 +18,8 @@ public class ReSpGame extends Game {
 	private GameObject mDbgBackground;
 	private GameObject mDbgBackground1;
 
-	public ReSpGame(Context context) {
-		super(context);
+	public ReSpGame(Activity activity) {
+		super(activity);
 
 		random = new Random();
 		mRenderer = new ReSpGameRenderer(mContext, this);
@@ -34,34 +33,33 @@ public class ReSpGame extends Game {
 	public void create() {
 
 		mWorld = new World(mContext, this);
-		mWorld.setPlayer(mObjFactory.create("BasicPlayer", 0f, 0f));
+		mWorld.setPlayer(mObjFactory.create("BasicPlayer", 1f, -1f));
 
-		mTilemap = new Tilemap(this, 10, 10, 200);
-		mTilemap.getTiles()[4][4].setT('c');
-		mTilemap.getTiles()[5][4].setT('c');
-		mTilemap.getTiles()[4][5].setT('c');
-		mTilemap.getTiles()[5][5].setT('c');
+		//		mTilemap = new Tilemap(R.raw.tilemap_test, this ,
+		//				R.drawable.tile_blue, R.drawable.tile_green, R.drawable.tile_red, R.drawable.tile_white);
 
-		mDbgBackground = mObjFactory.create("BG1", mTilemap.getTiles()[1][2].getX(), mTilemap.getTiles()[1][4].getY());
-		mDbgBackground1 =mObjFactory.create("BG2", mTilemap.getTiles()[1][2].getX(), mTilemap.getTiles()[1][4].getY());
+		mDbgBackground = mObjFactory.create("BG1", 0, 0);
+		mDbgBackground1 =mObjFactory.create("BG2", 0, 0);
 
 		mCamera = new ReSpCamera(this);
-		
+
 		int qd = 1; int qd2 = 1;
-		for (int i = 0; i < 30; i++) {
+		for (int i = 0; i < 10; i++) {
 			mWorld.addObject(mObjFactory
-					.create("BasicEnemy1", (qd * random.nextFloat() * random.nextInt(10)) + 5*qd, 
-							(qd2 * random.nextFloat() * random.nextInt(10)) + 5*qd2));
+					.create("BasicEnemy1", (qd * random.nextFloat() * random.nextInt(10)) + 10*qd, 
+							(qd2 * random.nextFloat() * random.nextInt(10)) + 10*qd2));
 			if(i%2==0) qd *= -1;
 			else qd2 *= -1;
-		}		
+		}	
 
-		//		qd = 1; qd2 = 1;
-		//		for (int i = 0; i < 35; i++) {
-		//			mWorld.addObject(mObjFactory.create("BasicEnemy2", (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2));
-		//			if(i%2==0) qd *= -1;
-		//			else qd2 *= -1;
-		//		}
+		mWorld.addObject(mObjFactory.create("Spawnpoint", 10, 10));
+
+		//				qd = 1; qd2 = 1;
+		//				for (int i = 0; i < 35; i++) {
+		//					mWorld.addObject(mObjFactory.create("BasicEnemy2", (qd * random.nextFloat() * random.nextInt(10)) + 2*qd, (qd2 * random.nextFloat() * random.nextInt(10)) + 2*qd2));
+		//					if(i%2==0) qd *= -1;
+		//					else qd2 *= -1;
+		//				}
 		//
 		//		qd = 1; qd2 = 2;
 		//		for (int i = 0; i < 15; i++) {
@@ -91,10 +89,10 @@ public class ReSpGame extends Game {
 		mDbgBackground1.render(viewProjMatrix);
 		Matrix.translateM(viewProjMatrix, 0, 0, 0, 10);
 
+		//		mTilemap.loop(this, viewProjMatrix);
+
 		mWorld.loop(this, viewProjMatrix);
 
-		mTilemap.loop(this, viewProjMatrix);
-		
 		mCamera.loop(this, viewProjMatrix);
 
 		//		mHUD.loop(this, viewProjMatrix);
@@ -140,18 +138,18 @@ public class ReSpGame extends Game {
 
 		//-------------------------------
 
-//		if (((ReSpInputHandler)mInputHandler).move) {
-			try {
-				((PlayerPhysicsComponent) mWorld.getPlayer()
-						.getUpdatableComponent("Physics")).move(((ReSpInputHandler)mInputHandler).playerMoveVel);
+		//		if (((ReSpInputHandler)mInputHandler).move) {
+		try {
+			((PlayerPhysicsComponent) mWorld.getPlayer()
+					.getUpdatableComponent("Physics")).move(((ReSpInputHandler)mInputHandler).playerMoveVel);
 
-				((ReSpInputHandler) mInputHandler).playerMoveVel.setX(0);
-				((ReSpInputHandler)mInputHandler).playerMoveVel.setY(0);
-				((ReSpInputHandler)mInputHandler).move = false;
-			} catch (Exception e) {
-				//				e.printStackTrace();
-			}
-//		}
+			((ReSpInputHandler) mInputHandler).playerMoveVel.setX(0);
+			((ReSpInputHandler)mInputHandler).playerMoveVel.setY(0);
+			((ReSpInputHandler)mInputHandler).move = false;
+		} catch (Exception e) {
+			//				e.printStackTrace();
+		}
+		//		}
 
 	}
 

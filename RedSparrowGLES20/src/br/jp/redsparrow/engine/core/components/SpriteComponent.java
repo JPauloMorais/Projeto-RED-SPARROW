@@ -139,8 +139,8 @@ public class SpriteComponent extends Component implements Renderable {
 		mVertsData[18] = 0;//right
 		mVertsData[19] = 1;//bottom
 		//U V
-		mVertsData[23] = mVertsData[3];//right
-		mVertsData[24] = mVertsData[4];//top
+		mVertsData[23] = 0;//right
+		mVertsData[24] = 0;//top
 		//U V
 		mVertsData[28] = 1;//left
 		mVertsData[29] = 1;//bottom

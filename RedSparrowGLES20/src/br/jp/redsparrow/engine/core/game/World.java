@@ -46,6 +46,50 @@ public class World extends GameSystem{
 
 		isRunning = false;
 
+		//		try {
+		//			
+		//			String dirName = "RedSparrow";
+		//			String dir = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator;
+		//
+		//			File dirFile = new File(dir, dirName);
+		//			dirFile.mkdirs();
+		//			
+		//			String fileName = "saves.json";
+		//			File file = new File(dirFile, fileName);
+		//			if(file.createNewFile()) {				
+		//				FileWriter writer = new FileWriter(file);
+		//				JsonWriter jw = new JsonWriter(writer);
+		//				jw.beginObject().name("Teste").value(true).endObject();
+		//				jw.close();
+		//			}else {
+		//				
+		//				FileInputStream fInStream = new FileInputStream(file);
+		//				String json = null;
+		//				
+		//				FileChannel fChannel = fInStream.getChannel();
+		//				MappedByteBuffer mbBuffer = fChannel.map(FileChannel.MapMode.READ_ONLY, 0, fChannel.size());
+		//				
+		//				json = Charset.defaultCharset().decode(mbBuffer).toString();
+		//				
+		//				fInStream.close();
+		//				
+		//				JSONObject jObj = new JSONObject(json);
+		//				
+		//				JsonWriter jw = new JsonWriter(new FileWriter(file));
+		//				
+		//				
+		//				
+		//				
+		//			}
+		//			
+		//		} catch (IOException e) {
+		//			// TODO Auto-generated catch block
+		//			e.printStackTrace();
+		//		} catch (JSONException e) {
+		//			// TODO Auto-generated catch block
+		//			e.printStackTrace();
+		//		}
+
 		//Objetos
 		mPlayer = new GameObject();
 		mGameObjects = new ArrayList<GameObject>();
@@ -159,9 +203,12 @@ public class World extends GameSystem{
 
 
 			}
-			
-			mPlayer.update(game);
-			mPlayer.render(projectionMatrix);
+
+			if(!mPlayer.isDead()) {
+				mPlayer.update(game);
+				mPlayer.render(projectionMatrix);
+			}
+			//			Log.i("PlayerGame", "("+mPlayer.getX()+", "+mPlayer.getY()+")");
 
 			//------PARTICULAS TOP-----------
 
@@ -288,16 +335,14 @@ public class World extends GameSystem{
 
 	private void onPlayerDeath(Game game) {
 		//-----Teste------
-		//Isso e inevitavel Mr. Anderson.
 		//		mGameObjects.set(0, game.getObjFactory().createObject(game.getContext(), OBJECT_TYPE.PLAYER, mGameObjects.get(0).getX(), mGameObjects.get(0).getY()));
 
-//		mGameObjects.get(0).setUpdatableComponent("Physics", new PlayerPhysicsComponent(mGameObjects.get(0)));
-		mGameObjects.get(0).removeUpdatableComponent("Physics");
-		mGameObjects.get(0).addComponent("Physics", new PlayerPhysicsComponent(mGameObjects.get(0)));
-		
-		setPlayer(mGameObjects.get(0));
-		mGameObjects.remove(0);
-		//------------------
+		//		mGameObjects.get(0).setUpdatableComponent("Physics", new PlayerPhysicsComponent(mGameObjects.get(0)));
+
+			//		mPlayer = null;
+			setPlayer(game.getObjFactory().create("BasicPlayer", 0, 0));
+			//		
+			//------------------
 	}
 
 	public void removeObject(int index){

@@ -11,6 +11,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -20,6 +21,7 @@ import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Toast;
 import br.jp.redsparrow.R;
@@ -34,6 +36,8 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 
 	Sensor mSensorAccelerometer;
 	SensorManager mSensorManager;
+	
+	private Button ammoDisplay;
 
 	//	private boolean rendererSet;
 
@@ -71,8 +75,7 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 		
 		mRelLayout.addView(mGameView);
 		
-		Button ammoDisplay = new Button(this);
-//		ImageView ammo = new ImageView(this);
+		ammoDisplay = new Button(this);
 		
 		RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		layoutParams.addRule(RelativeLayout.ALIGN_TOP);
@@ -83,21 +86,17 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 			@Override
 			public void onClick(View v) {
 					Toast.makeText(getApplication(), "Click", Toast.LENGTH_SHORT).show();
+					if(isExStorageWritable()) {
+					}
 			}
 		});
 		mRelLayout.addView(ammoDisplay);
-		
-//		ammo.setBackgroundResource(R.drawable.projectile_1);
-//		ammo.setLayoutParams(layoutParams);
-//		mRelLayout.addView(ammo);
 		
 		setContentView(mRelLayout);
 		
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 	
 	}
-
-
 
 	@Override
 	protected void onResume() {
@@ -194,5 +193,13 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 			}
 			return true;
 		}else return false;
+	}
+	
+	public boolean isExStorageWritable() {
+		String state = Environment.getExternalStorageState();
+		if(Environment.MEDIA_MOUNTED.equals(state)) {
+			return true;
+		}
+		return false;
 	}
 }

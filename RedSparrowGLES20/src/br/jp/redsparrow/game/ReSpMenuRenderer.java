@@ -27,7 +27,7 @@ public class ReSpMenuRenderer implements GLSurfaceView.Renderer {
 	private ParticleSystem mParticleSystem;
 	private ParticleEmitter mEmitterWhite;
 
-	private int times = 0;
+//	private int times = 0;
 
 	public ReSpMenuRenderer(Context context) {
 		mContext = context;
