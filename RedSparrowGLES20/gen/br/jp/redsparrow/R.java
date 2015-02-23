@@ -46,6 +46,11 @@ public final class R {
         public static final int splash_logo_2=0x7f020015;
         public static final int stars_test1=0x7f020016;
         public static final int stars_test2=0x7f020017;
+        public static final int stars_test3=0x7f020018;
+        public static final int stars_test4=0x7f020019;
+        public static final int stars_test5=0x7f02001a;
+        public static final int stars_test6=0x7f02001b;
+        public static final int stars_test7=0x7f02001c;
     }
     public static final class id {
         public static final int action_settings=0x7f080000;
