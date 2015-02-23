@@ -31,6 +31,9 @@ public class SpawnPointComponent extends Component implements Updatable {
 		
 		if(counter == mSpawnInterval) {
 			
+			mSpawnAmmount+=counter2/2;
+			if(mSpawnAmmount >= 10) mSpawnAmmount=2;
+			
 			for (int i = 0; i < mSpawnAmmount; i++) {
 				GameObject go = game.getObjFactory().create(mSpawnTypeNames[0], parent.getX(), parent.getY());
 				((EnemyStatsComponent)go.getUpdatableComponent("Stats")).setHealth(5+counter2);
