@@ -16,12 +16,12 @@ import br.jp.redsparrow.engine.core.particles.ParticleSystem;
 import br.jp.redsparrow.engine.core.physics.AABB;
 import br.jp.redsparrow.engine.core.physics.Collision;
 import br.jp.redsparrow.engine.core.util.LogConfig;
-import br.jp.redsparrow.game.objecttypes.basicplayer.PlayerPhysicsComponent;
 
 public class World extends GameSystem{
 
 	private final String TAG = "World";
 	private boolean isRunning;
+	private boolean isPaused;
 
 	private GameObject mPlayer;
 	private ArrayList<GameObject> mGameObjects;
@@ -45,6 +45,7 @@ public class World extends GameSystem{
 		super(game);
 
 		isRunning = false;
+		isPaused = false;
 
 		//		try {
 		//			
@@ -215,13 +216,14 @@ public class World extends GameSystem{
 			mTopParticleSystem.render(game.getRenderer().particleProgram, projectionMatrix);
 
 
-		}else {
+		}else if(!isPaused) {
 			onStart();
 		}
 	}
 
-	public void pause(){
+	public synchronized void pause(){
 		isRunning = false;
+		isPaused = true;
 		try {
 			bgmSoundComponent.pauseSound(0);
 		} catch (Exception e) {
@@ -230,6 +232,7 @@ public class World extends GameSystem{
 	}
 
 	public void resume(){
+		isPaused = false;
 		//		bgMusic.start();
 	}
 
@@ -382,6 +385,14 @@ public class World extends GameSystem{
 		try {
 			this.getObject(objectId).recieveMessages(curMessages);
 		} catch (Exception e) {	}
+	}
+
+	public boolean isPaused() {
+		return isPaused;
+	}
+
+	public void setPaused(boolean isPaused) {
+		this.isPaused = isPaused;
 	}
 
 }

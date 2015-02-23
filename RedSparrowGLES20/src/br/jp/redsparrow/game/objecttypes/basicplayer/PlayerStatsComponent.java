@@ -5,6 +5,7 @@ import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.components.AnimatedSpriteComponent;
 import br.jp.redsparrow.engine.core.components.StatsComponent;
 import br.jp.redsparrow.engine.core.game.Game;
+import br.jp.redsparrow.game.activities.PlayActivity;
 
 public class PlayerStatsComponent extends StatsComponent {
 
@@ -26,6 +27,7 @@ public class PlayerStatsComponent extends StatsComponent {
 //			mParent.removeUpdatableComponent("Physics");
 			((AnimatedSpriteComponent) mParent.getRenderableComponent("AnimatedSprite")).setCurAnim(1);
 			isDying = true;
+			((PlayActivity) game.getActivity()).setPoints(0);
 		}
 		else if(((AnimatedSpriteComponent) mParent.getRenderableComponent("AnimatedSprite")).getAnimation(1).hasLoopedOnce()) 
 			mParent.die();
@@ -46,7 +48,7 @@ public class PlayerStatsComponent extends StatsComponent {
 	public void setKillPoints(Game game, int killPoints) {
 		this.killPoints = killPoints;
 		Log.i("PlayerGame", "Kill Points: " + killPoints);
-//		((PlayActivity) game.getActivity()).setPoints(this.killPoints);
+		((PlayActivity) game.getActivity()).setPoints(this.killPoints);
 	}
 
 }

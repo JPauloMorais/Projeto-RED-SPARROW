@@ -84,6 +84,8 @@ public class ReSpGame extends Game {
 	@Override
 	public void loop(float[] viewMatrix, float[] projMatrix, float[] viewProjMatrix) {
 
+		
+		
 		mDbgBackground.render(viewProjMatrix);
 		Matrix.translateM(viewProjMatrix, 0, 0, 0, 25);
 		mDbgBackground1.render(viewProjMatrix);
