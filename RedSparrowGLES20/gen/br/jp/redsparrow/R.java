@@ -42,8 +42,10 @@ public final class R {
         public static final int player_projectile_2=0x7f020011;
         public static final int player_ship=0x7f020012;
         public static final int red_sparrow_test_2=0x7f020013;
-        public static final int stars_test1=0x7f020014;
-        public static final int stars_test2=0x7f020015;
+        public static final int splash_logo_1=0x7f020014;
+        public static final int splash_logo_2=0x7f020015;
+        public static final int stars_test1=0x7f020016;
+        public static final int stars_test2=0x7f020017;
     }
     public static final class id {
         public static final int action_settings=0x7f080000;
