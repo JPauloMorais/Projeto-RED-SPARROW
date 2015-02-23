@@ -274,7 +274,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 
 				obj.addComponent("Physics", new EnemyProjectilePhysicsComponent(obj, 3));
 
-				obj.addComponent("Sprite", new SpriteComponent(game.getContext(), R.drawable.player_projectile_2, obj, 0.12f,0.12f));
+				obj.addComponent("Sprite", new SpriteComponent(game.getContext(), R.drawable.player_projectile_3, obj, 0.12f,0.12f));
 
 				typeCounts.set(5, typeCounts.get(5) +1);
 
@@ -294,7 +294,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 
 				obj.addComponent("Physics", new EnemyProjectilePhysicsComponent(obj, 4));
 
-				obj.addComponent("Sprite", new SpriteComponent(game.getContext(), R.drawable.player_projectile_2, obj, 0.12f,0.12f));
+				obj.addComponent("Sprite", new SpriteComponent(game.getContext(), R.drawable.player_projectile_4, obj, 0.12f,0.12f));
 
 				typeCounts.set(5, typeCounts.get(5) +1);
 
@@ -314,7 +314,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 
 				obj.addComponent("Physics", new EnemyProjectilePhysicsComponent(obj, 5));
 
-				obj.addComponent("Sprite", new SpriteComponent(game.getContext(), R.drawable.player_projectile_2, obj, 0.12f,0.12f));
+				obj.addComponent("Sprite", new SpriteComponent(game.getContext(), R.drawable.player_projectile_5, obj, 0.12f,0.12f));
 
 				typeCounts.set(5, typeCounts.get(5) +1);
 
