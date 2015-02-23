@@ -15,6 +15,7 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -182,6 +183,7 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 		layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
 		gameOver.setLayoutParams(layoutParams);
 		gameOver.setTextColor(Color.RED);
+		gameOver.setGravity(Gravity.CENTER);
 		gameOver.setTypeface(type);
 		gameOver.setTextSize(50);
 //		final Intent i = new Intent(this, MenuActivity.class);
@@ -249,8 +251,8 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 			@Override
 			public void run() {
 				game.getWorld().stop();
-				gameOver.setText("SIM, ACABOU\n" +
-						"A terra esta perdida\n" +
+				gameOver.setText("SIM, ACABOU\n - \n" +
+						"A terra esta perdida\n - \n" +
 						"Voce destruiu " + points/10 + " Zamooni scout(s)");
 
 				gameOver.setVisibility(View.VISIBLE);
