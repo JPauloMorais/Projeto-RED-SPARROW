@@ -68,8 +68,9 @@ public class MenuActivity extends Activity implements OnTouchListener {
 		TextView tv = new TextView(this);
 		Typeface font = Typeface.createFromAsset(getAssets(), "fonts/Sertig.otf");
 		tv.setTypeface(font);
-		tv.setText(R.string.app_name);
-		tv.setTextSize(50);
+		tv.setText("RED SPARROW");
+		tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+		tv.setTextSize(30);
 		
 		tv.setTextColor(Color.RED);
 		tv.setLayoutParams(layoutParams);		

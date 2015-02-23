@@ -80,37 +80,37 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 
 		mRelLayout.addView(mGameView);
 
-		ammoDisplay = new ImageView(this);
-
+//		ammoDisplay = new ImageView(this);
+//
 		RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		layoutParams.addRule(RelativeLayout.ALIGN_TOP);
-		ammoDisplay.setLayoutParams(layoutParams);
-		ammoDisplay.setBackgroundResource(R.drawable.ammo_display_test);
-		ammoDisplay.setAlpha(0.5f);
-		mRelLayout.addView(ammoDisplay);
-
-		ammo = new ImageView(this);
-
-		layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-//		layoutParams.addRule(RelativeLayout.tra);
-//		ammo.setLayoutParams(layoutParams);
-		ammo.setScaleX(10);
-		ammo.setScaleY(10);
-		ammo.setFadingEdgeLength(1);
-		ammo.setX(ammoDisplay.getWidth()/2);
-		ammo.setBackgroundResource(R.drawable.player_projectile_1);
-		ammo.setAlpha(0.5f);
-		ammo.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if(((PlayerGunComponent)game.getWorld().getPlayer().getUpdatableComponent("Gun")).getBulletTypeCount()>1)
-				{
-					((PlayerGunComponent)game.getWorld().getPlayer().getUpdatableComponent("Gun")).switchNextBulletType();
-					ammo.setBackgroundResource(R.drawable.player_projectile_2);
-				}
-			}
-		});
-		mRelLayout.addView(ammo);
+//		layoutParams.addRule(RelativeLayout.ALIGN_TOP);
+//		ammoDisplay.setLayoutParams(layoutParams);
+//		ammoDisplay.setBackgroundResource(R.drawable.ammo_display_test);
+//		ammoDisplay.setAlpha(0.5f);
+//		mRelLayout.addView(ammoDisplay);
+//
+//		ammo = new ImageView(this);
+//
+//		layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+////		layoutParams.addRule(RelativeLayout.tra);
+////		ammo.setLayoutParams(layoutParams);
+//		ammo.setScaleX(10);
+//		ammo.setScaleY(10);
+//		ammo.setFadingEdgeLength(1);
+//		ammo.setX(ammoDisplay.getWidth()/2);
+//		ammo.setBackgroundResource(R.drawable.player_projectile_1);
+//		ammo.setAlpha(0.5f);
+//		ammo.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				if(((PlayerGunComponent)game.getWorld().getPlayer().getUpdatableComponent("Gun")).getBulletTypeCount()>1)
+//				{
+//					((PlayerGunComponent)game.getWorld().getPlayer().getUpdatableComponent("Gun")).switchNextBulletType();
+//					ammo.setBackgroundResource(R.drawable.player_projectile_2);
+//				}
+//			}
+//		});
+//		mRelLayout.addView(ammo);
 
 
 		pauseButton = new Button(this);
@@ -128,8 +128,8 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 					game.getWorld().pause();
 					pauseButton.setBackgroundResource(R.drawable.play_button_v1);
 					killPoints.setVisibility(View.GONE);
-					ammo.setVisibility(View.GONE);
-					ammoDisplay.setVisibility(View.GONE);
+//					ammo.setVisibility(View.GONE);
+//					ammoDisplay.setVisibility(View.GONE);
 					//					pauseButton.setX();
 
 				}
@@ -138,8 +138,8 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 					pauseButton.setBackgroundResource(R.drawable.pause_buton);
 					pauseButton.setAlpha(0.5f);
 					killPoints.setVisibility(View.VISIBLE);
-					ammo.setVisibility(View.VISIBLE);
-					ammoDisplay.setVisibility(View.VISIBLE);
+//					ammo.setVisibility(View.VISIBLE);
+//					ammoDisplay.setVisibility(View.VISIBLE);
 
 				}
 			}

@@ -91,7 +91,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 						new PlayerGunComponent(obj));
 
 				obj.addComponent("Stats",
-						new PlayerStatsComponent(obj, 5));
+						new PlayerStatsComponent(obj, 10));
 				
 				typeCounts.set(0, typeCounts.get(0) +1);
 				

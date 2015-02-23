@@ -29,24 +29,21 @@ public final class R {
         public static final int eyes_test=0x7f020004;
         public static final int ic_launcher=0x7f020005;
         public static final int ic_launcher4=0x7f020006;
-        public static final int kill_points=0x7f020007;
-        public static final int life_gauge_test=0x7f020008;
-        public static final int nave_f=0x7f020009;
-        public static final int nave_f_a=0x7f02000a;
-        public static final int nave_f_b=0x7f02000b;
-        public static final int nova_nave=0x7f02000c;
-        public static final int pause_buton=0x7f02000d;
-        public static final int play_button_v1=0x7f02000e;
-        public static final int player_projectile_1=0x7f02000f;
-        public static final int player_projectile_2=0x7f020010;
-        public static final int player_ship=0x7f020011;
-        public static final int red_sparrow_test_2=0x7f020012;
-        public static final int stars_test1=0x7f020013;
-        public static final int stars_test2=0x7f020014;
-        public static final int tile_blue=0x7f020015;
-        public static final int tile_green=0x7f020016;
-        public static final int tile_red=0x7f020017;
-        public static final int tile_white=0x7f020018;
+        public static final int intro_splash=0x7f020007;
+        public static final int kill_points=0x7f020008;
+        public static final int life_gauge_test=0x7f020009;
+        public static final int nave_f=0x7f02000a;
+        public static final int nave_f_a=0x7f02000b;
+        public static final int nave_f_b=0x7f02000c;
+        public static final int nova_nave=0x7f02000d;
+        public static final int pause_buton=0x7f02000e;
+        public static final int play_button_v1=0x7f02000f;
+        public static final int player_projectile_1=0x7f020010;
+        public static final int player_projectile_2=0x7f020011;
+        public static final int player_ship=0x7f020012;
+        public static final int red_sparrow_test_2=0x7f020013;
+        public static final int stars_test1=0x7f020014;
+        public static final int stars_test2=0x7f020015;
     }
     public static final class id {
         public static final int action_settings=0x7f080000;
@@ -54,6 +51,7 @@ public final class R {
     public static final class menu {
         public static final int menu=0x7f070000;
         public static final int ogl=0x7f070001;
+        public static final int splash_scree=0x7f070002;
     }
     public static final class raw {
         public static final int at_least_you_tried_greaf=0x7f030000;
@@ -71,8 +69,10 @@ public final class R {
     public static final class string {
         public static final int action_settings=0x7f050001;
         public static final int app_name=0x7f050000;
+        public static final int hello_world=0x7f050005;
         public static final int points_tv=0x7f050003;
         public static final int title_activity_menu=0x7f050002;
+        public static final int title_activity_splash_scree=0x7f050004;
     }
     public static final class style {
         /** 

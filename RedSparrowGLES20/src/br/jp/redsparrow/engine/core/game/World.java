@@ -343,7 +343,7 @@ public class World extends GameSystem{
 		//		mGameObjects.get(0).setUpdatableComponent("Physics", new PlayerPhysicsComponent(mGameObjects.get(0)));
 
 			//		mPlayer = null;
-			setPlayer(game.getObjFactory().create("BasicPlayer", 0, 0));
+//			setPlayer(game.getObjFactory().create("BasicPlayer", 0, 0));
 			//		
 			//------------------
 	}

@@ -9,8 +9,8 @@
         android:targetSdkVersion="21" />
 
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -21,12 +21,18 @@
             android:name=".game.activities.PlayActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
-           
         </activity>
+       
         <activity
-            android:name="br.jp.redsparrow.game.activities.MenuActivity"
+            android:name=".game.activities.MenuActivity"
             android:label="@string/title_activity_menu" >
-             <intent-filter>
+      
+        </activity>
+        
+        <activity
+            android:name="br.jp.redsparrow.game.activities.SplashScreeActivity"
+            android:label="@string/title_activity_splash_scree" >
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />

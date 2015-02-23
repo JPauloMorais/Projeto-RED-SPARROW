@@ -16,7 +16,6 @@ public class ReSpGame extends Game {
 
 	private Random random;
 	private GameObject mDbgBackground;
-	private GameObject mDbgBackground1;
 
 	public ReSpGame(Activity activity) {
 		super(activity);
@@ -39,7 +38,6 @@ public class ReSpGame extends Game {
 		//				R.drawable.tile_blue, R.drawable.tile_green, R.drawable.tile_red, R.drawable.tile_white);
 
 		mDbgBackground = mObjFactory.create("BG1", 0, 0);
-		mDbgBackground1 =mObjFactory.create("BG2", 0, 0);
 
 		mCamera = new ReSpCamera(this);
 
@@ -85,11 +83,80 @@ public class ReSpGame extends Game {
 	public void loop(float[] viewMatrix, float[] projMatrix, float[] viewProjMatrix) {
 
 		
+		mDbgBackground.setX(0);
+		mDbgBackground.setY(0);
+		mDbgBackground.render(viewProjMatrix);
 		
+		mDbgBackground.setX(100);
+		mDbgBackground.setY(0);
+		mDbgBackground.render(viewProjMatrix);
+		
+		mDbgBackground.setX(-100);
+		mDbgBackground.setY(0);
+		mDbgBackground.render(viewProjMatrix);
+		
+		mDbgBackground.setX(0);
+		mDbgBackground.setY(-100);
+		mDbgBackground.render(viewProjMatrix);
+		
+		mDbgBackground.setX(-100);
+		mDbgBackground.setY(-100);
+		mDbgBackground.render(viewProjMatrix);
+		
+		mDbgBackground.setX(100);
+		mDbgBackground.setY(-100);
+		mDbgBackground.render(viewProjMatrix);
+		
+		mDbgBackground.setX(0);
+		mDbgBackground.setY(100);
+		mDbgBackground.render(viewProjMatrix);
+		
+		mDbgBackground.setX(-100);
+		mDbgBackground.setY(100);
+		mDbgBackground.render(viewProjMatrix);
+		
+		mDbgBackground.setX(100);
+		mDbgBackground.setY(100);
 		mDbgBackground.render(viewProjMatrix);
 		Matrix.translateM(viewProjMatrix, 0, 0, 0, 25);
-		mDbgBackground1.render(viewProjMatrix);
-		Matrix.translateM(viewProjMatrix, 0, 0, 0, 10);
+		
+		mDbgBackground.setX(0);
+		mDbgBackground.setY(0);
+		mDbgBackground.render(viewProjMatrix);
+		
+		mDbgBackground.setX(100);
+		mDbgBackground.setY(0);
+		mDbgBackground.render(viewProjMatrix);
+		
+		mDbgBackground.setX(-100);
+		mDbgBackground.setY(0);
+		mDbgBackground.render(viewProjMatrix);
+		
+		mDbgBackground.setX(0);
+		mDbgBackground.setY(-100);
+		mDbgBackground.render(viewProjMatrix);
+		
+		mDbgBackground.setX(-100);
+		mDbgBackground.setY(-100);
+		mDbgBackground.render(viewProjMatrix);
+		
+		mDbgBackground.setX(100);
+		mDbgBackground.setY(-100);
+		mDbgBackground.render(viewProjMatrix);
+		
+		mDbgBackground.setX(0);
+		mDbgBackground.setY(100);
+		mDbgBackground.render(viewProjMatrix);
+		
+		mDbgBackground.setX(-100);
+		mDbgBackground.setY(100);
+		mDbgBackground.render(viewProjMatrix);
+		
+		mDbgBackground.setX(100);
+		mDbgBackground.setY(100);
+		mDbgBackground.render(viewProjMatrix);		
+		
+		Matrix.translateM(viewProjMatrix, 0, 0, 0, 20);
 
 		//		mTilemap.loop(this, viewProjMatrix);
 
