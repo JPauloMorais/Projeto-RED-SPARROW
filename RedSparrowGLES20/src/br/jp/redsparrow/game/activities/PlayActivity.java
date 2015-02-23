@@ -20,6 +20,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ import android.widget.Toast;
 import br.jp.redsparrow.R;
 import br.jp.redsparrow.engine.core.game.GameView;
 import br.jp.redsparrow.game.ReSpGame;
+import br.jp.redsparrow.game.objecttypes.basicplayer.PlayerGunComponent;
 
 public class PlayActivity extends Activity implements OnTouchListener, SensorEventListener {
 
@@ -37,6 +39,8 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 	Sensor mSensorAccelerometer;
 	SensorManager mSensorManager;
 
+	private ImageView ammoDisplay;
+	private ImageView ammo;
 	private Button pauseButton;
 	private TextView killPoints;
 
@@ -76,26 +80,41 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 
 		mRelLayout.addView(mGameView);
 
-//		ammoDisplay = new Button(this);
-//
-//		RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-//		layoutParams.addRule(RelativeLayout.ALIGN_TOP);
-//		ammoDisplay.setLayoutParams(layoutParams);
-//		ammoDisplay.setBackgroundResource(R.drawable.ammo_display_test);
-//		ammoDisplay.setAlpha(0.2f);
-//		ammoDisplay.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				Toast.makeText(getApplication(), "Click", Toast.LENGTH_SHORT).show();
-//				if(isExStorageWritable()) {
-//				}
-//			}
-//		});
-//		mRelLayout.addView(ammoDisplay);
+		ammoDisplay = new ImageView(this);
+
+		RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		layoutParams.addRule(RelativeLayout.ALIGN_TOP);
+		ammoDisplay.setLayoutParams(layoutParams);
+		ammoDisplay.setBackgroundResource(R.drawable.ammo_display_test);
+		ammoDisplay.setAlpha(0.5f);
+		mRelLayout.addView(ammoDisplay);
+
+		ammo = new ImageView(this);
+
+		layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		layoutParams.addRule(RelativeLayout.ALIGN_TOP);
+		ammoDisplay.setLayoutParams(layoutParams);
+		ammo.setScaleX(20);
+		ammo.setScaleY(20);
+		ammo.setX(ammoDisplay.getWidth()/2);
+		ammo.setBackgroundResource(R.drawable.player_projectile_1);
+		ammo.setAlpha(0.5f);
+		ammo.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(((PlayerGunComponent)game.getWorld().getPlayer().getUpdatableComponent("Gun")).getBulletTypeCount()>1)
+				{
+					((PlayerGunComponent)game.getWorld().getPlayer().getUpdatableComponent("Gun")).switchNextBulletType();
+					ammo.setBackgroundResource(R.drawable.player_projectile_2);
+				}
+			}
+		});
+		mRelLayout.addView(ammo);
+
 
 		pauseButton = new Button(this);
 
-		RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 		layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
 		pauseButton.setLayoutParams(layoutParams);
@@ -108,7 +127,7 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 					game.getWorld().pause();
 					pauseButton.setBackgroundResource(R.drawable.play_button_v1);
 					killPoints.setVisibility(View.GONE);
-//					pauseButton.setX();
+					//					pauseButton.setX();
 
 				}
 				else {
@@ -120,31 +139,32 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 			}
 		});
 		mRelLayout.addView(pauseButton);
-		
+
 		killPoints = new TextView(this);
-		
+
 		layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+		layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 		killPoints.setLayoutParams(layoutParams);
 		killPoints.setBackgroundResource(R.drawable.kill_points);
 		killPoints.setText("     "+0);
 		killPoints.setAlpha(0.5f);
-//		killPoints.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				
-//			}
-//		});
+		//		killPoints.setOnClickListener(new OnClickListener() {
+		//			@Override
+		//			public void onClick(View v) {
+		//				
+		//			}
+		//		});
 		mRelLayout.addView(killPoints);
 
-		
+
 
 		setContentView(mRelLayout);
 
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
 	}
-	
+
 	public void setPoints(final int points) {
 		runOnUiThread(new Runnable() {
 			@Override
