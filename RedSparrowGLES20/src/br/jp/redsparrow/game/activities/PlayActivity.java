@@ -167,7 +167,7 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 		killPoints.setLayoutParams(layoutParams);
 		killPoints.setBackgroundResource(R.drawable.kill_points);
 		killPoints.setText("     "+0);
-		killPoints.setAlpha(0.5f);
+		killPoints.setAlpha(0.7f);
 		//		killPoints.setOnClickListener(new OnClickListener() {
 		//			@Override
 		//			public void onClick(View v) {
