@@ -6,6 +6,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -155,11 +156,14 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 		});
 		mRelLayout.addView(pauseButton);
 
+		Typeface type = Typeface.createFromAsset(getAssets(),"fonts/DisposableDroidBB.otf"); 
+		
 		killPoints = new TextView(this);
 
 		layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
 		layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+		killPoints.setTypeface(type);
 		killPoints.setLayoutParams(layoutParams);
 		killPoints.setBackgroundResource(R.drawable.kill_points);
 		killPoints.setText("     "+0);
@@ -178,6 +182,7 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 		layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
 		gameOver.setLayoutParams(layoutParams);
 		gameOver.setTextColor(Color.RED);
+		gameOver.setTypeface(type);
 		gameOver.setTextSize(50);
 //		final Intent i = new Intent(this, MenuActivity.class);
 		gameOver.setOnClickListener(new OnClickListener() {
@@ -197,6 +202,7 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 		layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
 		upgradeButton.setLayoutParams(layoutParams);
 		upgradeButton.setTextColor(Color.YELLOW);
+		upgradeButton.setTypeface(type);
 		upgradeButton.setText("UPGRADE");
 		upgradeButton.setTextSize(30);
 		upgradeButton.setOnClickListener(new OnClickListener() {
@@ -244,7 +250,7 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 			public void run() {
 				game.getWorld().stop();
 				gameOver.setText("SIM, ACABOU\n" +
-						"A terra está perdida\n" +
+						"A terra esta perdida\n" +
 						"Voce destruiu " + points/10 + " Zamooni scout(s)");
 
 				gameOver.setVisibility(View.VISIBLE);
