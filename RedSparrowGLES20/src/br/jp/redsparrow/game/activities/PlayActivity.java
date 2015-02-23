@@ -135,6 +135,8 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 					game.getWorld().pause();
 					pauseButton.setBackgroundResource(R.drawable.play_button_v1);
 					killPoints.setVisibility(View.GONE);
+					upgradeButton.setVisibility(View.GONE);
+
 					//					ammo.setVisibility(View.GONE);
 					//					ammoDisplay.setVisibility(View.GONE);
 					//					pauseButton.setX();
@@ -249,6 +251,7 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 				killPoints.setVisibility(View.GONE);
 				pauseButton.setVisibility(View.GONE);
 				mGameView.setVisibility(View.GONE);
+				upgradeButton.setVisibility(View.GONE);
 			}
 		});
 	}

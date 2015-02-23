@@ -47,7 +47,7 @@ public class PlayerStatsComponent extends StatsComponent {
 	public void setKillPoints(Game game, int killPoints) {
 		this.killPoints = killPoints;
 		((PlayActivity) game.getActivity()).setPoints(this.killPoints);
-		if(killPoints%100==0) ((PlayActivity) game.getActivity()).showUpgrade();
+		if(killPoints%100==0 && killPoints < 510) ((PlayActivity) game.getActivity()).showUpgrade();
 	}
 
 }
