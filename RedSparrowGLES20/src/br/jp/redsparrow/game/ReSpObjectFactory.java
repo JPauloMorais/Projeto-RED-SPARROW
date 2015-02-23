@@ -243,6 +243,26 @@ public class ReSpObjectFactory extends ObjectFactory {
 
 		};
 		mTypes.put(basicEnemyProjectile.getName(), basicEnemyProjectile);
+		
+		ObjectType basicProjectile2 = new ObjectType("BasicProjectile2", mSupertypes.get(2)) {
+
+			@Override
+			public GameObject create(Game game, float positionX, float positionY) {
+				GameObject obj = new GameObject(new AABB(new Vector2f(positionX, positionY), .1f, .1f));
+
+				obj.setType(this);
+
+				obj.addComponent("Physics", new EnemyProjectilePhysicsComponent(obj, 10));
+
+				obj.addComponent("Sprite", new SpriteComponent(game.getContext(), R.drawable.player_projectile_2, obj, 0.12f,0.12f));
+
+				typeCounts.set(5, typeCounts.get(5) +1);
+
+				return obj;
+			}
+
+		};
+		mTypes.put(basicProjectile2.getName(), basicProjectile2);
 
 		ObjectType bg1 = new ObjectType("BG1", mSupertypes.get(3)) {
 

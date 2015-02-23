@@ -1,6 +1,5 @@
 package br.jp.redsparrow.game.objecttypes.basicplayer;
 
-import android.util.Log;
 import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.components.AnimatedSpriteComponent;
 import br.jp.redsparrow.engine.core.components.StatsComponent;
@@ -47,7 +46,7 @@ public class PlayerStatsComponent extends StatsComponent {
 
 	public void setKillPoints(Game game, int killPoints) {
 		this.killPoints = killPoints;
-		Log.i("PlayerGame", "Kill Points: " + killPoints);
+		if(killPoints > 100) ((PlayerGunComponent) mParent.getUpdatableComponent("Gun")).addBulletType("BasicProjectile2");
 		((PlayActivity) game.getActivity()).setPoints(this.killPoints);
 	}
 

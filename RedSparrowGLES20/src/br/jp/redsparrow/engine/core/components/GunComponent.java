@@ -19,23 +19,6 @@ public abstract class GunComponent extends Component implements Updatable {
 //		mShootPoint = new Vector2f(parent.getX() + shootPointRelX, parent.getY() + shootPointRelY);
 	}
 
-	@Override
-	public void update(Game game, GameObject parent) {
-	
-		if(toShoot){
-						
-			GameObject proj = game.getObjFactory().create("BasicProjectile", mParent.getX(), mParent.getY());
-						
-			((ProjectilePhysicsComponent) proj.getUpdatableComponent("Physics")).setShooterSuperType(mParent.getType().getSuperType());
-			((ProjectilePhysicsComponent) proj.getUpdatableComponent("Physics")).shoot(mMoveVel.copy());
-			
-			game.getWorld().addObject(proj);
-
-			toShoot = false;
-		}
-		
-	}
-
 	public void shoot(Vector2f moveVel){
 		mMoveVel = moveVel;
 //		mParent.setRotation(Math.atan2(moveVel.getY(), moveVel.getX()) - 1.5707963268d);
