@@ -14,7 +14,6 @@ import android.hardware.SensorManager;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,7 +31,6 @@ import br.jp.redsparrow.R;
 import br.jp.redsparrow.engine.core.game.GameView;
 import br.jp.redsparrow.game.ReSpGame;
 import br.jp.redsparrow.game.objecttypes.basicplayer.PlayerGunComponent;
-import br.jp.redsparrow.game.objecttypes.basicplayer.PlayerStatsComponent;
 
 public class PlayActivity extends Activity implements OnTouchListener, SensorEventListener {
 
@@ -232,6 +230,7 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
+				upgradeButton.setText("UPGRADE " + (upgrades-1));
 				upgradeButton.setVisibility(View.VISIBLE);
 			}
 		});
