@@ -10,6 +10,8 @@ public class SpawnPointComponent extends Component implements Updatable {
 
 	private String[] mSpawnTypeNames;
 
+	private int mCurType = 0;
+
 	private int mSpawnInterval;
 	private int mSpawnAmmount;
 	private int counter = 0;
@@ -32,10 +34,14 @@ public class SpawnPointComponent extends Component implements Updatable {
 		if(counter == mSpawnInterval) {
 			
 			mSpawnAmmount+=counter2/2;
-			if(mSpawnAmmount >= 10) mSpawnAmmount=2;
+			if(mSpawnAmmount >= 5) {
+				mSpawnAmmount=2;
+				mCurType++;
+				if(mCurType>mSpawnTypeNames.length-1) mCurType = mSpawnTypeNames.length-1;
+			}
 			
 			for (int i = 0; i < mSpawnAmmount; i++) {
-				GameObject go = game.getObjFactory().create(mSpawnTypeNames[0], parent.getX(), parent.getY());
+				GameObject go = game.getObjFactory().create(mSpawnTypeNames[mCurType], parent.getX(), parent.getY());
 				((EnemyStatsComponent)go.getUpdatableComponent("Stats")).setHealth(5+counter2);
 				game.getWorld().addObject(go);
 			}

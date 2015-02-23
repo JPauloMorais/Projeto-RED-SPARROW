@@ -93,7 +93,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 				obj.addComponent("Stats",
 						new PlayerStatsComponent(obj, 10));
 				
-				typeCounts.set(0, typeCounts.get(0) +1);
+//				typeCounts.set(0, typeCounts.get(0) +1);
 				
 				return obj;
 			}
@@ -128,7 +128,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 
 				obj.addComponent("AI", new EnemyAIComponent(obj));
 
-				typeCounts.set(1, typeCounts.get(1) +1);
+//				typeCounts.set(1, typeCounts.get(1) +1);
 				
 				return obj;
 			}
@@ -140,7 +140,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 
 			@Override
 			public GameObject create(Game game, float positionX, float positionY) {
-				GameObject obj = new GameObject(new AABB(new Vector2f(positionX, positionY), 1, 1));
+				GameObject obj = new GameObject(new AABB(new Vector2f(positionX, positionY), 1.5f, 1.5f));
 
 				obj.setType(this);
 
@@ -148,7 +148,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 
 				Animation anim = new Animation(1, 1);
 				anim.setAmmoToWait(4);
-				obj.addComponent("AnimatedSprite", new AnimatedSpriteComponent(game.getContext(), R.drawable.nave_f_a, obj,
+				obj.addComponent("AnimatedSprite", new AnimatedSpriteComponent(game.getContext(), R.drawable.basic_enemy_ship_dark, obj,
 						anim, 0.3f, 0.3f));
 				((AnimatedSpriteComponent) obj.getRenderableComponent("AnimatedSprite")).addAnimation( game.getContext(), R.drawable.explosion_test,new Animation(5, 4));
 
@@ -159,9 +159,11 @@ public class ReSpObjectFactory extends ObjectFactory {
 
 				obj.addComponent("Gun", new EnemyGunComponent(obj, 0, 0));
 
-				obj.addComponent("Stats", new EnemyStatsComponent(obj, 5));		
+				obj.addComponent("Stats", new EnemyStatsComponent(obj, 15));		
+				
+				obj.addComponent("AI", new EnemyAIComponent(obj));
 
-				typeCounts.set(2, typeCounts.get(2) + 1);
+//				typeCounts.set(2, typeCounts.get(2) + 1);
 
 				return obj;
 			}
@@ -215,7 +217,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 				obj.addComponent("Sprite", new SpriteComponent(game.getContext(), R.drawable.player_projectile_1, obj, 0.12f,0.12f,
 						2, 1, 0, 1));
 
-				typeCounts.set(4, typeCounts.get(4) +1);
+//				typeCounts.set(4, typeCounts.get(4) +1);
 				
 				return obj;
 			}
@@ -236,7 +238,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 				obj.addComponent("Sprite", new SpriteComponent(game.getContext(), R.drawable.enemy_projectile_1, obj, 0.12f,0.12f,
 						2, 1, 0, 1));
 
-				typeCounts.set(5, typeCounts.get(5) +1);
+//				typeCounts.set(5, typeCounts.get(5) +1);
 
 				return obj;
 			}
@@ -256,7 +258,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 
 				obj.addComponent("Sprite", new SpriteComponent(game.getContext(), R.drawable.player_projectile_2, obj, 0.12f,0.12f));
 
-				typeCounts.set(5, typeCounts.get(5) +1);
+//				typeCounts.set(5, typeCounts.get(5) +1);
 
 				return obj;
 			}
@@ -276,7 +278,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 
 				obj.addComponent("Sprite", new SpriteComponent(game.getContext(), R.drawable.player_projectile_3, obj, 0.12f,0.12f));
 
-				typeCounts.set(5, typeCounts.get(5) +1);
+//				typeCounts.set(5, typeCounts.get(5) +1);
 
 				return obj;
 			}
@@ -296,7 +298,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 
 				obj.addComponent("Sprite", new SpriteComponent(game.getContext(), R.drawable.player_projectile_4, obj, 0.12f,0.12f));
 
-				typeCounts.set(5, typeCounts.get(5) +1);
+//				typeCounts.set(5, typeCounts.get(5) +1);
 
 				return obj;
 			}
@@ -316,7 +318,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 
 				obj.addComponent("Sprite", new SpriteComponent(game.getContext(), R.drawable.player_projectile_5, obj, 0.12f,0.12f));
 
-				typeCounts.set(5, typeCounts.get(5) +1);
+//				typeCounts.set(5, typeCounts.get(5) +1);
 
 				return obj;
 			}
@@ -365,7 +367,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 				obj.setType(this);
 				
 				obj.addComponent("Spawn", new SpawnPointComponent(obj,
-						300, 2, "BasicEnemy1"));
+						300, 2, "BasicEnemy1", "BasicEnemy2"));
 				
 				return obj;
 			}
