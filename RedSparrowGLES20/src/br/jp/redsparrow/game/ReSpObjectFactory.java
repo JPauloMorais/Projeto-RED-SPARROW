@@ -252,7 +252,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 
 				obj.setType(this);
 
-				obj.addComponent("Sprite", new SpriteComponent(game.getContext(), R.drawable.stars_test1, obj, 0, 0));
+				obj.addComponent("Sprite", new SpriteComponent(game.getContext(), R.drawable.stars_test2, obj, 0, 0));
 
 				return obj;
 			}
