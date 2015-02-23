@@ -44,6 +44,7 @@ public class PlayerGunComponent extends GunComponent {
 
 	public void addBulletType(String bulletType) {
 		mAvailableBulletTypes.add(bulletType);
+		switchNextBulletType();
 	}
 	
 	public void removeBulletType(String bulletType) {

@@ -16,6 +16,8 @@ import br.jp.redsparrow.engine.core.particles.ParticleSystem;
 import br.jp.redsparrow.engine.core.physics.AABB;
 import br.jp.redsparrow.engine.core.physics.Collision;
 import br.jp.redsparrow.engine.core.util.LogConfig;
+import br.jp.redsparrow.game.activities.PlayActivity;
+import br.jp.redsparrow.game.objecttypes.basicplayer.PlayerStatsComponent;
 
 public class World extends GameSystem{
 
@@ -238,6 +240,7 @@ public class World extends GameSystem{
 
 	public void stop(){
 		isRunning = false;
+		isPaused = true;
 		try {
 			bgmSoundComponent.stopSound(0);
 			bgmSoundComponent.releaseSound(0);
@@ -345,6 +348,7 @@ public class World extends GameSystem{
 			//		mPlayer = null;
 //			setPlayer(game.getObjFactory().create("BasicPlayer", 0, 0));
 			//		
+		((PlayActivity) game.getActivity()).gameOver(((PlayerStatsComponent)mPlayer.getUpdatableComponent("Stats")).getKillPoints());
 			//------------------
 	}
 

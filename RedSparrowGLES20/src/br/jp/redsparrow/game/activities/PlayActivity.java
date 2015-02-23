@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.ConfigurationInfo;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -12,6 +13,7 @@ import android.hardware.SensorManager;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -20,7 +22,6 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
@@ -29,6 +30,7 @@ import br.jp.redsparrow.R;
 import br.jp.redsparrow.engine.core.game.GameView;
 import br.jp.redsparrow.game.ReSpGame;
 import br.jp.redsparrow.game.objecttypes.basicplayer.PlayerGunComponent;
+import br.jp.redsparrow.game.objecttypes.basicplayer.PlayerStatsComponent;
 
 public class PlayActivity extends Activity implements OnTouchListener, SensorEventListener {
 
@@ -39,11 +41,16 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 	Sensor mSensorAccelerometer;
 	SensorManager mSensorManager;
 
-	private ImageView ammoDisplay;
-	private ImageView ammo;
+	//	private ImageView ammoDisplay;
+	//	private ImageView ammo;
+	private TextView gameOver;
+	
+	private TextView upgradeButton;
+	
 	private Button pauseButton;
 	private TextView killPoints;
 
+	private int upgrades = 2;
 	//	private boolean rendererSet;
 
 	@SuppressLint("ClickableViewAccessibility")
@@ -80,37 +87,37 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 
 		mRelLayout.addView(mGameView);
 
-//		ammoDisplay = new ImageView(this);
-//
+		//		ammoDisplay = new ImageView(this);
+		//
 		RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-//		layoutParams.addRule(RelativeLayout.ALIGN_TOP);
-//		ammoDisplay.setLayoutParams(layoutParams);
-//		ammoDisplay.setBackgroundResource(R.drawable.ammo_display_test);
-//		ammoDisplay.setAlpha(0.5f);
-//		mRelLayout.addView(ammoDisplay);
-//
-//		ammo = new ImageView(this);
-//
-//		layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-////		layoutParams.addRule(RelativeLayout.tra);
-////		ammo.setLayoutParams(layoutParams);
-//		ammo.setScaleX(10);
-//		ammo.setScaleY(10);
-//		ammo.setFadingEdgeLength(1);
-//		ammo.setX(ammoDisplay.getWidth()/2);
-//		ammo.setBackgroundResource(R.drawable.player_projectile_1);
-//		ammo.setAlpha(0.5f);
-//		ammo.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				if(((PlayerGunComponent)game.getWorld().getPlayer().getUpdatableComponent("Gun")).getBulletTypeCount()>1)
-//				{
-//					((PlayerGunComponent)game.getWorld().getPlayer().getUpdatableComponent("Gun")).switchNextBulletType();
-//					ammo.setBackgroundResource(R.drawable.player_projectile_2);
-//				}
-//			}
-//		});
-//		mRelLayout.addView(ammo);
+		//		layoutParams.addRule(RelativeLayout.ALIGN_TOP);
+		//		ammoDisplay.setLayoutParams(layoutParams);
+		//		ammoDisplay.setBackgroundResource(R.drawable.ammo_display_test);
+		//		ammoDisplay.setAlpha(0.5f);
+		//		mRelLayout.addView(ammoDisplay);
+		//
+		//		ammo = new ImageView(this);
+		//
+		//		layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		////		layoutParams.addRule(RelativeLayout.tra);
+		////		ammo.setLayoutParams(layoutParams);
+		//		ammo.setScaleX(10);
+		//		ammo.setScaleY(10);
+		//		ammo.setFadingEdgeLength(1);
+		//		ammo.setX(ammoDisplay.getWidth()/2);
+		//		ammo.setBackgroundResource(R.drawable.player_projectile_1);
+		//		ammo.setAlpha(0.5f);
+		//		ammo.setOnClickListener(new OnClickListener() {
+		//			@Override
+		//			public void onClick(View v) {
+		//				if(((PlayerGunComponent)game.getWorld().getPlayer().getUpdatableComponent("Gun")).getBulletTypeCount()>1)
+		//				{
+		//					((PlayerGunComponent)game.getWorld().getPlayer().getUpdatableComponent("Gun")).switchNextBulletType();
+		//					ammo.setBackgroundResource(R.drawable.player_projectile_2);
+		//				}
+		//			}
+		//		});
+		//		mRelLayout.addView(ammo);
 
 
 		pauseButton = new Button(this);
@@ -128,8 +135,8 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 					game.getWorld().pause();
 					pauseButton.setBackgroundResource(R.drawable.play_button_v1);
 					killPoints.setVisibility(View.GONE);
-//					ammo.setVisibility(View.GONE);
-//					ammoDisplay.setVisibility(View.GONE);
+					//					ammo.setVisibility(View.GONE);
+					//					ammoDisplay.setVisibility(View.GONE);
 					//					pauseButton.setX();
 
 				}
@@ -138,8 +145,8 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 					pauseButton.setBackgroundResource(R.drawable.pause_buton);
 					pauseButton.setAlpha(0.5f);
 					killPoints.setVisibility(View.VISIBLE);
-//					ammo.setVisibility(View.VISIBLE);
-//					ammoDisplay.setVisibility(View.VISIBLE);
+					//					ammo.setVisibility(View.VISIBLE);
+					//					ammoDisplay.setVisibility(View.VISIBLE);
 
 				}
 			}
@@ -163,7 +170,47 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 		//		});
 		mRelLayout.addView(killPoints);
 
+		gameOver = new TextView(this);
 
+		layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+		gameOver.setLayoutParams(layoutParams);
+		gameOver.setTextColor(Color.RED);
+		gameOver.setTextSize(50);
+//		final Intent i = new Intent(this, MenuActivity.class);
+		gameOver.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				onBackPressed();
+				finish();
+			}
+		});
+		gameOver.setVisibility(View.GONE);
+		mRelLayout.addView(gameOver);
+		
+		upgradeButton = new TextView(this);
+
+		layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+		layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+		upgradeButton.setLayoutParams(layoutParams);
+		upgradeButton.setTextColor(Color.YELLOW);
+		upgradeButton.setText("UPGRADE");
+		upgradeButton.setTextSize(30);
+		upgradeButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				((PlayerGunComponent)game.getWorld().getPlayer().getUpdatableComponent("Gun"))
+				.addBulletType("BasicProjectile"+upgrades);
+				
+				upgrades++;
+				
+				upgradeButton.setVisibility(View.GONE);
+
+			}
+		});
+		upgradeButton.setVisibility(View.GONE);
+		mRelLayout.addView(upgradeButton);
 
 		setContentView(mRelLayout);
 
@@ -171,11 +218,37 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 
 	}
 
+	public void showUpgrade() {
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				upgradeButton.setVisibility(View.VISIBLE);
+			}
+		});
+	}
+	
 	public void setPoints(final int points) {
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				killPoints.setText("     "+points);
+			}
+		});
+	}
+
+	public void gameOver(final int points) {
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				game.getWorld().stop();
+				gameOver.setText("SIM, ACABOU\n" +
+						"A terra está perdida\n" +
+						"Voce destruiu " + points/10 + " Zamooni scout(s)");
+
+				gameOver.setVisibility(View.VISIBLE);
+				killPoints.setVisibility(View.GONE);
+				pauseButton.setVisibility(View.GONE);
+				mGameView.setVisibility(View.GONE);
 			}
 		});
 	}

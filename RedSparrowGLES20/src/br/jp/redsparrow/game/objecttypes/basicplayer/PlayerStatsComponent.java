@@ -23,7 +23,7 @@ public class PlayerStatsComponent extends StatsComponent {
 	@Override
 	protected void die(Game game) {
 		if (!isDying) {
-//			mParent.removeUpdatableComponent("Physics");
+			//			mParent.removeUpdatableComponent("Physics");
 			((AnimatedSpriteComponent) mParent.getRenderableComponent("AnimatedSprite")).setCurAnim(1);
 			isDying = true;
 			((PlayActivity) game.getActivity()).setPoints(0);
@@ -46,8 +46,8 @@ public class PlayerStatsComponent extends StatsComponent {
 
 	public void setKillPoints(Game game, int killPoints) {
 		this.killPoints = killPoints;
-		if(killPoints > 100) ((PlayerGunComponent) mParent.getUpdatableComponent("Gun")).addBulletType("BasicProjectile2");
 		((PlayActivity) game.getActivity()).setPoints(this.killPoints);
+		if(killPoints%100==0) ((PlayActivity) game.getActivity()).showUpgrade();
 	}
 
 }

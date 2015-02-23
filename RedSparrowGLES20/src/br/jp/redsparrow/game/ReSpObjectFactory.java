@@ -252,7 +252,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 
 				obj.setType(this);
 
-				obj.addComponent("Physics", new EnemyProjectilePhysicsComponent(obj, 10));
+				obj.addComponent("Physics", new EnemyProjectilePhysicsComponent(obj, 2));
 
 				obj.addComponent("Sprite", new SpriteComponent(game.getContext(), R.drawable.player_projectile_2, obj, 0.12f,0.12f));
 
@@ -263,6 +263,66 @@ public class ReSpObjectFactory extends ObjectFactory {
 
 		};
 		mTypes.put(basicProjectile2.getName(), basicProjectile2);
+		
+		ObjectType basicProjectile3 = new ObjectType("BasicProjectile3", mSupertypes.get(2)) {
+
+			@Override
+			public GameObject create(Game game, float positionX, float positionY) {
+				GameObject obj = new GameObject(new AABB(new Vector2f(positionX, positionY), .15f, .15f));
+
+				obj.setType(this);
+
+				obj.addComponent("Physics", new EnemyProjectilePhysicsComponent(obj, 3));
+
+				obj.addComponent("Sprite", new SpriteComponent(game.getContext(), R.drawable.player_projectile_2, obj, 0.12f,0.12f));
+
+				typeCounts.set(5, typeCounts.get(5) +1);
+
+				return obj;
+			}
+
+		};
+		mTypes.put(basicProjectile3.getName(), basicProjectile3);
+		
+		ObjectType basicProjectile4 = new ObjectType("BasicProjectile4", mSupertypes.get(2)) {
+
+			@Override
+			public GameObject create(Game game, float positionX, float positionY) {
+				GameObject obj = new GameObject(new AABB(new Vector2f(positionX, positionY), .2f, .2f));
+
+				obj.setType(this);
+
+				obj.addComponent("Physics", new EnemyProjectilePhysicsComponent(obj, 4));
+
+				obj.addComponent("Sprite", new SpriteComponent(game.getContext(), R.drawable.player_projectile_2, obj, 0.12f,0.12f));
+
+				typeCounts.set(5, typeCounts.get(5) +1);
+
+				return obj;
+			}
+
+		};
+		mTypes.put(basicProjectile4.getName(), basicProjectile4);
+		
+		ObjectType basicProjectile5 = new ObjectType("BasicProjectile5", mSupertypes.get(2)) {
+
+			@Override
+			public GameObject create(Game game, float positionX, float positionY) {
+				GameObject obj = new GameObject(new AABB(new Vector2f(positionX, positionY), .25f, .25f));
+
+				obj.setType(this);
+
+				obj.addComponent("Physics", new EnemyProjectilePhysicsComponent(obj, 5));
+
+				obj.addComponent("Sprite", new SpriteComponent(game.getContext(), R.drawable.player_projectile_2, obj, 0.12f,0.12f));
+
+				typeCounts.set(5, typeCounts.get(5) +1);
+
+				return obj;
+			}
+
+		};
+		mTypes.put(basicProjectile5.getName(), basicProjectile5);
 
 		ObjectType bg1 = new ObjectType("BG1", mSupertypes.get(3)) {
 
