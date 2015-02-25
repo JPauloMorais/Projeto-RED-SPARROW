@@ -49,50 +49,6 @@ public class World extends GameSystem{
 		isRunning = false;
 		isPaused = false;
 
-		//		try {
-		//			
-		//			String dirName = "RedSparrow";
-		//			String dir = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator;
-		//
-		//			File dirFile = new File(dir, dirName);
-		//			dirFile.mkdirs();
-		//			
-		//			String fileName = "saves.json";
-		//			File file = new File(dirFile, fileName);
-		//			if(file.createNewFile()) {				
-		//				FileWriter writer = new FileWriter(file);
-		//				JsonWriter jw = new JsonWriter(writer);
-		//				jw.beginObject().name("Teste").value(true).endObject();
-		//				jw.close();
-		//			}else {
-		//				
-		//				FileInputStream fInStream = new FileInputStream(file);
-		//				String json = null;
-		//				
-		//				FileChannel fChannel = fInStream.getChannel();
-		//				MappedByteBuffer mbBuffer = fChannel.map(FileChannel.MapMode.READ_ONLY, 0, fChannel.size());
-		//				
-		//				json = Charset.defaultCharset().decode(mbBuffer).toString();
-		//				
-		//				fInStream.close();
-		//				
-		//				JSONObject jObj = new JSONObject(json);
-		//				
-		//				JsonWriter jw = new JsonWriter(new FileWriter(file));
-		//				
-		//				
-		//				
-		//				
-		//			}
-		//			
-		//		} catch (IOException e) {
-		//			// TODO Auto-generated catch block
-		//			e.printStackTrace();
-		//		} catch (JSONException e) {
-		//			// TODO Auto-generated catch block
-		//			e.printStackTrace();
-		//		}
-
 		//Objetos
 		mPlayer = new GameObject();
 		mGameObjects = new ArrayList<GameObject>();

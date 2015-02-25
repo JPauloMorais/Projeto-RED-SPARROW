@@ -18,6 +18,7 @@ public abstract class Game {
 	protected InputHandler mInputHandler;
 	protected MissionSystem mMissionSystem;
 	protected Camera mCamera;
+	protected ScoreSystem mScoreSystem;
 	
 	public Game(Activity activity) {
 		mContext = activity;
@@ -85,6 +86,14 @@ public abstract class Game {
 
 	public void setActivity(Activity activity) {
 		this.mActivity = activity;
+	}
+
+	public ScoreSystem getScoreSystem() {
+		return mScoreSystem;
+	}
+
+	public void setScoreSystem(ScoreSystem mScoreSystem) {
+		this.mScoreSystem = mScoreSystem;
 	}
 
 

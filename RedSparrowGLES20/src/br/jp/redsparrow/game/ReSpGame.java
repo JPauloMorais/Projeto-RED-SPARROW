@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.opengl.Matrix;
 import br.jp.redsparrow.engine.core.GameObject;
 import br.jp.redsparrow.engine.core.game.Game;
+import br.jp.redsparrow.engine.core.game.ScoreSystem;
 import br.jp.redsparrow.engine.core.game.World;
 import br.jp.redsparrow.engine.core.missions.MissionSequence;
 import br.jp.redsparrow.engine.core.missions.MissionSystem;
@@ -16,7 +17,7 @@ public class ReSpGame extends Game {
 
 	private Random random;
 	private GameObject mDbgBackground;
-
+	
 	public ReSpGame(Activity activity) {
 		super(activity);
 
@@ -25,6 +26,7 @@ public class ReSpGame extends Game {
 		mInputHandler = new ReSpInputHandler(this);	
 		mMissionSystem = new MissionSystem(this, new MissionSequence(new TestMission()));
 		mObjFactory = new ReSpObjectFactory(this);
+		mScoreSystem = new ScoreSystem(this);
 
 	}
 
