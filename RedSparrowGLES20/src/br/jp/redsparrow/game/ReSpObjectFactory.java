@@ -235,7 +235,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 
 				obj.addComponent("Physics", new EnemyProjectilePhysicsComponent(obj,1));
 
-				obj.addComponent("Sprite", new SpriteComponent(game.getContext(), R.drawable.enemy_projectile_1, obj, 0.12f,0.12f,
+				obj.addComponent("Sprite", new SpriteComponent(game.getContext(), R.drawable.enemy_projectile_3, obj, 0.12f,0.12f,
 						2, 1, 0, 1));
 
 //				typeCounts.set(5, typeCounts.get(5) +1);
