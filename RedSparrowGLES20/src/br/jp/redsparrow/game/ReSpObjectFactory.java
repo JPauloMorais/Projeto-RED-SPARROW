@@ -212,13 +212,25 @@ public class ReSpObjectFactory extends ObjectFactory {
 
 				obj.setType(this);
 
-				obj.addComponent("Physics", new EnemyProjectilePhysicsComponent(obj,1));
+				obj.addComponent("Physics", new EnemyPhysicsComponent(obj));
 
-				obj.addComponent("Sprite", new SpriteComponent(game.getContext(), R.drawable.player_projectile_1, obj, 0.12f,0.12f,
-						2, 1, 0, 1));
+				Animation anim = new Animation(1, 1);
+				anim.setAmmoToWait(4);
+				obj.addComponent("AnimatedSprite", new AnimatedSpriteComponent(game.getContext(), R.drawable.nave_f_b, obj,
+						anim, 0.3f, 0.3f));
+				((AnimatedSpriteComponent) obj.getRenderableComponent("AnimatedSprite")).addAnimation( game.getContext(), R.drawable.explosion_test,new Animation(5, 4));
+
+				obj.addComponent("Sound",
+						new SoundComponent(game.getContext(), obj, R.raw.test_shot));
+				((SoundComponent) obj.getUpdatableComponent("Sound"))
+				.setSoundVolume(0, 0.005f, 0.005f);
+
+				obj.addComponent("Gun", new EnemyGunComponent(obj, 0, 0));
+
+				obj.addComponent("Stats", new EnemyStatsComponent(obj, 10));		
 
 //				typeCounts.set(4, typeCounts.get(4) +1);
-				
+
 				return obj;
 			}
 
@@ -367,7 +379,7 @@ public class ReSpObjectFactory extends ObjectFactory {
 				obj.setType(this);
 				
 				obj.addComponent("Spawn", new SpawnPointComponent(obj,
-						300, 2, "BasicEnemy1", "BasicEnemy2"));
+						300, 2, "BasicEnemy1", "BasicEnemy2", "BasicEnemy3"));
 				
 				return obj;
 			}
