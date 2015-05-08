@@ -83,8 +83,8 @@
       <file leaf-file-name="ReSpObjectFactory.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/RedSparrow/app/src/main/java/br/jp/redsparrow/game/ReSpObjectFactory.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5944518" vertical-offset="2814" max-vertical-offset="6834">
-              <caret line="223" column="51" selection-start-line="223" selection-start-column="36" selection-end-line="223" selection-end-column="51" />
+            <state vertical-scroll-proportion="0.25759578" vertical-offset="2814" max-vertical-offset="6834">
+              <caret line="208" column="56" selection-start-line="208" selection-start-column="56" selection-end-line="208" selection-end-column="56" />
               <folding />
             </state>
           </provider>
@@ -369,6 +369,7 @@
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
     <property name="restartRequiresConfirmation" value="true" />
+    <property name="FullScreen" value="false" />
   </component>
   <component name="RunManager" selected="Android Application.main">
     <configuration default="true" type="JUnit" factoryName="JUnit">
@@ -518,6 +519,9 @@
     </configuration>
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
 <<<<<<< HEAD
@@ -639,8 +643,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/RedSparrow/app/src/main/java/br/jp/redsparrow/game/ReSpObjectFactory.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5944518" vertical-offset="2814" max-vertical-offset="6834">
-          <caret line="223" column="51" selection-start-line="223" selection-start-column="36" selection-end-line="223" selection-end-column="51" />
+        <state vertical-scroll-proportion="0.25759578" vertical-offset="2814" max-vertical-offset="6834">
+          <caret line="208" column="56" selection-start-line="208" selection-start-column="56" selection-end-line="208" selection-end-column="56" />
           <folding />
         </state>
       </provider>
