@@ -7,8 +7,8 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
 import android.opengl.Matrix;
-import br.jp.redsparrow.engine.core.game.Game;
-import br.jp.redsparrow.engine.core.game.GameRenderer;
+import br.jp.redsparrow.engine.game.Game;
+import br.jp.redsparrow.engine.game.GameRenderer;
 
 public class ReSpGameRenderer extends GameRenderer {
 	

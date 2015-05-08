@@ -2,9 +2,9 @@ package br.jp.redsparrow.game.objecttypes.basicplayer;
 
 import java.util.ArrayList;
 
-import br.jp.redsparrow.engine.core.GameObject;
-import br.jp.redsparrow.engine.core.components.GunComponent;
-import br.jp.redsparrow.engine.core.game.Game;
+import br.jp.redsparrow.engine.GameObject;
+import br.jp.redsparrow.engine.components.GunComponent;
+import br.jp.redsparrow.engine.game.Game;
 import br.jp.redsparrow.game.objecttypes.ProjectilePhysicsComponent;
 
 public class PlayerGunComponent extends GunComponent {

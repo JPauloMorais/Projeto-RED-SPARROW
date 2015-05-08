@@ -12,6 +12,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Environment;
@@ -30,7 +31,7 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 import br.jp.redsparrow.R;
-import br.jp.redsparrow.engine.core.game.GameView;
+import br.jp.redsparrow.engine.game.GameView;
 import br.jp.redsparrow.game.ReSpGame;
 import br.jp.redsparrow.game.objecttypes.basicplayer.PlayerGunComponent;
 
@@ -52,6 +53,7 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 	private Button pauseButton;
 	private TextView killPoints;
 
+	private MediaPlayer mp;
 	private int upgrades = 2;
 	//	private boolean rendererSet;
 
@@ -252,12 +254,16 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 	private long killsAmmountOut;
 	private TextView killsOut;
 	public void gameOver(final int points) {
-		
 
+		final Context c = this;
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				game.getWorld().stop();
+
+				mp = MediaPlayer.create(c, R.raw.what_a_shame);
+				mp.setVolume(1,1);
+				mp.start();
 
 				setContentView(R.layout.game_over_screen);
 
@@ -283,6 +289,7 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 
 	@Override
 	public void onBackPressed() {
+		if(mp.isPlaying()) mp.stop();
 		if(!game.getWorld().isRunning()){
 			playerName = (nameIn.getText().toString() != null ? nameIn.getText().toString() : "Anonimo");
 			game.getScoreSystem().addScore(playerName, killsAmmountOut);
@@ -307,6 +314,7 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 	@Override
 	protected void onPause() {
 		super.onPause();
+		if(mp.isPlaying()) mp.stop();
 		mGameView.onPause();
 		game.pause();
 		mSensorManager.unregisterListener(this);
@@ -315,28 +323,9 @@ public class PlayActivity extends Activity implements OnTouchListener, SensorEve
 	@Override
 	protected void onStop() {
 		super.onStop();
+		if(mp.isPlaying()) mp.stop();
 		game.stop();
 		mSensorManager.unregisterListener(this);
-	}
-
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.ogl, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
 	}
 
 

@@ -3,11 +3,10 @@ package br.jp.redsparrow.game;
 import android.content.Context;
 import android.os.Vibrator;
 import android.util.Log;
-import br.jp.redsparrow.engine.core.Vector2f;
-import br.jp.redsparrow.engine.core.components.GunComponent;
-import br.jp.redsparrow.engine.core.components.SoundComponent;
-import br.jp.redsparrow.engine.core.game.Game;
-import br.jp.redsparrow.engine.core.game.InputHandler;
+import br.jp.redsparrow.engine.Vector2f;
+import br.jp.redsparrow.engine.components.GunComponent;
+import br.jp.redsparrow.engine.game.Game;
+import br.jp.redsparrow.engine.game.InputHandler;
 import br.jp.redsparrow.game.objecttypes.basicplayer.PlayerPhysicsComponent;
 
 public class ReSpInputHandler extends InputHandler {

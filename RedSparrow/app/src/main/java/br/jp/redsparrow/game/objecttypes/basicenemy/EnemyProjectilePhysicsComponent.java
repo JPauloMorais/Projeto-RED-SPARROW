@@ -1,7 +1,7 @@
 package br.jp.redsparrow.game.objecttypes.basicenemy;
 
-import br.jp.redsparrow.engine.core.GameObject;
-import br.jp.redsparrow.engine.core.game.Game;
+import br.jp.redsparrow.engine.GameObject;
+import br.jp.redsparrow.engine.game.Game;
 import br.jp.redsparrow.game.objecttypes.ProjectilePhysicsComponent;
 
 public class EnemyProjectilePhysicsComponent extends ProjectilePhysicsComponent {

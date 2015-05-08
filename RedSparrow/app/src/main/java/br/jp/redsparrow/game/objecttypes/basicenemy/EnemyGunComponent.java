@@ -1,15 +1,14 @@
 package br.jp.redsparrow.game.objecttypes.basicenemy;
 
-import br.jp.redsparrow.engine.core.GameObject;
-import br.jp.redsparrow.engine.core.components.GunComponent;
-import br.jp.redsparrow.engine.core.game.Game;
+import br.jp.redsparrow.engine.GameObject;
+import br.jp.redsparrow.engine.components.GunComponent;
+import br.jp.redsparrow.engine.game.Game;
 
 public class EnemyGunComponent extends GunComponent {
 
 	public EnemyGunComponent(GameObject parent, float shootPointRelX,
 			float shootPointRelY) {
 		super(parent, shootPointRelX, shootPointRelY);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

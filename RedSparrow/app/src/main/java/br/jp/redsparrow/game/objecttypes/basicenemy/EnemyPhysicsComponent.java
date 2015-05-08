@@ -1,14 +1,14 @@
 package br.jp.redsparrow.game.objecttypes.basicenemy;
 
 import android.graphics.Color;
-import br.jp.redsparrow.engine.core.GameObject;
-import br.jp.redsparrow.engine.core.Vector2f;
-import br.jp.redsparrow.engine.core.Vector3f;
-import br.jp.redsparrow.engine.core.components.PhysicsComponent;
-import br.jp.redsparrow.engine.core.components.StatsComponent;
-import br.jp.redsparrow.engine.core.game.Game;
-import br.jp.redsparrow.engine.core.particles.ParticleEmitter;
-import br.jp.redsparrow.engine.core.physics.Collision;
+import br.jp.redsparrow.engine.GameObject;
+import br.jp.redsparrow.engine.Vector2f;
+import br.jp.redsparrow.engine.Vector3f;
+import br.jp.redsparrow.engine.components.PhysicsComponent;
+import br.jp.redsparrow.engine.components.StatsComponent;
+import br.jp.redsparrow.engine.game.Game;
+import br.jp.redsparrow.engine.particles.ParticleEmitter;
+import br.jp.redsparrow.engine.physics.Collision;
 import br.jp.redsparrow.game.objecttypes.ProjectilePhysicsComponent;
 
 public class EnemyPhysicsComponent extends PhysicsComponent {

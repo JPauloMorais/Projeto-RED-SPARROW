@@ -2,8 +2,8 @@ package br.jp.redsparrow.game.missions;
 
 import android.media.MediaPlayer;
 import br.jp.redsparrow.R;
-import br.jp.redsparrow.engine.core.game.Game;
-import br.jp.redsparrow.engine.core.missions.Mission;
+import br.jp.redsparrow.engine.game.Game;
+import br.jp.redsparrow.engine.missions.Mission;
 
 public class TestMission extends Mission {
 

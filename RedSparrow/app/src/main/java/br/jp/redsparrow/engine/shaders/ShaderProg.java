@@ -2,8 +2,8 @@ package br.jp.redsparrow.engine.shaders;
 
 import android.content.Context;
 import android.opengl.GLES20;
-import br.jp.redsparrow.engine.core.util.ShaderUtil;
-import br.jp.redsparrow.engine.core.util.TextFileReader;
+import br.jp.redsparrow.engine.util.ShaderUtil;
+import br.jp.redsparrow.engine.util.TextFileReader;
 
 public class ShaderProg {
 	

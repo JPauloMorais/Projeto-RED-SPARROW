@@ -12,9 +12,9 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 
-import br.jp.redsparrow.engine.core.Vector3f;
-import br.jp.redsparrow.engine.core.particles.ParticleEmitter;
-import br.jp.redsparrow.engine.core.particles.ParticleSystem;
+import br.jp.redsparrow.engine.Vector3f;
+import br.jp.redsparrow.engine.particles.ParticleEmitter;
+import br.jp.redsparrow.engine.particles.ParticleSystem;
 import br.jp.redsparrow.engine.shaders.ParticleShaderProg;
 
 public class ReSpMenuRenderer implements GLSurfaceView.Renderer {

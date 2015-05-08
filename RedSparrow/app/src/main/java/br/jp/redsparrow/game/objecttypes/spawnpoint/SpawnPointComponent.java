@@ -1,9 +1,9 @@
 package br.jp.redsparrow.game.objecttypes.spawnpoint;
 
-import br.jp.redsparrow.engine.core.GameObject;
-import br.jp.redsparrow.engine.core.Updatable;
-import br.jp.redsparrow.engine.core.components.Component;
-import br.jp.redsparrow.engine.core.game.Game;
+import br.jp.redsparrow.engine.GameObject;
+import br.jp.redsparrow.engine.Updatable;
+import br.jp.redsparrow.engine.components.Component;
+import br.jp.redsparrow.engine.game.Game;
 import br.jp.redsparrow.game.objecttypes.basicenemy.EnemyStatsComponent;
 
 public class SpawnPointComponent extends Component implements Updatable {

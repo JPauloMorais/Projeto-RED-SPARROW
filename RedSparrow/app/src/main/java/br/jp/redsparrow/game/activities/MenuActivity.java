@@ -17,12 +17,11 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Toast;
 import br.jp.redsparrow.R;
-import br.jp.redsparrow.engine.core.game.GameView;
+import br.jp.redsparrow.engine.game.GameView;
 import br.jp.redsparrow.game.ReSpMenuRenderer;
 
 public class MenuActivity extends Activity implements OnTouchListener {

@@ -4,12 +4,12 @@ import java.util.Random;
 
 import android.app.Activity;
 import android.opengl.Matrix;
-import br.jp.redsparrow.engine.core.GameObject;
-import br.jp.redsparrow.engine.core.game.Game;
-import br.jp.redsparrow.engine.core.game.ScoreSystem;
-import br.jp.redsparrow.engine.core.game.World;
-import br.jp.redsparrow.engine.core.missions.MissionSequence;
-import br.jp.redsparrow.engine.core.missions.MissionSystem;
+import br.jp.redsparrow.engine.GameObject;
+import br.jp.redsparrow.engine.game.Game;
+import br.jp.redsparrow.engine.game.ScoreSystem;
+import br.jp.redsparrow.engine.game.World;
+import br.jp.redsparrow.engine.missions.MissionSequence;
+import br.jp.redsparrow.engine.missions.MissionSystem;
 import br.jp.redsparrow.game.missions.TestMission;
 
 public class ReSpGame extends Game {

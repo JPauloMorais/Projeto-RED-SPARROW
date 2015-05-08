@@ -1,10 +1,10 @@
 package br.jp.redsparrow.game.objecttypes;
 
-import br.jp.redsparrow.engine.core.GameObject;
-import br.jp.redsparrow.engine.core.Vector2f;
-import br.jp.redsparrow.engine.core.components.PhysicsComponent;
-import br.jp.redsparrow.engine.core.game.Game;
-import br.jp.redsparrow.engine.core.game.ObjectType;
+import br.jp.redsparrow.engine.GameObject;
+import br.jp.redsparrow.engine.Vector2f;
+import br.jp.redsparrow.engine.components.PhysicsComponent;
+import br.jp.redsparrow.engine.game.Game;
+import br.jp.redsparrow.engine.game.ObjectType;
 
 public abstract class ProjectilePhysicsComponent extends PhysicsComponent {
 

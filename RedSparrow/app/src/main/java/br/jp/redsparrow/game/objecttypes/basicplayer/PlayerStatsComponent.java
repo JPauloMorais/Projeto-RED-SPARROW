@@ -2,14 +2,14 @@ package br.jp.redsparrow.game.objecttypes.basicplayer;
 
 import android.graphics.Color;
 
-import br.jp.redsparrow.engine.core.GameObject;
-import br.jp.redsparrow.engine.core.Vector3f;
-import br.jp.redsparrow.engine.core.components.AnimatedSpriteComponent;
-import br.jp.redsparrow.engine.core.components.PhysicsComponent;
-import br.jp.redsparrow.engine.core.components.SoundComponent;
-import br.jp.redsparrow.engine.core.components.StatsComponent;
-import br.jp.redsparrow.engine.core.game.Game;
-import br.jp.redsparrow.engine.core.particles.ParticleEmitter;
+import br.jp.redsparrow.engine.GameObject;
+import br.jp.redsparrow.engine.Vector3f;
+import br.jp.redsparrow.engine.components.AnimatedSpriteComponent;
+import br.jp.redsparrow.engine.components.PhysicsComponent;
+import br.jp.redsparrow.engine.components.SoundComponent;
+import br.jp.redsparrow.engine.components.StatsComponent;
+import br.jp.redsparrow.engine.game.Game;
+import br.jp.redsparrow.engine.particles.ParticleEmitter;
 import br.jp.redsparrow.game.ReSpInputHandler;
 import br.jp.redsparrow.game.activities.PlayActivity;
 

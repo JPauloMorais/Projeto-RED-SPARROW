@@ -5,9 +5,8 @@ import javax.microedition.khronos.opengles.GL10;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 
-import br.jp.redsparrow.engine.core.components.PhysicsComponent;
-import br.jp.redsparrow.engine.core.game.Camera;
-import br.jp.redsparrow.engine.core.game.Game;
+import br.jp.redsparrow.engine.game.Camera;
+import br.jp.redsparrow.engine.game.Game;
 
 public class ReSpCamera extends Camera {
 
