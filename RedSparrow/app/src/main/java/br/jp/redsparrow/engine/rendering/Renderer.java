@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLUtils;
+import android.util.Log;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -14,12 +15,23 @@ import javax.microedition.khronos.opengles.GL10;
 
 import br.jp.redsparrow.engine.Consts;
 import br.jp.redsparrow.engine.World;
+import br.jp.redsparrow.engine.input.InputManager;
 
 /**
  * Created by JoaoPaulo on 07/10/2015.
  */
 public class Renderer implements GLSurfaceView.Renderer
 {
+	public static final long NS_PER_MS = 1000000;
+	public static final long NS_PER_S = 1000000000;
+	public static final long MS_PER_S = 1000;
+
+	private static long startTime = System.nanoTime();
+	private static int frames = 0;
+
+	private static long lastTime;
+	private static long time;
+
 	@Override
 	public void onSurfaceCreated (GL10 gl, EGLConfig config)
 	{
@@ -35,7 +47,19 @@ public class Renderer implements GLSurfaceView.Renderer
 	@Override
 	public void onDrawFrame (GL10 gl)
 	{
-		float delta = 0;
+		float delta = (float)((time - lastTime) / NS_PER_S);
+		lastTime = time + 0L;
+		time = System.nanoTime();
+
+		frames++;
+		if(time - startTime >= NS_PER_S)
+		{
+			Log.d("FPS", "Fps:" + frames);
+			frames = 0;
+			startTime = time;
+		}
+
+		InputManager.processInputs();
 		World.update(delta);
 		World.render();
 	}

@@ -13,8 +13,10 @@ void main()
     float distance = length(u_LightPos - v_Position);
     vec3 lightVector = normalize(u_LightPos - v_Position);
     float diffuse = max(dot(v_Normal, lightVector), 0.0);
-    diffuse = diffuse * (1.0 / (1.0 + (0.10 * distance)));
-    diffuse = diffuse + 0.3;
+    diffuse = diffuse * (1.0 / (1.0 + (0.20 * distance)));
+//    if(u_LightPos.z < v_Position.z) diffuse = 0.0;
+    diffuse = diffuse + 0.05f;
     vec4 t_Color = texture2D(u_Texture, v_TexCoordinate);
-    gl_FragColor = (vec4(v_Color.xyz * diffuse, 1.0) * t_Color);
+//    gl_FragColor = t_Color + vec4(v_Color.xyz, 1.0) * diffuse * t_Color.a;
+    gl_FragColor = vec4(v_Color.xyz * t_Color.xyz * diffuse, t_Color.a);
 }

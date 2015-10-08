@@ -214,3 +214,11 @@ pip-log.txt
 #Mr Developer
 .mr.developer.cfg
 RedSparrowGLES20/gen/br/jp/redsparrow/R.java
+*.lock
+RedSparrow/.gradle/2.2.1/taskArtifacts/fileHashes.bin
+RedSparrow/.idea/libraries/json_simple_1_1_1.xml
+RedSparrow/.idea/libraries/support_v4_19_1_0.xml
+RedSparrow/.idea/workspace.xml
+RedSparrow/.gradle/2.2.1/taskArtifacts/taskArtifacts.bin
+RedSparrow/.gradle/2.2.1/taskArtifacts/outputFileStates.bin
+RedSparrow/.idea/workspace.xml

@@ -5,7 +5,7 @@ package br.jp.redsparrow.engine;
  */
 public class RGB
 {
-	private static final float ONE_OVER_255 = 1/255;
+	public static final float ONE_OVER_255 = 1/255;
 	public static final RGB PINK = new RGB(0.8f,0.0f,0.8f);
 	public static final RGB BLACK = new RGB(0.0f,0.0f,0.0f);
 	public static final RGB WHITE = new RGB(1.0f,1.0f,1.0f);

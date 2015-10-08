@@ -14,7 +14,7 @@ import br.jp.redsparrow.engine.Consts;
 public class Quad
 {
 	public static final int POSITION_DATA_SIZE = 2;
-	public static final int NORMAL_DATA_SIZE   = 2;
+	public static final int NORMAL_DATA_SIZE   = 3;
 
 	public static final ShortBuffer INDEX_DATA_BUFFER;
 	public static final FloatBuffer POSITION_DATA_BUFFER;

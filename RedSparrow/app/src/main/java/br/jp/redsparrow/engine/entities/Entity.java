@@ -33,6 +33,36 @@ public class Entity
 	public FloatBuffer texCoordDataBuffer;
 	public FloatBuffer colorDataBuffer;
 
+	public Controller controller;
+
+	public Entity (int uid, Vec3 loc, Vec3 vel, Vec3 acl,
+	               float rot, float aVel, Vec3 scl,
+	               int typeId, int tmIndex, FloatBuffer texCoordDataBuffer,
+	               FloatBuffer colorDataBuffer,
+	               Controller controller)
+	{
+		this.uid = uid;
+		this.loc = loc;
+		this.vel = vel;
+		this.acl = acl;
+		this.rot = rot;
+		this.aVel = aVel;
+		this.scl = scl;
+		this.typeId = typeId;
+		this.tmIndex = tmIndex;
+		this.texCoordDataBuffer = texCoordDataBuffer;
+		this.colorDataBuffer = colorDataBuffer;
+		this.controller = controller;
+	}
+
+	public Entity ()
+	{
+		this(-1, new Vec3(0,0,0), new Vec3(0,0,0), new Vec3(0,0,0), 0.0f, 0.0f, new Vec3(1,1,1), -1, -1, null, null, new Controller(){
+			@Override
+			public void update (Entity parent, float delta) {}
+		});
+	}
+
 	public void setCurrentTexCoords (EntityType type, int tmIndex)
 	{
 		Sprite s = type.sprite;
@@ -58,6 +88,11 @@ public class Entity
 		}
 	}
 
+	public void update(float delta)
+	{
+		controller.update(this, delta);
+	}
+
 	public void setCurrentColors (RGB lt, RGB lb, RGB rb, RGB rt)
 	{
 		final float[] colors =
@@ -73,5 +108,12 @@ public class Entity
 				.asFloatBuffer()
 				.put(colors);
 		colorDataBuffer.position(0);
+	}
+
+
+
+	public static abstract class Controller
+	{
+		public abstract void update(Entity parent, float delta);
 	}
 }

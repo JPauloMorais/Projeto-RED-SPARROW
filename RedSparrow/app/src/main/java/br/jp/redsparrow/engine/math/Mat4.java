@@ -90,7 +90,7 @@ public class Mat4
 		values[14] = 0.0f;
 		values[15] = 1.0f;
 
-		translate(loc.mult(- 1.0f));
+		setTranslation(loc.mult(- 1.0f));
 	}
 
 	public void setOrtho(float left, float right,
@@ -215,7 +215,7 @@ public class Mat4
 		values[15] = 0.0f;
 	}
 
-	public void translate(Vec3 v)
+	public void setTranslation (Vec3 v)
 	{
 		for (int i = 0 ; i < 4 ; i++)
 			values[12 + i] += values[i] * v.x + values[4 + i] * v.y + values[8 + i] * v.z;
