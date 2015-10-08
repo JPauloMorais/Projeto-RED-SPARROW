@@ -6,8 +6,8 @@ android {
 
     defaultConfig {
         applicationId "br.jp.redsparrow"
-        minSdkVersion 17
-        targetSdkVersion 21
+        minSdkVersion 19
+        targetSdkVersion 22
     }
 
     buildTypes {
