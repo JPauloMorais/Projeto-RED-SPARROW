@@ -26,7 +26,6 @@ public class ReSpGame extends Game {
 		mMissionSystem = new MissionSystem(this, new MissionSequence(new TestMission()));
 		mObjFactory = new ReSpObjectFactory(this);
 		mScoreSystem = new ScoreSystem(this, "RedSparrow");
-
 	}
 
 	@Override
