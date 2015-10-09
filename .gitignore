@@ -214,3 +214,9 @@ pip-log.txt
 #Mr Developer
 .mr.developer.cfg
 RedSparrowGLES20/gen/br/jp/redsparrow/R.java
+RedSparrow/.gradle/2.2.1/taskArtifacts/cache.properties.lock
+*.lock
+RedSparrow/.gradle/2.2.1/taskArtifacts/cache.properties.lock
+RedSparrow/.gradle/2.2.1/taskArtifacts/taskArtifacts.bin
+RedSparrow/.idea/libraries/support_v4_19_1_0.xml
+RedSparrow/app/app.iml
