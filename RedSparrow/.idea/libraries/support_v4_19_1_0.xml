@@ -6,7 +6,6 @@
     <JAVADOC />
     <SOURCES>
       <root url="jar://A:/tools/SDK/extras/android/m2repository/com/android/support/support-v4/19.1.0/support-v4-19.1.0-sources.jar!/" />
-      <root url="jar://$USER_HOME$/AppData/Local/Android/sdk/extras/android/m2repository/com/android/support/support-v4/19.1.0/support-v4-19.1.0-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

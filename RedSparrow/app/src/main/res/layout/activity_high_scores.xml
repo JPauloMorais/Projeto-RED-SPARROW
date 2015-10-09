@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_gravity="center"
     android:gravity="center"
-    tools:context="br.jp.redsparrow.game.activities.HighScoresActivity">
+    tools:context="br.jp.redsparrow_zsdemo.game.activities.HighScoresActivity">
 
     <TextView android:text="@string/high_scores_label"
         android:textSize="50dp"

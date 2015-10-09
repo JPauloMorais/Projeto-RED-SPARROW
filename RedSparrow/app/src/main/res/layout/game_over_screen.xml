@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_gravity="center"
     android:gravity="center"
-    tools:context="br.jp.redsparrow.engine.menu.EnterNameDialog"
+    tools:context="br.jp.redsparrow_zsdemo.engine.menu.EnterNameDialog"
     android:id="@+id/gameOverLayout">
 
 

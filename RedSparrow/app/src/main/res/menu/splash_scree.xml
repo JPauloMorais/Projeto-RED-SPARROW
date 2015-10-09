@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="br.jp.redsparrow.SplashScreeActivity" >
+    tools:context="br.jp.redsparrow_zsdemo.SplashScreeActivity" >
 
     <item
         android:id="@+id/action_settings"

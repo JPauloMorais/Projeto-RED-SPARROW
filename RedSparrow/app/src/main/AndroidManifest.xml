@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="br.jp.redsparrow"
+    package="br.jp.redsparrow_zsdemo"
     android:versionCode="1"
     android:versionName="1.1" >
-
-    <uses-sdk
-        android:minSdkVersion="17"
-        android:targetSdkVersion="21" />
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -19,13 +15,13 @@
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
         <activity
-            android:name=".game.activities.PlayActivity"
+            android:name="br.jp.redsparrow_zsdemo.game.activities.PlayActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             >
         </activity>
         <activity
-            android:name=".game.activities.MenuActivity"
+            android:name="br.jp.redsparrow_zsdemo.game.activities.MenuActivity"
             android:label="@string/title_activity_menu"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -34,7 +30,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".game.activities.HighScoresActivity"
+            android:name="br.jp.redsparrow_zsdemo.game.activities.HighScoresActivity"
             android:label="@string/title_activity_high_scores"
             android:screenOrientation="portrait">
         </activity>
