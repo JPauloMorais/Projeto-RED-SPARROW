@@ -21,9 +21,11 @@ public class Sprite
 	public int          textureId;
 	public Bitmap       spriteSheet;
 	public TextureMap[] textureMaps;
+	public Vec2 offset;
 
 	public Sprite (String spriteSheetName, int spritesAlongX, int spritesAlongY)
 	{
+		offset = new Vec2();
 		textureId = - 1;
 		spriteSheet = Assets.getBitmap(spriteSheetName);
 

@@ -61,12 +61,12 @@ public class Mat4
 		                        look.z - loc.z);
 
 		float rlf = 1.0f / f.magnitude();
-		f = f.mult(rlf);
+		Vec3.mult(f, rlf, f);
 
 		Vec3 s = Vec3.cross(f,up);
 
 		float rls = 1.0f / s.magnitude();
-		s = s.mult(rls);
+		Vec3.mult(s, rls, s);
 
 		Vec3 u = Vec3.cross(s,f);
 
@@ -90,7 +90,8 @@ public class Mat4
 		values[14] = 0.0f;
 		values[15] = 1.0f;
 
-		setTranslation(loc.mult(- 1.0f));
+		Vec3.mult(loc, -1.0f, loc);
+		setTranslation(loc.x, loc.y, loc.z);
 	}
 
 	public void setOrtho(float left, float right,
@@ -215,10 +216,10 @@ public class Mat4
 		values[15] = 0.0f;
 	}
 
-	public void setTranslation (Vec3 v)
+	public void setTranslation (float x, float y, float z)
 	{
 		for (int i = 0 ; i < 4 ; i++)
-			values[12 + i] += values[i] * v.x + values[4 + i] * v.y + values[8 + i] * v.z;
+			values[12 + i] += values[i] * x + values[4 + i] * y + values[8 + i] * z;
 	}
 
 	public float getDeterminant()

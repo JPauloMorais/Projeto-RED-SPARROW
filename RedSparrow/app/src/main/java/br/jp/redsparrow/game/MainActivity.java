@@ -1,6 +1,9 @@
 package br.jp.redsparrow.game;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -9,6 +12,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import br.jp.redsparrow.engine.App;
 import br.jp.redsparrow.engine.World;
@@ -22,31 +28,70 @@ import br.jp.redsparrow.engine.rendering.Renderer;
 public class MainActivity extends Activity implements View.OnTouchListener, SensorEventListener
 {
 	private GLSurfaceView glSurfaceView;
-
+	public static TextView fpsView;
 
 	@Override
 	protected void onCreate (Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 		                                                 | View.SYSTEM_UI_FLAG_FULLSCREEN
 		                                                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 
+		RelativeLayout layout = new RelativeLayout(this);
+
 		glSurfaceView = new GLSurfaceView(this);
 		glSurfaceView.setEGLContextClientVersion(2);
-		glSurfaceView.setRenderer(new Renderer());
+		glSurfaceView.setRenderer(new Renderer(this));
 		glSurfaceView.setOnTouchListener(this);
 		App.registerAccelerometerListener(this);
-		setContentView(glSurfaceView);
+		layout.addView(glSurfaceView);
 
-		InputManager.set(new InputManager(true, false) {
+		fpsView = new TextView(this);
+		RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+		layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+		layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+		fpsView.setLayoutParams(layoutParams);
+		fpsView.setTextColor(Color.WHITE);
+		Typeface tf = Typeface.createFromAsset(getAssets(),"fonts/DisposableDroidBB.otf");
+		fpsView.setTypeface(tf);
+		fpsView.setText("FPS: 0");
+		fpsView.setAlpha(0.5f);
+		fpsView.setTextSize(20);
+		fpsView.setVisibility(View.VISIBLE);
+		layout.addView(fpsView);
+
+		setContentView(layout);
+
+		InputManager.set(new InputManager(true, false)
+		{
+			private Vec2 start = new Vec2();
+			private Vec2 dir = new Vec2();
+
 			@Override
 			protected boolean onTouch_0 (TouchInput touchInput)
 			{
-//				Vec3 dir = World.player.loc.sub(new Vec3(touchInput.x, touchInput.y, 0));
-//				dir.normalize();
-//				dir = dir.mult(0.001f);
-//				World.player.acl = dir;
+				switch (touchInput.type)
+				{
+					case TouchInput.TYPE_DOWN:
+						start.set(touchInput.x, - touchInput.y);
+						Log.d("In", "strt: " + start);
+						break;
+					case TouchInput.TYPE_MOVE:
+						Vec2.sub(new Vec2(touchInput.x, - touchInput.y), start, dir);
+						dir.normalize();
+						Log.d("In", "Dir: " + dir);
+						Vec2.mult(dir, 0.01f, dir);
+						World.player.applyForce(dir);
+//						Vec2.add(World.player.acl, dir, World.player.acl);
+//						World.player.acl.normalize();
+//						Vec2.mult(World.player.acl, 0.001f, World.player.acl);
+						break;
+					case TouchInput.TYPE_UP:
+						Log.d("In", "0 Up");
+						break;
+				}
 				return true;
 			}
 

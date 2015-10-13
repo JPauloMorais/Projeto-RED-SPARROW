@@ -16,67 +16,18 @@ public class Vec3
 		this.z = z;
 	}
 
-	public Vec3 ()
-	{
-		this(0.0f,0.0f,0.0f);
-	}
-
-	public Vec3(Vec3 v)
-	{
-		this(v.x, v.y, v.z);
-	}
+	public Vec3 () { this(0.0f,0.0f,0.0f); }
 
 	public void zero()
 	{
-		x = y = z = 0.0f;
-	}
-	
-	public Vec3 add(final Vec3 v)
-	{
-		return new Vec3(x+v.x, y+v.y, z+v.z);
+		x = 0.0f;
+		y = 0.0f;
+		z = 0.0f;
 	}
 
-	public Vec3 add(final float n)
-	{
-		return new Vec3(x+n, y+n, z+n);
-	}
+	public float magnitude() { return (float) Math.sqrt((x*x)+(y*y)+(z*z)); }
 
-	public Vec3 addScaled(final Vec3 v, float scale)
-	{
-		return new Vec3(x + (v.x*scale),
-		                y + (v.y*scale),
-		                z + (v.z*scale));
-	}
-
-	public Vec3 sub(final Vec3 v)
-	{
-		return new Vec3(x-v.x, y-v.y, z-v.z);
-	}
-
-	public Vec3 sub(final float n)
-	{
-		return new Vec3(x-n, y-n, z-n);
-	}
-
-	public Vec3 mult(final float n)
-	{
-		return new Vec3(x*n, y*n, z*n);
-	}
-
-	public Vec3 div(final float n)
-	{
-		return new Vec3(x/n, y/n, z/n);
-	}
-
-	public float magnitude()
-	{
-		return (float) Math.sqrt((x*x)+(y*y)+(z*z));
-	}
-
-	public float squareMagnitude()
-	{
-		return ((x*x)+(y*y)+(z*z));
-	}
+	public float squareMagnitude() { return ((x*x)+(y*y)+(z*z)); }
 
 	public void negate()
 	{
@@ -87,45 +38,69 @@ public class Vec3
 	
 	public void normalize()
 	{
-		float mag = this.magnitude();
-		if(mag > 0)
+		final float mag = this.magnitude();
+		if(mag > 0.0f)
 		{			
-			Vec3 r = this.div(mag);
-			x = r.x;
-			y = r.y;
-			z = r.z;
+			x = x / mag;
+			y = y / mag;
+			z = z / mag;
 		}
 	}
 
-	public float dot(Vec3 v)
-	{
-		return (x*v.x) + (y*v.y) + (z*v.z);
-	}
+	public float dot (Vec3 v) { return (x*v.x) + (y*v.y) + (z*v.z); }
 	
-	public boolean equals(Vec3 v)
+	public boolean equals (Vec3 v) { return (x==v.x) && (y==v.y) && (z==v.z); }
+
+	public static void add (final Vec3 a, final Vec3 b, final Vec3 res)
 	{
-		return (x==v.x) && (y==v.y) && (z==v.z);
-	}
-	
-	public static float magnitude(Vec3 v)
-	{
-		return (float) Math.sqrt((v.x*v.x)+(v.y*v.y)+(v.z*v.z));
+		res.x = a.x + b.x;
+		res.y = a.y + b.y;
+		res.z = a.z + b.z;
 	}
 
-	public static float squareMagnitude(Vec3 v)
+	public static void add (final Vec3 v, final float n, final Vec3 res)
 	{
-		return ((v.x*v.x)+(v.y*v.y)+(v.z*v.z));
+		res.x = v.x + n;
+		res.y = v.y + n;
+		res.z = v.z + n;
 	}
 
-	public static Vec3 cross(Vec3 a, Vec3 b)
+	public static void sub (final Vec3 a, final Vec3 b, final Vec3 res)
 	{
-		float x = a.y*b.z - a.z*b.y;
-		float y = a.z*b.x - a.x*b.z;
-		float z = a.x*b.y - a.y*b.x;
-		return new Vec3(x, y, z);
+		res.x = a.x - b.x;
+		res.y = a.y - b.y;
+		res.z = a.z - b.z;
 	}
-	
-	public static float distance(Vec3 a, Vec3 b)
+
+	public static void sub (final Vec3 v, final float n, final Vec3 res)
+	{
+		res.x = v.x - n;
+		res.y = v.y - n;
+		res.z = v.z - n;
+	}
+
+	public static void mult (final Vec3 v, final float n, final Vec3 res)
+	{
+		res.x = v.x * n;
+		res.y = v.y * n;
+		res.z = v.z * n;
+	}
+
+	public static void div (final Vec3 a, final Vec3 b, final Vec3 res)
+	{
+		res.x = a.x / b.x;
+		res.y = a.y / b.y;
+		res.z = a.z / b.z;
+	}
+
+	public static void div (final Vec3 v, final float n, final Vec3 res)
+	{
+		res.x = v.x / n;
+		res.y = v.y / n;
+		res.z = v.z / n;
+	}
+
+	public static float distance (Vec3 a, Vec3 b)
 	{
 		float dx = a.x - b.x;
 		float dy = a.y - b.y;
@@ -133,19 +108,22 @@ public class Vec3
 		return (float) Math.sqrt((dx*dx) + (dy*dy) + (dz*dz));
 	}
 
-	@Override
-	public String toString ()
+	public static Vec3 cross (Vec3 a, Vec3 b)
 	{
-		return "(" + x + ", " + y + ", " + z + ")";
-	}
-
-	public Vec3 copy ()
-	{
+		float x = a.y*b.z - a.z*b.y;
+		float y = a.z*b.x - a.x*b.z;
+		float z = a.x*b.y - a.y*b.x;
 		return new Vec3(x,y,z);
 	}
 
-	public Vec3 componentProduct (Vec3 v)
+	public static void componentProduct (final Vec3 a, final Vec3 b, final Vec3 res)
 	{
-		return new Vec3(x*v.x, y*v.y, z*v.z);
+		res.x = a.x * b.x;
+		res.y = a.y * b.y;
+		res.z = a.z * b.z;
 	}
+
+	@Override
+	public String toString () { return "(" + x + ", " + y + ", " + z + ")"; }
+	public Vec3 copy () { return new Vec3(x,y,z); }
 }

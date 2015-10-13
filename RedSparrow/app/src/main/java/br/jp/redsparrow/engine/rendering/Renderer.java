@@ -1,5 +1,6 @@
 package br.jp.redsparrow.engine.rendering;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
@@ -16,6 +17,7 @@ import javax.microedition.khronos.opengles.GL10;
 import br.jp.redsparrow.engine.Consts;
 import br.jp.redsparrow.engine.World;
 import br.jp.redsparrow.engine.input.InputManager;
+import br.jp.redsparrow.game.MainActivity;
 
 /**
  * Created by JoaoPaulo on 07/10/2015.
@@ -32,6 +34,16 @@ public class Renderer implements GLSurfaceView.Renderer
 	private static long lastTime;
 	private static long time;
 
+	public static int width, height;
+	public static float halfWidth, halfHeight;
+
+	private final Activity activity;
+
+	public Renderer (Activity activity)
+	{
+		this.activity = activity;
+	}
+
 	@Override
 	public void onSurfaceCreated (GL10 gl, EGLConfig config)
 	{
@@ -41,13 +53,17 @@ public class Renderer implements GLSurfaceView.Renderer
 	@Override
 	public void onSurfaceChanged (GL10 gl, int width, int height)
 	{
+		Renderer.width = width;
+		halfWidth = ((float)width) * 0.5f;
+		Renderer.height = height;
+		halfHeight = ((float)height) * 0.5f;
 		World.resize(width, height);
 	}
 
 	@Override
 	public void onDrawFrame (GL10 gl)
 	{
-		float delta = (float)((time - lastTime) / NS_PER_S);
+		final float delta = (float)((time - lastTime) / NS_PER_S);
 		lastTime = time + 0L;
 		time = System.nanoTime();
 
@@ -55,6 +71,15 @@ public class Renderer implements GLSurfaceView.Renderer
 		if(time - startTime >= NS_PER_S)
 		{
 			Log.d("FPS", "Fps:" + frames);
+			final int fps = frames;
+			activity.runOnUiThread(new Runnable()
+			{
+				@Override
+				public void run ()
+				{
+					MainActivity.fpsView.setText("FPS: " + fps);
+				}
+			});
 			frames = 0;
 			startTime = time;
 		}
@@ -63,6 +88,10 @@ public class Renderer implements GLSurfaceView.Renderer
 		World.update(delta);
 		World.render();
 	}
+
+	public static float getXInScreenSpace(final float xInPixelSpace) { return (xInPixelSpace - halfWidth) - halfWidth; }
+
+	public static float getYInScreenSpace(final float yInPixelSpace) { return ((yInPixelSpace - halfHeight) - halfHeight) * -1.0f; }
 
 	public static int toIBO (ShortBuffer buffer)
 	{

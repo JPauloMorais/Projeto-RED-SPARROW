@@ -5,62 +5,70 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 import br.jp.redsparrow.engine.Consts;
-import br.jp.redsparrow.engine.RGB;
-import br.jp.redsparrow.engine.math.Vec3;
+import br.jp.redsparrow.engine.RGBA;
+import br.jp.redsparrow.engine.math.Vec2;
+import br.jp.redsparrow.engine.physics.AABB;
+import br.jp.redsparrow.engine.physics.Particle;
+import br.jp.redsparrow.engine.physics.Quadtree;
 import br.jp.redsparrow.engine.rendering.Sprite;
 
 /**
  * Created by JoaoPaulo on 07/10/2015.
  */
-public class Entity
+public class Entity extends Particle
 {
-	public static final int TEXCOORD_DATA_SIZE = 2;
-	public static final int COLOR_DATA_SIZE = 3;
-
-	public int   uid;
-
-	public Vec3  loc;
-	public Vec3  vel;
-	public Vec3  acl;
+	private int uid;
 
 	public float rot;
 	public float aVel;
+	public Vec2 scl;
+	public AABB bounds;
 
-	public Vec3  scl;
-
-	public int         typeId;
 	public int         tmIndex;
 	public FloatBuffer texCoordDataBuffer;
 	public FloatBuffer colorDataBuffer;
 
 	public Controller controller;
 
-	public Entity (int uid, Vec3 loc, Vec3 vel, Vec3 acl,
-	               float rot, float aVel, Vec3 scl,
-	               int typeId, int tmIndex, FloatBuffer texCoordDataBuffer,
-	               FloatBuffer colorDataBuffer,
-	               Controller controller)
-	{
-		this.uid = uid;
-		this.loc = loc;
-		this.vel = vel;
-		this.acl = acl;
-		this.rot = rot;
-		this.aVel = aVel;
-		this.scl = scl;
-		this.typeId = typeId;
-		this.tmIndex = tmIndex;
-		this.texCoordDataBuffer = texCoordDataBuffer;
-		this.colorDataBuffer = colorDataBuffer;
-		this.controller = controller;
-	}
-
 	public Entity ()
 	{
-		this(-1, new Vec3(0,0,0), new Vec3(0,0,0), new Vec3(0,0,0), 0.0f, 0.0f, new Vec3(1,1,1), -1, -1, null, null, new Controller(){
-			@Override
-			public void update (Entity parent, float delta) {}
-		});
+		uid = -1;
+		setType((short) -1);
+		setId(- 1);
+		loc = new Vec2();
+		vel = new Vec2();
+		acl = new Vec2();
+		rot = 0.0f;
+		aVel = 0.0f;
+		scl = new Vec2(1.0f,1.0f);
+		tmIndex = 0;
+		texCoordDataBuffer = null;
+		colorDataBuffer = null;
+		controller = null;
+		invMass = 1.0f;
+		acumForce = new Vec2();
+		lDamp = 0.7f;
+		bounds = new AABB();
+	}
+
+	public void integrate(final float delta)
+	{
+		Vec2.add(loc, vel, loc);
+//		Vec2.add(loc, vel, delta, loc);
+
+		Vec2 resAcl = acl.copy();
+		Vec2.add(resAcl, acumForce, invMass, resAcl);
+		Vec2.add(vel, resAcl, vel);
+//		Vec2.add(vel, resAcl, delta, vel);
+		Vec2.mult(vel, (float) Math.pow(lDamp, delta), vel); //Drag
+
+		acumForce.zero();
+		acl.zero();
+	}
+
+	public void applyForce(final Vec2 f)
+	{
+		Vec2.add(acumForce, f, acumForce);
 	}
 
 	public void setCurrentTexCoords (EntityType type, int tmIndex)
@@ -72,13 +80,12 @@ public class Entity
 				tmIndex = s.textureMaps.length - 1;
 			this.tmIndex = tmIndex;
 			Sprite.TextureMap tm = s.textureMaps[tmIndex];
-			final float[] uvData = new float[]
-					{
-							tm.uvs[0].x, tm.uvs[0].y, // top left
-							tm.uvs[1].x, tm.uvs[1].y, // bottom left
-							tm.uvs[2].x, tm.uvs[2].y, // bottom right
-							tm.uvs[3].x, tm.uvs[3].y, // top right
-					};
+			final float[] uvData = {
+					tm.uvs[0].x, tm.uvs[0].y, // top left
+					tm.uvs[1].x, tm.uvs[1].y, // bottom left
+					tm.uvs[2].x, tm.uvs[2].y, // bottom right
+					tm.uvs[3].x, tm.uvs[3].y, // top right
+			};
 			texCoordDataBuffer = ByteBuffer
 					.allocateDirect(uvData.length * Consts.BYTES_PER_FLOAT)
 					.order(ByteOrder.nativeOrder())
@@ -88,19 +95,16 @@ public class Entity
 		}
 	}
 
-	public void update(float delta)
-	{
-		controller.update(this, delta);
-	}
+	public void update(float delta) { if(controller!=null) controller.update(this, delta); }
 
-	public void setCurrentColors (RGB lt, RGB lb, RGB rb, RGB rt)
+	public void setCurrentColors (RGBA lt, RGBA lb, RGBA rb, RGBA rt)
 	{
 		final float[] colors =
 				{
-						lt.r, lt.g, lt.b,
-						lb.r, lb.g, lb.b,
-						rb.r, rb.g, rb.b,
-						rt.r, rt.g, rt.b
+						lt.r, lt.g, lt.b, lt.a,
+						lb.r, lb.g, lb.b, lb.a,
+						rb.r, rb.g, rb.b, rb.a,
+						rt.r, rt.g, rt.b, rt.a
 				};
 		colorDataBuffer = ByteBuffer
 				.allocateDirect(colors.length * Consts.BYTES_PER_FLOAT)
@@ -110,7 +114,38 @@ public class Entity
 		colorDataBuffer.position(0);
 	}
 
+	public void setMass(float mass)
+	{
+		invMass = 1.0f/mass;
+	}
 
+	private void setUid(final short type, final int id) { uid = (((int)type) << 24 | id); }
+
+	public void setType (short typeId)
+	{
+		typeId &= ~ ((~ 0 << (8)));
+		setUid(typeId, getId());
+	}
+
+	public short getType()
+	{
+		short type = (short)(uid >> 24);
+		type &= ~ ((~ 0 << (8)));
+		return type;
+	}
+
+	public void setId (int id)
+	{
+		id &= ~ ((~ 0 << (24)));
+		setUid(getType(), id);
+	}
+
+	public int getId()
+	{
+		int id = uid;
+		id &= ~ ((~ 0 << (24)));
+		return id;
+	}
 
 	public static abstract class Controller
 	{

@@ -5,6 +5,7 @@ import android.opengl.Matrix;
 import android.os.SystemClock;
 import android.util.Log;
 
+import java.lang.reflect.Member;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,11 +15,16 @@ import java.util.Random;
 import br.jp.redsparrow.engine.entities.Entity;
 import br.jp.redsparrow.engine.entities.EntityType;
 import br.jp.redsparrow.engine.math.Mat4;
-import br.jp.redsparrow.engine.math.Vec3;
+import br.jp.redsparrow.engine.math.Vec2;
 import br.jp.redsparrow.engine.misc.AutoArray;
-import br.jp.redsparrow.engine.rendering.BasicShader;
+import br.jp.redsparrow.engine.physics.AABB;
+import br.jp.redsparrow.engine.physics.Particle;
+import br.jp.redsparrow.engine.physics.Quadtree;
+import br.jp.redsparrow.engine.rendering.LightPointShader;
 import br.jp.redsparrow.engine.rendering.Quad;
+import br.jp.redsparrow.engine.rendering.SimpleShader;
 import br.jp.redsparrow.engine.rendering.Sprite;
+import br.jp.redsparrow.engine.rendering.SpriteShader;
 
 /**
  * Created by JoaoPaulo on 07/10/2015.
@@ -28,519 +34,371 @@ public class World
 	private static final String  TAG         = "World";
 	public static        boolean initialized = false;
 
-	public static        Mat4    model      = new Mat4();
-	public static        Mat4    view       = new Mat4();
-	public static        Mat4    projection = new Mat4();
-	public static        Mat4    mvp        = new Mat4();
-	private static final float[] tempMatrix = new float[16];
+	public static final Mat4 modelMatrix      = new Mat4();
+	public static final Mat4 viewMatrix       = new Mat4();
+	public static final Mat4 projectionMatrix = new Mat4();
+	public static final Mat4 MVPMatrix        = new Mat4();
 
-	public static BasicShader basicShader;
+	public static SpriteShader     spriteShader;
+	public static LightPointShader lightPointShader;
+	public static SimpleShader     simpleShader;
 
 	public static Entity player;
-	public static AutoArray<EntityType> entityTypes = new AutoArray<EntityType>();
-	public static AutoArray<Entity>     entities    = new AutoArray<Entity>();
+	public static final AutoArray<EntityType>              entityTypes = new AutoArray<EntityType>();
+	public static final AutoArray<Entity>                  entities    = new AutoArray<Entity>();
+	public static final Quadtree                           quadtree    = new Quadtree(0, new Vec2(- 10, - 10), new Vec2(10, 10));
+	public static final Map<EntityType, AutoArray<Entity>> renderMap   = new HashMap<EntityType, AutoArray<Entity>>();
 
-	private static Map<Integer, List<Integer>> entityTypeEntityRenderListMap = new HashMap<Integer, List<Integer>>();
+	private static final float[] lightModelMatrix     = new float[16];
+	private static final float[] lightPosInModelSpace = new float[] {0.0f, 0.0f, 0.0f, 1.0f}; //For light rendering
+	private static final float[] lightPosInWorldSpace = new float[4];  //modelMatrix matrix * pos in modelMatrix space
+	private static final float[] lightPosInEyeSpace   = new float[4]; //pos in world * viewMatrix matrix
 
-	private static float[] mLightModelMatrix = new float[16];
-
-	private static int mMVPMatrixHandle;
-	private static int mMVMatrixHandle;
-	private static int mLightPosHandle;
-	private static int mTextureUniformHandle;
-	private static int mPositionHandle;
-	private static int mColorHandle;
-	private static int mNormalHandle;
-	private static int mTextureCoordinateHandle;
-
-	private static final float[] mLightPosInModelSpace = new float[] {0.0f, 0.0f, 0.0f, 1.0f};
-	private static final float[] mLightPosInWorldSpace = new float[4];
-	private static final float[] mLightPosInEyeSpace   = new float[4];
-
-	private static int mProgramHandle;
-	private static int mPointProgramHandle;
+	private static final float ENTITIES_LOCATION_Z = - 5.0f;
+	private static final float CAMERA_LOCATION_Z   = 1.0f;
+	private static final float CAMERA_LOOK_Z       = - 1.0f;
+	private static final float LIGHT_LOCATION_Z    = - 4.5f;
+	private static final float QUADTREE_HALF_SIZE  = 25.0f;
 
 	public static void init ()
 	{
 		Log.d(TAG, TAG + " init");
 		initialized = true;
 
-//		Entity e = new Entity(new Vec3(0, 0, 0), 0, new Vec3(1, 1, 1));
-//		e.sprite = 0;
-//		addEntity(e);
-//
-//		Sprite s = new Sprite("imgs/test.jpg", 1, 1);
-//		addSprite(s);
-
-		// X, Y, Z
-
-		final Sprite testSprite = new Sprite("red_sparrow_test_2", 5, 2);
-		EntityType   entityType = new EntityType(testSprite);
-		addEntityType(entityType);
+		//----------------// TESTE //----------------------------------------------------------------------------------------//
+		final Random r            = new Random();
+		final Sprite playerSprite = new Sprite("white_tri", 1, 1);
+		EntityType   playerType   = new EntityType(playerSprite);
+		addEntityType(playerType);
 		player = new Entity();
-		player.loc = new Vec3(0, 0, -4.9f);
-		player.rot = 0;
-		player.scl = new Vec3(1, 1, 1);
-		player.typeId = 0;
-		player.setCurrentTexCoords(entityType, 0);
-		player.setCurrentColors(RGB.BLUE, RGB.BLUE, RGB.BLUE, RGB.BLUE);
-		player.controller = new Entity.Controller() {
+		player.loc = new Vec2(0, 0);
+		player.scl = new Vec2(1.5f, 1.5f);
+		player.setType((short) 0);
+		player.setMass(10.0f);
+		player.setCurrentTexCoords(playerType, 0);
+		player.setCurrentColors(RGBA.BLUE, new RGBA(0.9f, 0.9f, 1.0f, 1.0f), new RGBA(0.9f, 0.9f, 1.0f, 1.0f), RGBA.BLUE);
+		player.controller = new Entity.Controller()
+		{
 			@Override
 			public void update (Entity parent, float delta)
 			{
-				parent.vel = parent.vel.add(parent.acl);
-				parent.loc = parent.loc.add(parent.vel);
-
-//				parent.acl = new Vec3(0.0001f, 0.0f, 0.0f);
+				parent.integrate(delta);
+				parent.rot = (float) Math.toDegrees(Math.atan2(parent.vel.y, parent.vel.x) - 1.5707963268d);
 			}
 		};
 
-
-		final Sprite testSprite1 = new Sprite("eyes_test", 12, 1);
-		EntityType entityType1 = new EntityType(testSprite1);
+		final Sprite enemySprite = new Sprite("white_tri", 1, 1);
+		EntityType entityType1 = new EntityType(enemySprite);
 		addEntityType(entityType1);
-		final Random r = new Random();
-		for (int i = 0; i < 200; i++)
+		int qd = 0;
+		for (int i = 0; i < 300; i++)
 		{
 			Entity entity = new Entity();
-			entity.loc = new Vec3((i%2!=0 ? -1 : 1) * r.nextInt(4),
-			                      (i%2==0 ? -1 : 1) * r.nextInt(4),
-			                      -5 + r.nextInt(100)/100);
-			entity.scl = new Vec3(1,1,1);
-			entity.rot = r.nextFloat() * r.nextInt();
-			entity.typeId = 1;
-			entity.setCurrentTexCoords(entityType1, r.nextInt(12));
-			entity.setCurrentColors(new RGB(0.5f + r.nextFloat(), 0.5f + r.nextFloat(), 0.5f + r.nextFloat()),
-			                        new RGB(0.5f + r.nextFloat(), 0.5f + r.nextFloat(), 0.5f + r.nextFloat()),
-			                        new RGB(0.5f + r.nextFloat(), 0.5f + r.nextFloat(), 0.5f + r.nextFloat()),
-			                        new RGB(0.5f + r.nextFloat(), 0.5f + r.nextFloat(), 0.5f + r.nextFloat()));
-			entity.controller = new Entity.Controller() {
+			final Vec2 acl;
+			if(qd == 4) qd = 0;
+			switch (qd)
+			{
+				default:
+				case 0:
+					acl = new Vec2(-1 * (r.nextFloat() * r.nextInt(50) / r.nextInt(100000)), (r.nextFloat() * r.nextInt(50) / r.nextInt(100000)));
+					entity.loc = new Vec2(-1 * (2 + r.nextInt(5)), 2 + r.nextInt(5));
+					break;
+				case 1:
+					acl = new Vec2((r.nextFloat() * r.nextInt(50) / r.nextInt(100000)), (r.nextFloat() * r.nextInt(50) / r.nextInt(100000)));
+					entity.loc = new Vec2(2 + r.nextInt(5), 2 + r.nextInt(5));
+					break;
+				case 2:
+					acl = new Vec2(-1 * (r.nextFloat() * r.nextInt(50) / r.nextInt(100000)), -1 * (r.nextFloat() * r.nextInt(50) / r.nextInt(100000)));
+					entity.loc = new Vec2(-1 * (2 + r.nextInt(5)),-1 * (2 + r.nextInt(5)));
+					break;
+				case 3:
+					acl = new Vec2((r.nextFloat() * r.nextInt(50) / r.nextInt(100000)), -1 * (r.nextFloat() * r.nextInt(50) / r.nextInt(100000)));
+					entity.loc = new Vec2(2 + r.nextInt(5), -1 * (2 + r.nextInt(5)));
+					break;
+			}
+			qd++;
+
+			entity.scl = new Vec2(2,2);
+			entity.setType((short) 1);
+			entity.setCurrentTexCoords(entityType1, r.nextInt(11));
+			entity.setCurrentColors(RGBA.RED,new RGBA(1.0f, 0.9f, 0.9f, 1.0f),new RGBA(1.0f, 0.9f, 0.9f, 1.0f),RGBA.RED);
+			entity.controller = new Entity.Controller()
+			{
+				private final Vec2 acel = acl;
+
 				@Override
 				public void update (Entity parent, float delta)
 				{
-					parent.vel = parent.vel.add(parent.acl);
-					parent.loc = parent.loc.add(parent.vel);
-
-					parent.acl = new Vec3((r.nextInt(2)%2==0 ? -1 : 1) * 0.0001f * r.nextFloat(),
-					                      (r.nextInt(2)%2==0 ? -1 : 1) *  0.0001f * r.nextFloat(), 0.0f);
+//					Vec2.add(parent.vel, parent.acl, parent.vel);
+//					parent.loc.x = parent.loc.x + parent.vel.x;
+//					parent.loc.y = parent.loc.y + parent.vel.y;
+					parent.integrate(delta);
+					parent.rot = (float) Math.toDegrees(Math.atan2(parent.vel.y, parent.vel.x) - 1.5707963268d);
+					parent.acl.set(acel.x, acel.y);
 				}
 			};
 			addEntity(entity);
 		}
+		//----------------// TESTE //----------------------------------------------------------------------------------------//
 
-//		final float[] cubeColorData =
-//				{
-//						1.0f, 0.0f, 1.0f, // top left
-//						1.0f, 1.0f, 1.0f, // bottom left
-//						1.0f, 0.0f, 0.0f, // bottom right
-//						1.0f, 1.0f, 1.0f, // top right
-//				};
-//		quadColors = ByteBuffer.allocateDirect(cubeColorData.length * Consts.BYTES_PER_FLOAT)
-//		                       .order(ByteOrder.nativeOrder()).asFloatBuffer();
-//		quadColors.put(cubeColorData).position(0);
-//
-//		final float[] cubeTextureCoordinateData =
-//				{
-//						0.0f, 0.0f, // top left
-//						0.0f, 1.0f, // bottom left
-//						1.0f, 1.0f, // bottom right
-//						1.0f, 0.0f, // top right
-//				};
-//		quadTexCoords = ByteBuffer.allocateDirect(cubeTextureCoordinateData.length * Consts.BYTES_PER_FLOAT)
-//		                          .order(ByteOrder.nativeOrder()).asFloatBuffer();
-//		quadTexCoords.put(cubeTextureCoordinateData).position(0);
-
-		GLES20.glClearColor(.0f, .0f, .0f, 1);
-
+		GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		GLES20.glEnable(GLES20.GL_CULL_FACE);
 //		GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 		GLES20.glEnable(GLES20.GL_BLEND);
 		GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+		GLES20.glLineWidth(10.0f);
 
-		final float eyeX = 0.0f;
-		final float eyeY = 0.0f;
-		final float eyeZ = -0.5f;
-		final float lookX = 0.0f;
-		final float lookY = 0.0f;
-		final float lookZ = -1.0f;
-		final float upX = 0.0f;
-		final float upY = 1.0f;
-		final float upZ = 0.0f;
-		Matrix.setLookAtM(view.values, 0, eyeX, eyeY, eyeZ, lookX, lookY, lookZ, upX, upY, upZ);
+		spriteShader = new SpriteShader();
+		lightPointShader = new LightPointShader();
+		simpleShader = new SimpleShader();
 
-		final String vertexShader = Assets.getShaderText("BasicVertex");
-		final String fragmentShader = Assets.getShaderText("BasicFragment");
-		final int vertexShaderHandle = compileShader(GLES20.GL_VERTEX_SHADER, vertexShader);
-		final int fragmentShaderHandle = compileShader(GLES20.GL_FRAGMENT_SHADER, fragmentShader);
-		mProgramHandle = createAndLinkProgram(vertexShaderHandle, fragmentShaderHandle,
-		                                      new String[] {"a_Position", "a_Color", "a_Normal", "a_TexCoordinate"});
-
-		// Define a simple shader program for our point.
-		final String pointVertexShader = "uniform mat4 u_MVPMatrix;      \t\t\n" +
-		                                 "attribute vec4 a_Position;     \t\t\n" +
-		                                 "\n" +
-		                                 "void main()                    \n" +
-		                                 "{                              \n" +
-		                                 "\tgl_Position = u_MVPMatrix * a_Position;   \n" +
-		                                 "    gl_PointSize = 5.0;         \n" +
-		                                 "}";
-		final String pointFragmentShader = "precision mediump float;\n" +
-		                                   "       \t\t\t\t\t          \n" +
-		                                   "void main()                    \n" +
-		                                   "{                              \n" +
-		                                   "\tgl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);             \n" +
-		                                   "}";
-		final int pointVertexShaderHandle   = compileShader(GLES20.GL_VERTEX_SHADER, pointVertexShader);
-		final int pointFragmentShaderHandle = compileShader(GLES20.GL_FRAGMENT_SHADER, pointFragmentShader);
-		mPointProgramHandle = createAndLinkProgram(pointVertexShaderHandle, pointFragmentShaderHandle,
-		                                           new String[] {"a_Position"});
-
-		// Load the texture
-//		try
-//		{
-//			final InputStream is = App.getContext().getResources().getAssets().open("sprites/test1.png");
-//			mTextureDataHandle = Renderer.loadBitmap(BitmapFactory.decodeStream(is));
-//		} catch (IOException e)
-//		{
-//			e.printStackTrace();
-//		}
-
-//		GLES20.glEnable(GLES20.GL_CULL_FACE);
-//		GLES20.glEnable(GLES20.GL_DEPTH_TEST);
-//
-//		final float eyeX = 0.0f;
-//		final float eyeY = 0.0f;
-//		final float eyeZ = -0.5f;
-//		final float lookX = 0.0f;
-//		final float lookY = 0.0f;
-//		final float lookZ = -5.0f;
-//		final float upX = 0.0f;
-//		final float upY = 1.0f;
-//		final float upZ = 0.0f;
-//		Matrix.setLookAtM(view.values, 0, eyeX, eyeY, eyeZ, lookX, lookY, lookZ, upX, upY, upZ);
-//
-//		for (int i = 0; i < sprites.size; i++)
-//		{
-//			Sprite sprite = sprites.get(i);
-//			if(sprite != null)
-//			{
-//				sprite.loadTexture();
-//				Log.d("Sprite", "texture: " + sprites.get(i).texture);
-//			}
-//		}
-//
-//		Quad.vertexVBO = Renderer.toVBO(Quad.vertexPositionBuffer);
-//
-//		basicShader = new BasicShader();
-//
+		Matrix.setLookAtM(viewMatrix.values, 0,
+		                  player.loc.x, player.loc.y, CAMERA_LOCATION_Z,
+		                  player.loc.x, player.loc.y, CAMERA_LOOK_Z,
+		                  0.0f, 1.0f, 0.0f);
 	}
 
-	public static void resize(int width, int height)
+	public static void resize (int width, int height)
 	{
-		// Set the OpenGL viewport to the same size as the surface.
 		GLES20.glViewport(0, 0, width, height);
 
-		// Create a new perspective projection matrix. The height will stay the same
-		// while the width will vary as per aspect ratio.
-		final float ratio = (float) width / height;
-		final float left = -ratio;
-		final float right = ratio;
-		final float bottom = -1.0f;
-		final float top = 1.0f;
-		final float near = 1.0f;
-		final float far = 10.0f;
+		final float ratio  = (float) width / height;
+//		final float left   = - ratio;
+//		final float right  = ratio;
+//		final float bottom = - 1.0f;
+//		final float top    = 1.0f;
+		final float near   = 1.0f;
+		final float far    = 1000.0f;
 
-		projection.setFrustum(left, right, bottom, top, near, far);
+//		projectionMatrix.setOrtho(left, right, bottom, top, near, far);
+//		projectionMatrix.setFrustum(left, right, bottom, top, near, far);
+		projectionMatrix.setPerspective(90.0f, ratio, near, far);
 	}
-
-	public static void update (float delta)
+	static float y = 0.0f;
+	public static void update (final float delta)
 	{
-		final float eyeX = player.loc.x;
-		final float eyeY = player.loc.y;
-		final float eyeZ = -0.5f;
-		final float lookX = player.loc.x;
-		final float lookY = player.loc.y;
-		final float lookZ = player.loc.z;
-		final float upX = 0.0f;
-		final float upY = 1.0f;
-		final float upZ = 0.0f;
-		Matrix.setLookAtM(view.values, 0, eyeX, eyeY, eyeZ, lookX, lookY, lookZ, upX, upY, upZ);
+		quadtree.clear(true);
+		renderMap.clear();
 
 		player.update(delta);
+//		if(player.loc.x < quadtree.bounds.min.x || player.loc.y < quadtree.bounds.min.y ||
+//		   player.loc.x > quadtree.bounds.max.x || player.loc.y > quadtree.bounds.max.y )
+		quadtree.bounds = new AABB(new Vec2(player.loc.x - QUADTREE_HALF_SIZE, player.loc.y - QUADTREE_HALF_SIZE),
+		                           new Vec2(player.loc.x + QUADTREE_HALF_SIZE, player.loc.y + QUADTREE_HALF_SIZE));
+//		Log.d(TAG, "QD: " + quadtree.getQuadrant(player.loc));
+		quadtree.add(player);
 
-		entityTypeEntityRenderListMap.clear();
 		for (int i = 0; i < entities.size; i++)
 		{
 			final Entity e = entities.get(i);
 			if(e != null)
 			{
 				//TODO: Spatial Partitioning
-				e.update(delta);
-
-				int type = e.typeId;
-
-				if(!entityTypeEntityRenderListMap.containsKey(type))
+				if(AABB.isInside(e.loc, quadtree.bounds.min, quadtree.bounds.max))
 				{
-					ArrayList<Integer> eIds = new ArrayList<Integer>();
-					entityTypeEntityRenderListMap.put(type, eIds);
-				}
+					e.update(delta);
+					quadtree.add(e);
 
-				entityTypeEntityRenderListMap.get(type).add(e.uid);
+					//Render map
+					short typeId = e.getType();
+					EntityType type = entityTypes.get(typeId);
+					if(!renderMap.containsKey(type)) renderMap.put(type, new AutoArray<Entity>());
+					renderMap.get(type).add(e);
+				}
 			}
 		}
+
+		AutoArray<Quadtree.Member> res = new AutoArray<Quadtree.Member>();
+		quadtree.query(player.loc, res);
+		Log.d(TAG, "Query size: " + res.size);
+
+		/// Camera Update
+		Matrix.setLookAtM(viewMatrix.values, 0,
+		                  player.loc.x, player.loc.y, CAMERA_LOCATION_Z + y,
+		                  player.loc.x, player.loc.y, CAMERA_LOOK_Z,
+		                  0.0f, 1.0f, 0.0f);
+		if(CAMERA_LOCATION_Z + y < 2.0f) y += 0.01f;
 	}
 
-	static float x = 0.0f;
-	static int cur = 0;
 	public static void render ()
 	{
-		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
+		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
 		// Do a complete rotation every 10 seconds.
 		long  time           = SystemClock.uptimeMillis() % 10000L;
 		float angleInDegrees = (360.0f / 10000.0f) * ((int) time);
 
-		// Set our per-vertex lighting program.
-		GLES20.glUseProgram(mProgramHandle);
+		spriteShader.use();
+		spriteShader.getLocations();
 
-		// Set program handles for cube drawing.
-		mMVPMatrixHandle = GLES20.glGetUniformLocation(mProgramHandle, "u_MVPMatrix");
-		mMVMatrixHandle = GLES20.glGetUniformLocation(mProgramHandle, "u_MVMatrix");
-		mLightPosHandle = GLES20.glGetUniformLocation(mProgramHandle, "u_LightPos");
-		mTextureUniformHandle = GLES20.glGetUniformLocation(mProgramHandle, "u_Texture");
-		mPositionHandle = GLES20.glGetAttribLocation(mProgramHandle, "a_Position");
-		mColorHandle = GLES20.glGetAttribLocation(mProgramHandle, "a_Color");
-		mNormalHandle = GLES20.glGetAttribLocation(mProgramHandle, "a_Normal");
-		mTextureCoordinateHandle = GLES20.glGetAttribLocation(mProgramHandle, "a_TexCoordinate");
+		Matrix.setIdentityM(lightModelMatrix, 0);
+//		y += 0.001f;
+		Matrix.translateM(lightModelMatrix, 0, player.loc.x, player.loc.y, LIGHT_LOCATION_Z);
+		Matrix.multiplyMV(lightPosInWorldSpace, 0, lightModelMatrix, 0, lightPosInModelSpace, 0);
+		Matrix.multiplyMV(lightPosInEyeSpace, 0, viewMatrix.values, 0, lightPosInWorldSpace, 0);
 
-		// Calculate position of the light. Rotate and then push into the distance.
-		Matrix.setIdentityM(mLightModelMatrix, 0);
-		Matrix.translateM(mLightModelMatrix, 0, player.loc.x, player.loc.y, player.loc.z + 0.2f);
-//		Matrix.rotateM(mLightModelMatrix, 0, angleInDegrees, 0.0f, 1.0f, 0.0f);
-//		Matrix.translateM(mLightModelMatrix, 0, 0.0f, 0.0f, 2.0f);
-
-		Matrix.multiplyMV(mLightPosInWorldSpace, 0, mLightModelMatrix, 0, mLightPosInModelSpace, 0);
-		Matrix.multiplyMV(mLightPosInEyeSpace, 0, view.values, 0, mLightPosInWorldSpace, 0);
-
-		setupQuadData();
-		for (int typeId : entityTypeEntityRenderListMap.keySet())
+		spriteShader.setPositionAttribute(Quad.POSITION_DATA_BUFFER);
+		spriteShader.setNormalAttribute(Quad.NORMAL_DATA_BUFFER);
+//		for (int i = 0; i < entities.size; i++)
+//			renderEntity(entities.get(i));
+		for (EntityType type : renderMap.keySet())
 		{
-			EntityType type = entityTypes.get(typeId);
+			spriteShader.setTextureUniform(type.sprite.textureId);
 
-			GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-			GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, type.sprite.textureId);
-			GLES20.glUniform1i(mTextureUniformHandle, 0);
-
-			List<Integer> entityIds = entityTypeEntityRenderListMap.get(typeId);
-			for (int i = 0; i < entityIds.size(); i++)
+			AutoArray<Entity> es = renderMap.get(type);
+			for (int i = 0; i < es.size; i++)
 			{
-				final Entity e = entities.get(entityIds.get(i));
+				Entity e = es.get(i);
 
-				e.colorDataBuffer.position(0);
-				GLES20.glVertexAttribPointer(mColorHandle, Entity.COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, 0, e.colorDataBuffer);
-				GLES20.glEnableVertexAttribArray(mColorHandle);
+				spriteShader.setColorAttribute(e.colorDataBuffer);
+				spriteShader.setTexCoordAttribute(e.texCoordDataBuffer);
 
-				e.texCoordDataBuffer.position(0);
-				GLES20.glVertexAttribPointer(mTextureCoordinateHandle, Entity.TEXCOORD_DATA_SIZE, GLES20.GL_FLOAT, false, 0, e.texCoordDataBuffer);
-				GLES20.glEnableVertexAttribArray(mTextureCoordinateHandle);
+				modelMatrix.identity();
+				modelMatrix.setTranslation(e.loc.x, e.loc.y, ENTITIES_LOCATION_Z);
+				modelMatrix.setTranslation(type.sprite.offset.x, type.sprite.offset.y, 0.0f);
+				Matrix.rotateM(modelMatrix.values, 0, e.rot, 0, 0, 1);
+				Matrix.scaleM(modelMatrix.values, 0, e.scl.x, e.scl.y, 1.0f);
 
-				model.identity();
-				model.setTranslation(e.loc);
-				Matrix.rotateM(model.values, 0, e.rot, 0, 0, 1);
-				Matrix.scaleM(model.values, 0, e.scl.z, e.scl.y, e.scl.z);
+				Matrix.multiplyMM(MVPMatrix.values, 0, viewMatrix.values, 0, modelMatrix.values, 0);
+				spriteShader.setMVMatrixUniform(MVPMatrix.values);
 
-				Matrix.multiplyMM(mvp.values, 0, view.values, 0, model.values, 0);
-				GLES20.glUniformMatrix4fv(mMVMatrixHandle, 1, false, mvp.values, 0);
+				Matrix.multiplyMM(MVPMatrix.values, 0, projectionMatrix.values, 0, MVPMatrix.values, 0);
+				spriteShader.setMVPMatrixUniform(MVPMatrix.values);
 
-				Matrix.multiplyMM(mvp.values, 0, projection.values, 0, mvp.values, 0);
-				GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mvp.values, 0);
-
-				GLES20.glUniform3f(mLightPosHandle, mLightPosInEyeSpace[0], mLightPosInEyeSpace[1], mLightPosInEyeSpace[2]);
+				spriteShader.setLightPosEyeSpaceUniform(lightPosInEyeSpace[0], lightPosInEyeSpace[1], lightPosInEyeSpace[2]);
 
 				GLES20.glDrawElements(GLES20.GL_TRIANGLES, 6, GLES20.GL_UNSIGNED_SHORT, Quad.INDEX_DATA_BUFFER);
 			}
 		}
 
+//		for (short typeId : entityTypeEntityRenderListMap.keySet())
+//		{
+//			EntityType type = entityTypes.get(typeId);
+//
+//			spriteShader.setTextureUniform(type.sprite.textureId);
+//
+//			List<Integer> entityIds = entityTypeEntityRenderListMap.get(typeId);
+//			for (int i = 0; i < entityIds.size(); i++)
+//			{
+//				final Entity e = entities.get(entityIds.get(i));
+//
+//				spriteShader.setColorAttribute(e.colorDataBuffer);
+//
+//				spriteShader.setTexCoordAttribute(e.texCoordDataBuffer);
+//
+//				modelMatrix.identity();
+//				modelMatrix.setTranslation(e.loc.x, e.loc.y, - 5.0f);
+//				modelMatrix.setTranslation(type.sprite.offset.x, type.sprite.offset.y, 0.0f);
+//				Matrix.rotateM(modelMatrix.values, 0, e.rot, 0, 0, 1);
+//				Matrix.scaleM(modelMatrix.values, 0, e.scl.x, e.scl.y, 1.0f);
+//
+//				Matrix.multiplyMM(MVPMatrix.values, 0, viewMatrix.values, 0, modelMatrix.values, 0);
+//				spriteShader.setMVMatrixUniform(MVPMatrix.values);
+//
+//				Matrix.multiplyMM(MVPMatrix.values, 0, projectionMatrix.values, 0, MVPMatrix.values, 0);
+//				spriteShader.setMVPMatrixUniform(MVPMatrix.values);
+//
+//				spriteShader.setLightPosEyeSpaceUniform(lightPosInEyeSpace[0], lightPosInEyeSpace[1], lightPosInEyeSpace[2]);
+//
+//				GLES20.glDrawElements(GLES20.GL_TRIANGLES, 6, GLES20.GL_UNSIGNED_SHORT, Quad.INDEX_DATA_BUFFER);
+//			}
+//		}
+
 		renderEntity(player);
 
-		GLES20.glUseProgram(mPointProgramHandle);
-		drawLight();
+		simpleShader.use();
+		simpleShader.getLocations();
+		quadtree.dbgDraw();
 	}
 
-	private static void setupQuadData()
+	private static void renderEntity (Entity e)
 	{
-		Quad.POSITION_DATA_BUFFER.position(0);
-		GLES20.glVertexAttribPointer(mPositionHandle, Quad.POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, 0, Quad.POSITION_DATA_BUFFER);
-		GLES20.glEnableVertexAttribArray(mPositionHandle);
-
-		Quad.NORMAL_DATA_BUFFER.position(0);
-		GLES20.glVertexAttribPointer(mNormalHandle, Quad.NORMAL_DATA_SIZE, GLES20.GL_FLOAT, false, 0, Quad.NORMAL_DATA_BUFFER);
-		GLES20.glEnableVertexAttribArray(mNormalHandle);
-	}
-
-	private static void renderEntity(Entity e)
-	{
-		EntityType type = entityTypes.get(e.typeId);
+		EntityType type = entityTypes.get(e.getType());
 		if(type != null)
 		{
-			GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-			GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, type.sprite.textureId);
-			GLES20.glUniform1i(mTextureUniformHandle, 0);
+			spriteShader.setTextureUniform(type.sprite.textureId);
 
-			e.colorDataBuffer.position(0);
-			GLES20.glVertexAttribPointer(mColorHandle, Entity.COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, 0, e.colorDataBuffer);
-			GLES20.glEnableVertexAttribArray(mColorHandle);
+			spriteShader.setColorAttribute(e.colorDataBuffer);
 
-			e.texCoordDataBuffer.position(0);
-			GLES20.glVertexAttribPointer(mTextureCoordinateHandle, Entity.TEXCOORD_DATA_SIZE, GLES20.GL_FLOAT, false, 0, e.texCoordDataBuffer);
-			GLES20.glEnableVertexAttribArray(mTextureCoordinateHandle);
+			spriteShader.setTexCoordAttribute(e.texCoordDataBuffer);
 
-			model.identity();
-			model.setTranslation(e.loc);
-			Matrix.rotateM(model.values, 0, e.rot, 0, 0, 1);
-			Matrix.scaleM(model.values, 0, e.scl.z, e.scl.y, e.scl.z);
+			modelMatrix.identity();
+			modelMatrix.setTranslation(e.loc.x, e.loc.y, ENTITIES_LOCATION_Z);
+			modelMatrix.setTranslation(type.sprite.offset.x, type.sprite.offset.y, 0.0f);
+			Matrix.rotateM(modelMatrix.values, 0, e.rot, 0, 0, 1);
+			Matrix.scaleM(modelMatrix.values, 0, e.scl.x, e.scl.y, 1.0f);
 
-			Matrix.multiplyMM(mvp.values, 0, view.values, 0, model.values, 0);
-			GLES20.glUniformMatrix4fv(mMVMatrixHandle, 1, false, mvp.values, 0);
+			Matrix.multiplyMM(MVPMatrix.values, 0, viewMatrix.values, 0, modelMatrix.values, 0);
+			spriteShader.setMVMatrixUniform(MVPMatrix.values);
 
-			Matrix.multiplyMM(mvp.values, 0, projection.values, 0, mvp.values, 0);
-			GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mvp.values, 0);
+			Matrix.multiplyMM(MVPMatrix.values, 0, projectionMatrix.values, 0, MVPMatrix.values, 0);
+			spriteShader.setMVPMatrixUniform(MVPMatrix.values);
 
-			GLES20.glUniform3f(mLightPosHandle, mLightPosInEyeSpace[0], mLightPosInEyeSpace[1], mLightPosInEyeSpace[2]);
+			spriteShader.setLightPosEyeSpaceUniform(lightPosInEyeSpace[0], lightPosInEyeSpace[1], lightPosInEyeSpace[2]);
 
 			GLES20.glDrawElements(GLES20.GL_TRIANGLES, 6, GLES20.GL_UNSIGNED_SHORT, Quad.INDEX_DATA_BUFFER);
-		}
-	}
 
-	private static void drawCube ()
-	{
-//		Quad.POSITION_DATA_BUFFER.position(0);
-//		GLES20.glVertexAttribPointer(mPositionHandle, Quad.POSITION_DATA_SIZE, GLES20.GL_FLOAT, false, 0, Quad.POSITION_DATA_BUFFER);
-//		GLES20.glEnableVertexAttribArray(mPositionHandle);
+//			// DBG Bounds
+//			simpleShader.use();
+//			simpleShader.getLocations();
 //
-//		Quad.NORMAL_DATA_BUFFER.position(0);
-//		GLES20.glVertexAttribPointer(mNormalHandle, Quad.NORMAL_DATA_SIZE, GLES20.GL_FLOAT, false, 0, Quad.NORMAL_DATA_BUFFER);
-//		GLES20.glEnableVertexAttribArray(mNormalHandle);
-
-		player.colorDataBuffer.position(0);
-		GLES20.glVertexAttribPointer(mColorHandle, Entity.COLOR_DATA_SIZE, GLES20.GL_FLOAT, false, 0, player.colorDataBuffer);
-		GLES20.glEnableVertexAttribArray(mColorHandle);
-
-		player.texCoordDataBuffer.position(0);
-		GLES20.glVertexAttribPointer(mTextureCoordinateHandle, Entity.TEXCOORD_DATA_SIZE, GLES20.GL_FLOAT, false, 0, player.texCoordDataBuffer);
-		GLES20.glEnableVertexAttribArray(mTextureCoordinateHandle);
-
-		Matrix.multiplyMM(mvp.values, 0, view.values, 0, model.values, 0);
-		GLES20.glUniformMatrix4fv(mMVMatrixHandle, 1, false, mvp.values, 0);
-
-		Matrix.multiplyMM(mvp.values, 0, projection.values, 0, mvp.values, 0);
-		GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mvp.values, 0);
-
-		GLES20.glUniform3f(mLightPosHandle, mLightPosInEyeSpace[0], mLightPosInEyeSpace[1], mLightPosInEyeSpace[2]);
-
-		GLES20.glDrawElements(GLES20.GL_TRIANGLES, 6, GLES20.GL_UNSIGNED_SHORT, Quad.INDEX_DATA_BUFFER);
+//			simpleShader.setMVPMatrixUniform(MVPMatrix.values);
+//
+//			final Vec2 min = e.getMin();
+//			final Vec2 max = e.getMax();
+//			final float[] positions =
+//					{
+//							min.x, min.y,
+//							min.x, max.y,
+//							max.x, max.y,
+//							max.x, min.y,
+//							min.x, min.y
+//					};
+//			final FloatBuffer positionBuffer = ByteBuffer.allocateDirect(positions.length * Consts.BYTES_PER_FLOAT)
+//			                                             .order(ByteOrder.nativeOrder())
+//			                                             .asFloatBuffer()
+//			                                             .put(positions);
+//			World.simpleShader.setPositionAttribute(positionBuffer);
+//			final float[] colors =
+//					{
+//							0,0,1,
+//							0,0,1,
+//							0,0,1,
+//							0,0,1,
+//							0,0,1
+//					};
+//			FloatBuffer colorBuffer = ByteBuffer.allocateDirect(colors.length * Consts.BYTES_PER_FLOAT)
+//			                                    .order(ByteOrder.nativeOrder())
+//			                                    .asFloatBuffer()
+//			                                    .put(colors);
+//			simpleShader.setColorAttribute(colorBuffer);
+//			GLES20.glDrawArrays(GLES20.GL_LINE_LOOP, 0, 5);
+		}
 	}
 
 	private static void drawLight ()
 	{
-		final int pointMVPMatrixHandle = GLES20.glGetUniformLocation(mPointProgramHandle, "u_MVPMatrix");
-		final int pointPositionHandle  = GLES20.glGetAttribLocation(mPointProgramHandle, "a_Position");
+		lightPointShader.use();
+		lightPointShader.getLocations();
 
-		// Pass in the position.
-		GLES20.glVertexAttrib3f(pointPositionHandle, mLightPosInModelSpace[0], mLightPosInModelSpace[1], mLightPosInModelSpace[2]);
+		modelMatrix.identity();
+		Matrix.translateM(modelMatrix.values, 0, player.loc.x, player.loc.y, 0.0f);
+		Matrix.multiplyMM(MVPMatrix.values, 0, viewMatrix.values, 0, modelMatrix.values, 0);
+		Matrix.multiplyMM(MVPMatrix.values, 0, projectionMatrix.values, 0, MVPMatrix.values, 0);
+		lightPointShader.setMVPMatrixUniform(MVPMatrix.values);
 
-		// Since we are not using a buffer object, disable vertex arrays for this attribute.
-		GLES20.glDisableVertexAttribArray(pointPositionHandle);
-
-		// Pass in the transformation matrix.
-		Matrix.multiplyMM(mvp.values, 0, view.values, 0, mLightModelMatrix, 0);
-		Matrix.multiplyMM(mvp.values, 0, projection.values, 0, mvp.values, 0);
-		GLES20.glUniformMatrix4fv(pointMVPMatrixHandle, 1, false, mvp.values, 0);
-
-		// Draw the point.
 		GLES20.glDrawArrays(GLES20.GL_POINTS, 0, 1);
 	}
 
-	public static void addEntityType (final EntityType type) {entityTypes.add(type);}
-	public static void addEntity (final Entity e) {e.uid = entities.add(e);}
-
-
-	public static int compileShader (final int shaderType, final String shaderSource)
+	public static int addEntityType (final EntityType type)
 	{
-		int shaderHandle = GLES20.glCreateShader(shaderType);
-
-		if (shaderHandle != 0)
-		{
-			// Pass in the shader source.
-			GLES20.glShaderSource(shaderHandle, shaderSource);
-
-			// Compile the shader.
-			GLES20.glCompileShader(shaderHandle);
-
-			// Get the compilation status.
-			final int[] compileStatus = new int[1];
-			GLES20.glGetShaderiv(shaderHandle, GLES20.GL_COMPILE_STATUS, compileStatus, 0);
-
-			// If the compilation failed, delete the shader.
-			if (compileStatus[0] == 0)
-			{
-				Log.e(TAG, "Error compiling shader: " + GLES20.glGetShaderInfoLog(shaderHandle));
-				GLES20.glDeleteShader(shaderHandle);
-				shaderHandle = 0;
-			}
-		}
-
-		if (shaderHandle == 0)
-		{
-			throw new RuntimeException("Error creating shader.");
-		}
-
-		return shaderHandle;
+		int id = entityTypes.add(type);
+		return id;
 	}
 
-	public static int createAndLinkProgram(final int vertexShaderHandle, final int fragmentShaderHandle, final String[] attributes)
+	public static int addEntity (final Entity e)
 	{
-		int programHandle = GLES20.glCreateProgram();
-
-		if (programHandle != 0)
-		{
-			// Bind the vertex shader to the program.
-			GLES20.glAttachShader(programHandle, vertexShaderHandle);
-
-			// Bind the fragment shader to the program.
-			GLES20.glAttachShader(programHandle, fragmentShaderHandle);
-
-			// Bind attributes
-			if (attributes != null)
-			{
-				final int size = attributes.length;
-				for (int i = 0; i < size; i++)
-				{
-					GLES20.glBindAttribLocation(programHandle, i, attributes[i]);
-				}
-			}
-
-			// Link the two shaders together into a program.
-			GLES20.glLinkProgram(programHandle);
-
-			// Get the link status.
-			final int[] linkStatus = new int[1];
-			GLES20.glGetProgramiv(programHandle, GLES20.GL_LINK_STATUS, linkStatus, 0);
-
-			// If the link failed, delete the program.
-			if (linkStatus[0] == 0)
-			{
-				Log.e(TAG, "Error compiling program: " + GLES20.glGetProgramInfoLog(programHandle));
-				GLES20.glDeleteProgram(programHandle);
-				programHandle = 0;
-			}
-		}
-
-		if (programHandle == 0)
-		{
-			throw new RuntimeException("Error creating program.");
-		}
-
-		return programHandle;
+		e.setId(entities.add(e));
+		return e.getId();
 	}
 }

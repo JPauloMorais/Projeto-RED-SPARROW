@@ -11,46 +11,14 @@ public class Vec2
 		this.y = y;
 	}
 	
-	public Vec2(Vec2 v)
-	{
-		this(v.x, v.y);
-	}
+	public Vec2() { this(0.0f, 0.0f); }
 
 	public void zero()
 	{
-		x = y = 0.0f;
+		x = 0.0f;
+		y = 0.0f;
 	}
 	
-	public Vec2 add(Vec2 v)
-	{
-		return new Vec2(x+v.x, y+v.y);
-	}
-
-	public Vec2 add(float n)
-	{
-		return new Vec2(x+n, y+n);
-	}
-
-	public Vec2 sub(Vec2 v)
-	{
-		return new Vec2(x-v.x, y-v.y);
-	}
-
-	public Vec2 sub(float n)
-	{
-		return new Vec2(x-n, y-n);
-	}
-
-	public Vec2 mult(float n)
-	{
-		return new Vec2(x*n, y*n);
-	}
-
-	public Vec2 div(float n)
-	{
-		return new Vec2(x/n, y/n);
-	}
-
 	public float magnitude()
 	{
 		return (float) Math.sqrt((x*x)+(y*y));
@@ -71,11 +39,58 @@ public class Vec2
 	{
 		float mag = this.magnitude();
 		if(mag > 0)
-		{			
-			Vec2 r = this.div(mag);
-			x = r.x;
-			y = r.y;
+		{
+			x = x / mag;
+			y = y / mag;
 		}
+	}
+
+	public static void add (final Vec2 a, final Vec2 b, final Vec2 res)
+	{
+		res.x = a.x + b.x;
+		res.y = a.y + b.y;
+	}
+
+	public static void add (final Vec2 a, final Vec2 b, final float scale, final Vec2 res)
+	{
+		res.x = a.x + (b.x * scale);
+		res.y = a.y + (b.y * scale);
+	}
+
+	public static void add (final Vec2 v, final float n, final Vec2 res)
+	{
+		res.x = v.x + n;
+		res.y = v.y + n;
+	}
+
+	public static void sub (final Vec2 a, final Vec2 b, final Vec2 res)
+	{
+		res.x = a.x - b.x;
+		res.y = a.y - b.y;
+	}
+
+	public static void sub (final Vec2 v, final float n, final Vec2 res)
+	{
+		res.x = v.x - n;
+		res.y = v.y - n;
+	}
+
+	public static void mult (final Vec2 v, final float n, final Vec2 res)
+	{
+		res.x = v.x * n;
+		res.y = v.y * n;
+	}
+
+	public static void div (final Vec2 a, final Vec2 b, final Vec2 res)
+	{
+		res.x = a.x / b.x;
+		res.y = a.y / b.y;
+	}
+
+	public static void div (final Vec2 v, final float n, final Vec2 res)
+	{
+		res.x = v.x / n;
+		res.y = v.y / n;
 	}
 
 	public float dot(Vec2 v)
@@ -110,4 +125,12 @@ public class Vec2
 	{
 		return "(" + x + ", " + y + ")";
 	}
+
+	public void set (float x, float y)
+	{
+		this.x = x;
+		this.y = y;
+	}
+
+	public Vec2 copy () {return new Vec2(x,y);}
 }

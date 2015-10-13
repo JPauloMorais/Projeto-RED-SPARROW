@@ -112,7 +112,8 @@ public class Mat3
 
 	public void setBlockInertiaTensor(final Vec3 halfSizes, float mass)
 	{
-		Vec3 squares = halfSizes.componentProduct(halfSizes);
+		Vec3 squares = new Vec3();
+		Vec3.componentProduct(halfSizes, halfSizes, squares);
 		setInertiaTensorCoeffs(0.3f*mass*(squares.y + squares.z),
 		                       0.3f*mass*(squares.x + squares.z),
 		                       0.3f*mass*(squares.x + squares.y),

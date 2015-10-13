@@ -8,4 +8,9 @@ public class Consts
 	public static final int BYTES_PER_FLOAT = 4;
 	public static final int BYTES_PER_INT   = 4;
 	public static final int BYTES_PER_SHORT = 2;
+
+	public static final int SPRITE_POSITION_DATA_SIZE = 2;
+	public static final int SPRITE_COLOR_DATA_SIZE    = 4;
+	public static final int NORMAL_DATA_SIZE   = 3;
+	public static final int TEXCOORD_DATA_SIZE = 2;
 }

@@ -2,7 +2,6 @@ package br.jp.redsparrow.engine;
 
 import android.opengl.GLES20;
 import android.opengl.Matrix;
-import android.util.Log;
 
 import br.jp.redsparrow.engine.math.Vec3;
 
@@ -32,17 +31,17 @@ public class Camera
 		final float near = 1.0f;
 		final float far = 10.0f;
 
-		Matrix.frustumM(World.projection.values, 0, left, right, bottom, top, near, far);
+		Matrix.frustumM(World.projectionMatrix.values, 0, left, right, bottom, top, near, far);
 	}
 
 	public static void update ()
 	{
 //		loc = loc.sub(new Vec3(0,0,0.00001f));
 //		Log.d("CAM", "Loc: " + loc);
-		Matrix.setLookAtM(World.projection.values, 0,
+		Matrix.setLookAtM(World.projectionMatrix.values, 0,
 		                  loc.x, loc.y, loc.z,
 		                  look.x, look.y, look.z,
 		                  up.x, up.y, up.z);
-//		World.view.setLookAt(loc, look, up);
+//		World.viewMatrix.setLookAt(loc, look, up);
 	}
 }
