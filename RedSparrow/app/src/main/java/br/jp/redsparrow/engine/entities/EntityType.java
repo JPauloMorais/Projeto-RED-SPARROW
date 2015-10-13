@@ -8,6 +8,7 @@ import br.jp.redsparrow.engine.rendering.Sprite;
 public class EntityType
 {
 	public Sprite sprite;
+	public Entity.Controller controller;
 
 	public EntityType (Sprite sprite)
 	{

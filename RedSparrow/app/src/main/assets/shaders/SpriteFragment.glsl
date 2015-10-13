@@ -16,7 +16,7 @@ void main()
     float diffuse = max(dot(v_Normal, lightVector), 0.0);
     diffuse = diffuse * (1.0 / (1.0 + (0.10 * distance)));
 //    if(u_LightPos.z < v_Position.z) diffuse = 0.0;
-    diffuse = diffuse + 0.05f;
+    diffuse = diffuse + 0.1f;
     vec4 texel = texture2D(u_Texture, v_TexCoordinate);
 //    float r = texel.r * diffuse;
 //    if(v_Color.a > 0.0)

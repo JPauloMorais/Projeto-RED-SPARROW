@@ -17,7 +17,10 @@ import br.jp.redsparrow.engine.rendering.Sprite;
  */
 public class Entity extends Particle
 {
+	public static final int TYPE_BEHAVIOUR_ON = 0x1;
+
 	private int uid;
+	public int flags;
 
 	public float rot;
 	public float aVel;
@@ -33,6 +36,7 @@ public class Entity extends Particle
 	public Entity ()
 	{
 		uid = -1;
+		flags = TYPE_BEHAVIOUR_ON;
 		setType((short) -1);
 		setId(- 1);
 		loc = new Vec2();

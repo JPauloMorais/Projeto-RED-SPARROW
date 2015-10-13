@@ -18,7 +18,7 @@
     </shared>
   </component>
   <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="FPS" />
+    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="Quer" />
     <option name="TOOL_WINDOW_LOG_LEVEL" value="DEBUG" />
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
     <option name="TOOL_WINDOW_REGEXP_FILTER" value="false" />
@@ -51,22 +51,32 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="World.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="World.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/engine/World.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="198" column="16" selection-start-line="198" selection-start-column="16" selection-end-line="198" selection-end-column="16" />
+            <state vertical-scroll-proportion="0.4097222">
+              <caret line="174" column="28" selection-start-line="174" selection-start-column="28" selection-end-line="174" selection-end-column="28" />
               <folding>
                 <element signature="e#1607#1619#0" expanded="true" />
                 <element signature="e#1706#1714#0" expanded="true" />
                 <element signature="e#1926#1957#0" expanded="true" />
-                <element signature="e#3380#3611#0" expanded="true" />
-                <element signature="e#3610#3611#0" expanded="true" />
-                <element signature="e#8010#8027#0" expanded="true" />
-                <element signature="e#9155#9198#0" expanded="false" />
-                <element signature="e#10404#10467#0" expanded="false" />
-                <element signature="e#12958#12976#0" expanded="false" />
+                <element signature="e#3381#3612#0" expanded="true" />
+                <element signature="e#3611#3612#0" expanded="true" />
+                <element signature="e#8863#8880#0" expanded="true" />
+                <element signature="e#10006#10049#0" expanded="false" />
+                <element signature="e#11255#11318#0" expanded="false" />
+                <element signature="e#13809#13827#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="EntityType.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/engine/entities/EntityType.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="10" column="40" selection-start-line="10" selection-start-column="40" selection-end-line="10" selection-end-column="40" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -75,12 +85,22 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/engine/physics/Quadtree.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="25" column="44" selection-start-line="25" selection-start-column="44" selection-end-line="25" selection-end-column="44" />
+              <caret line="160" column="0" selection-start-line="160" selection-start-column="0" selection-end-line="160" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#769#777#0" expanded="true" />
                 <element signature="e#2436#2460#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SpriteFragment.glsl" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/assets/shaders/SpriteFragment.glsl">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="18" column="27" selection-start-line="18" selection-start-column="27" selection-end-line="18" selection-end-column="27" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -95,11 +115,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/game/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5868056">
-              <caret line="59" column="29" selection-start-line="59" selection-start-column="29" selection-end-line="59" selection-end-column="29" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="61" column="44" selection-start-line="61" selection-start-column="44" selection-end-line="61" selection-end-column="44" />
               <folding>
                 <element signature="e#3411#3412#0" expanded="true" />
                 <element signature="e#3434#3435#0" expanded="true" />
@@ -119,7 +139,29 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="158" column="0" selection-start-line="157" selection-start-column="0" selection-end-line="158" selection-end-column="0" />
-              <folding />
+              <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="e#4622#5347#0" expanded="false" />
+                <element signature="e#5346#5347#0" expanded="false" />
+                <element signature="e#6569#6682#0" expanded="false" />
+                <element signature="e#6681#6682#0" expanded="false" />
+                <element signature="e#7245#7525#0" expanded="false" />
+                <element signature="e#7524#7525#0" expanded="false" />
+                <element signature="e#7761#7923#0" expanded="false" />
+                <element signature="e#7922#7923#0" expanded="false" />
+                <element signature="e#7990#8091#0" expanded="false" />
+                <element signature="e#8090#8091#0" expanded="false" />
+                <element signature="e#8207#8651#0" expanded="false" />
+                <element signature="e#8650#8651#0" expanded="false" />
+                <element signature="e#9850#9984#0" expanded="false" />
+                <element signature="e#9983#9984#0" expanded="false" />
+                <element signature="e#10515#10656#0" expanded="false" />
+                <element signature="e#10655#10656#0" expanded="false" />
+                <element signature="e#10739#10882#0" expanded="false" />
+                <element signature="e#10881#10882#0" expanded="false" />
+                <element signature="e#10967#11107#0" expanded="false" />
+                <element signature="e#11106#11107#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -148,15 +190,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AABB.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/engine/physics/AABB.java">
+      <file leaf-file-name="Entity.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/engine/entities/Entity.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="30" column="31" selection-start-line="30" selection-start-column="31" selection-end-line="30" selection-end-column="31" />
-              <folding>
-                <element signature="e#270#271#0" expanded="true" />
-                <element signature="e#305#306#0" expanded="true" />
-              </folding>
+              <caret line="31" column="28" selection-start-line="31" selection-start-column="28" selection-end-line="31" selection-end-column="28" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -1487,7 +1526,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/engine/RGB.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/engine/input/InputManager.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/engine/App.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/engine/input/SensorInput.java" />
@@ -1525,8 +1563,6 @@
         <option value="$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/engine/misc/AutoArray.java" />
         <option value="$PROJECT_DIR$/app/src/main/assets/shaders/SimpleFragment.glsl" />
         <option value="$PROJECT_DIR$/app/src/main/assets/shaders/SimpleVertex.glsl" />
-        <option value="$PROJECT_DIR$/app/src/main/assets/shaders/SpriteFragment.glsl" />
-        <option value="$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/engine/entities/Entity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/engine/rendering/SimpleShader.java" />
         <option value="$PROJECT_DIR$/app/src/main/assets/shaders/TexturedParticleFragment.glsl" />
         <option value="$PROJECT_DIR$/app/src/main/assets/shaders/TexturedParticleVertex.glsl" />
@@ -1534,10 +1570,13 @@
         <option value="$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/engine/physics/AABB.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/engine/rendering/Quad.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/engine/physics/Particle.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/engine/physics/Quadtree.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/engine/World.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/engine/rendering/Renderer.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/game/MainActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/assets/shaders/SpriteFragment.glsl" />
+        <option value="$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/engine/physics/Quadtree.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/engine/entities/Entity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/engine/entities/EntityType.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/engine/World.java" />
       </list>
     </option>
   </component>
@@ -1620,6 +1659,24 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="assets" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RedSparrow" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="assets" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="shaders" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -2038,7 +2095,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32730561" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -2047,7 +2104,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4616695" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Monitor" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4616695" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32879046" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -2222,14 +2279,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/engine/entities/EntityType.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="9" column="12" selection-start-line="9" selection-start-column="12" selection-end-line="9" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/engine/rendering/Sprite.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -2299,20 +2348,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/engine/entities/Entity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="147" column="5" selection-start-line="147" selection-start-column="5" selection-end-line="147" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#2818#2819#0" expanded="false" />
-            <element signature="e#2844#2845#0" expanded="false" />
-            <element signature="e#2818#2819#0" expanded="false" />
-            <element signature="e#2844#2845#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/engine/rendering/SimpleShader.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -2351,14 +2386,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/assets/shaders/SpriteFragment.glsl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="19" column="17" selection-start-line="19" selection-start-column="17" selection-end-line="19" selection-end-column="54" />
           <folding />
         </state>
       </provider>
@@ -2536,41 +2563,33 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/engine/physics/Quadtree.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="25" column="44" selection-start-line="25" selection-start-column="44" selection-end-line="25" selection-end-column="44" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#769#777#0" expanded="true" />
-            <element signature="e#2436#2460#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/engine/World.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="198" column="16" selection-start-line="198" selection-start-column="16" selection-end-line="198" selection-end-column="16" />
-          <folding>
-            <element signature="e#1607#1619#0" expanded="true" />
-            <element signature="e#1706#1714#0" expanded="true" />
-            <element signature="e#1926#1957#0" expanded="true" />
-            <element signature="e#3380#3611#0" expanded="true" />
-            <element signature="e#3610#3611#0" expanded="true" />
-            <element signature="e#8010#8027#0" expanded="true" />
-            <element signature="e#9155#9198#0" expanded="false" />
-            <element signature="e#10404#10467#0" expanded="false" />
-            <element signature="e#12958#12976#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://A:/projects_old/RedSparrowGLES20/src/br/jp/redsparrow/game/activities/PlayActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="158" column="0" selection-start-line="157" selection-start-column="0" selection-end-line="158" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#4622#5347#0" expanded="false" />
+            <element signature="e#5346#5347#0" expanded="false" />
+            <element signature="e#6569#6682#0" expanded="false" />
+            <element signature="e#6681#6682#0" expanded="false" />
+            <element signature="e#7245#7525#0" expanded="false" />
+            <element signature="e#7524#7525#0" expanded="false" />
+            <element signature="e#7761#7923#0" expanded="false" />
+            <element signature="e#7922#7923#0" expanded="false" />
+            <element signature="e#7990#8091#0" expanded="false" />
+            <element signature="e#8090#8091#0" expanded="false" />
+            <element signature="e#8207#8651#0" expanded="false" />
+            <element signature="e#8650#8651#0" expanded="false" />
+            <element signature="e#9850#9984#0" expanded="false" />
+            <element signature="e#9983#9984#0" expanded="false" />
+            <element signature="e#10515#10656#0" expanded="false" />
+            <element signature="e#10655#10656#0" expanded="false" />
+            <element signature="e#10739#10882#0" expanded="false" />
+            <element signature="e#10881#10882#0" expanded="false" />
+            <element signature="e#10967#11107#0" expanded="false" />
+            <element signature="e#11106#11107#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2586,10 +2605,46 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/assets/shaders/SpriteFragment.glsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="18" column="27" selection-start-line="18" selection-start-column="27" selection-end-line="18" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/engine/physics/Quadtree.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="160" column="0" selection-start-line="160" selection-start-column="0" selection-end-line="160" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#769#777#0" expanded="true" />
+            <element signature="e#2436#2460#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/engine/entities/EntityType.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="10" column="40" selection-start-line="10" selection-start-column="40" selection-end-line="10" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/engine/entities/Entity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="31" column="28" selection-start-line="31" selection-start-column="28" selection-end-line="31" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/game/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5868056">
-          <caret line="59" column="29" selection-start-line="59" selection-start-column="29" selection-end-line="59" selection-end-column="29" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="61" column="44" selection-start-line="61" selection-start-column="44" selection-end-line="61" selection-end-column="44" />
           <folding>
             <element signature="e#3411#3412#0" expanded="true" />
             <element signature="e#3434#3435#0" expanded="true" />
@@ -2599,6 +2654,24 @@
             <element signature="e#3628#3629#0" expanded="true" />
             <element signature="e#3702#3703#0" expanded="true" />
             <element signature="e#3725#3726#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/br/jp/redsparrow/engine/World.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.4097222">
+          <caret line="174" column="28" selection-start-line="174" selection-start-column="28" selection-end-line="174" selection-end-column="28" />
+          <folding>
+            <element signature="e#1607#1619#0" expanded="true" />
+            <element signature="e#1706#1714#0" expanded="true" />
+            <element signature="e#1926#1957#0" expanded="true" />
+            <element signature="e#3381#3612#0" expanded="true" />
+            <element signature="e#3611#3612#0" expanded="true" />
+            <element signature="e#8863#8880#0" expanded="true" />
+            <element signature="e#10006#10049#0" expanded="false" />
+            <element signature="e#11255#11318#0" expanded="false" />
+            <element signature="e#13809#13827#0" expanded="false" />
           </folding>
         </state>
       </provider>

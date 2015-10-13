@@ -55,7 +55,7 @@ public class World
 	private static final float[] lightPosInEyeSpace   = new float[4]; //pos in world * viewMatrix matrix
 
 	private static final float ENTITIES_LOCATION_Z = - 5.0f;
-	private static final float CAMERA_LOCATION_Z   = 1.0f;
+	private static final float CAMERA_LOCATION_Z   = 15.0f;
 	private static final float CAMERA_LOOK_Z       = - 1.0f;
 	private static final float LIGHT_LOCATION_Z    = - 4.5f;
 	private static final float QUADTREE_HALF_SIZE  = 25.0f;
@@ -88,10 +88,43 @@ public class World
 		};
 
 		final Sprite enemySprite = new Sprite("white_tri", 1, 1);
-		EntityType entityType1 = new EntityType(enemySprite);
-		addEntityType(entityType1);
+		final EntityType enemyType = new EntityType(enemySprite);
+		enemyType.controller = new Entity.Controller()
+		{
+			int totalCount = 0;
+			int count = 0;
+			@Override
+			public void update (Entity parent, float delta)
+			{
+				parent.integrate(delta);
+				parent.rot = (float) Math.toDegrees(Math.atan2(parent.vel.y, parent.vel.x) - 1.5707963268d);
+				Vec2 runDir = new Vec2();
+				Vec2.sub(parent.loc, World.player.loc, runDir);
+				if(runDir.magnitude() <= 3.0f)
+				{
+					Vec2.mult(runDir, 0.001f, runDir);
+					parent.acl.set(runDir.x, runDir.y);
+				}
+
+				if(totalCount <= 240000 && count == 800)
+				{
+					Entity entity = new Entity();
+					Vec2.add(parent.loc, new Vec2(2,-2), entity.loc);
+					entity.scl = new Vec2(2,2);
+					entity.setType((short) 1);
+					entity.setCurrentTexCoords(enemyType, r.nextInt(11));
+					entity.setCurrentColors(RGBA.RED, new RGBA(1.0f, 0.9f, 0.9f, 1.0f), new RGBA(1.0f, 0.9f, 0.9f, 1.0f), RGBA.RED);
+					addEntity(entity);
+					totalCount += count;
+					count = 0;
+				}
+				count++;
+			}
+		};
+		addEntityType(enemyType);
+
 		int qd = 0;
-		for (int i = 0; i < 300; i++)
+		for (int i = 0; i < 4; i++)
 		{
 			Entity entity = new Entity();
 			final Vec2 acl;
@@ -120,23 +153,16 @@ public class World
 
 			entity.scl = new Vec2(2,2);
 			entity.setType((short) 1);
-			entity.setCurrentTexCoords(entityType1, r.nextInt(11));
-			entity.setCurrentColors(RGBA.RED,new RGBA(1.0f, 0.9f, 0.9f, 1.0f),new RGBA(1.0f, 0.9f, 0.9f, 1.0f),RGBA.RED);
-			entity.controller = new Entity.Controller()
-			{
-				private final Vec2 acel = acl;
-
-				@Override
-				public void update (Entity parent, float delta)
-				{
-//					Vec2.add(parent.vel, parent.acl, parent.vel);
-//					parent.loc.x = parent.loc.x + parent.vel.x;
-//					parent.loc.y = parent.loc.y + parent.vel.y;
-					parent.integrate(delta);
-					parent.rot = (float) Math.toDegrees(Math.atan2(parent.vel.y, parent.vel.x) - 1.5707963268d);
-					parent.acl.set(acel.x, acel.y);
-				}
-			};
+			entity.setCurrentTexCoords(enemyType, r.nextInt(11));
+			entity.setCurrentColors(RGBA.RED, new RGBA(1.0f, 0.9f, 0.9f, 1.0f), new RGBA(1.0f, 0.9f, 0.9f, 1.0f), RGBA.RED);
+//			entity.controller = new Entity.Controller() {
+//				private final Vec2 acel = acl;
+//				@Override
+//				public void update (Entity parent, float delta)
+//				{
+//					parent.acl.set(acel.x, acel.y);
+//				}
+//			};
 			addEntity(entity);
 		}
 		//----------------// TESTE //----------------------------------------------------------------------------------------//
@@ -146,7 +172,7 @@ public class World
 //		GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 		GLES20.glEnable(GLES20.GL_BLEND);
 		GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA);
-		GLES20.glLineWidth(10.0f);
+		GLES20.glLineWidth(5.0f);
 
 		spriteShader = new SpriteShader();
 		lightPointShader = new LightPointShader();
@@ -193,15 +219,19 @@ public class World
 			final Entity e = entities.get(i);
 			if(e != null)
 			{
-				//TODO: Spatial Partitioning
+				short typeId = e.getType();
+				EntityType type = entityTypes.get(typeId);
+				//Type behaviour
+				if((type.controller != null) && ((e.flags & Entity.TYPE_BEHAVIOUR_ON) != 0))
+					type.controller.update(e,delta);
+				//TODO: Spatial sparseness scheme?
+				e.update(delta);
+
 				if(AABB.isInside(e.loc, quadtree.bounds.min, quadtree.bounds.max))
 				{
-					e.update(delta);
 					quadtree.add(e);
 
 					//Render map
-					short typeId = e.getType();
-					EntityType type = entityTypes.get(typeId);
 					if(!renderMap.containsKey(type)) renderMap.put(type, new AutoArray<Entity>());
 					renderMap.get(type).add(e);
 				}
@@ -214,10 +244,10 @@ public class World
 
 		/// Camera Update
 		Matrix.setLookAtM(viewMatrix.values, 0,
-		                  player.loc.x, player.loc.y, CAMERA_LOCATION_Z + y,
+		                  player.loc.x, player.loc.y, CAMERA_LOCATION_Z,
 		                  player.loc.x, player.loc.y, CAMERA_LOOK_Z,
 		                  0.0f, 1.0f, 0.0f);
-		if(CAMERA_LOCATION_Z + y < 2.0f) y += 0.01f;
+//		if(CAMERA_LOCATION_Z + y < 2.0f) y += 0.01f;
 	}
 
 	public static void render ()
