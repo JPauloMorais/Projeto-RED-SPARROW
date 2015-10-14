@@ -29,9 +29,6 @@ public class Sprite
 		textureId = - 1;
 		spriteSheet = Assets.getBitmap(spriteSheetName);
 
-		if(World.initialized)
-			textureId = Renderer.loadBitmap(spriteSheet);
-
 		if(spritesAlongY <= 0 || spritesAlongX <= 0)
 			spritesAlongX = spritesAlongY = 1;
 
@@ -60,7 +57,7 @@ public class Sprite
 	public void loadTexture()
 	{
 		if(textureId < 0)
-			textureId = Renderer.loadBitmap(spriteSheet);
+			textureId = GPU.loadBitmap(spriteSheet);
 	}
 
 	public class TextureMap

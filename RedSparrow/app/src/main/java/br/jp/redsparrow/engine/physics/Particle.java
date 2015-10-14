@@ -7,17 +7,25 @@ import br.jp.redsparrow.engine.math.Vec2;
  */
 public class Particle implements Quadtree.Member
 {
-	public Vec2  loc;
-	public Vec2  vel;
-	public Vec2  acl;
-	public Vec2  scl;
-	public Vec2  acumForce;
-	public float lDamp;
-	public float invMass;
+	public Vec2 loc;
+	public Vec2 vel;
+	public float lifetime;
 
 	@Override
 	public Vec2 getCenter ()
 	{
 		return loc;
+	}
+
+	@Override
+	public Vec2 getMin ()
+	{
+		return null;
+	}
+
+	@Override
+	public Vec2 getMax ()
+	{
+		return null;
 	}
 }

@@ -19,7 +19,6 @@ import br.jp.redsparrow.engine.misc.AutoArray;
  */
 public class Quadtree
 {
-	public static final int POINT_OUT_OF_BOUNDS = - 2;
 	public static final int IN_BETWEEN          = - 1;
 
 	private static final int MAX_MEMBERS = 10;
@@ -60,7 +59,7 @@ public class Quadtree
 		nodes[3] = new Quadtree(level, new Vec2(middleX, bounds.min.y),      new Vec2(bounds.max.x, middleY));
 	}
 
-	public int getQuadrant(final Vec2 p)
+	public int getQuadrant (final Vec2 p)
 	{
 		final float halfWidth = (bounds.max.x - bounds.min.x) * 0.5f;
 		final float halfHeight = (bounds.max.y - bounds.min.y) * 0.5f;
@@ -85,46 +84,30 @@ public class Quadtree
 		return qd;
 	}
 
-//	public void add (M m)
-//	{
-//		if(nodes[0] != null)
-//		{
-//			final Vec2 min = m.getMin();
-//			final Vec2 max = m.getMax();
-//			final int index = getQuadrant(min,max);
-//
-//			if(index != -1)  nodes[index].add(m);
-//		}
-//
-//		members.add(m);
-//
-//		if(members.size > MAX_MEMBERS && level < MAX_LEVELS)
-//		{
-//			if(nodes[0] == null) split();
-//
-//			for (int i = 0; i < members.size; i++)
-//			{
-//				final M member = members.get(i);
-//				final Vec2 min = member.getMin();
-//				final Vec2 max = member.getMax();
-//				final int index = getQuadrant(min,max);
-//
-//				if(index != -1)
-//				{
-//					nodes[index].add(member);
-//					members.remove(i);
-//				}
-//			}
-//		}
-//	}
-//
-//	public void query (final Vec2 min, final Vec2 max, AutoArray<M> result)
-//	{
-//		final int qd = getQuadrant(min,max);
-//		if(qd != -1 && nodes[0] != null) nodes[qd].query(min,max,result);
-//
-//		result.add(members);
-//	}
+	public int getQuadrant2 (final Vec2 p)
+	{
+		final float halfWidth = (bounds.max.x - bounds.min.x) * 0.5f;
+		final float halfHeight = (bounds.max.y - bounds.min.y) * 0.5f;
+		final float middleX = bounds.min.x + halfWidth;
+		final float middleY = bounds.min.y + halfHeight;
+
+		final boolean upper = p.y >= middleY;
+		final boolean lower = p.y < middleY;
+
+		int qd = IN_BETWEEN;
+		if(p.x <= middleX)
+		{
+			if(upper) qd = 0;
+			else if(lower) qd = 2;
+		}
+		else if(p.x > middleX)
+		{
+			if(upper) qd = 1;
+			else if(lower) qd = 3;
+		}
+
+		return qd;
+	}
 
 	public void add (Member m)
 	{
@@ -138,7 +121,7 @@ public class Quadtree
 
 		members.add(m);
 
-		if(members.size > MAX_MEMBERS && level < MAX_LEVELS)
+		if(members.size >= MAX_MEMBERS && level < MAX_LEVELS)
 		{
 			if(nodes[0] == null) split();
 
@@ -166,13 +149,13 @@ public class Quadtree
 		result.add(members);
 	}
 
-	public void dbgDraw()
+	public void dbgDraw(final World w)
 	{
-		World.modelMatrix.identity();
-		Matrix.translateM(World.modelMatrix.values, 0, 0, 0, -5.0f);
-		Matrix.multiplyMM(World.MVPMatrix.values, 0, World.viewMatrix.values, 0, World.modelMatrix.values, 0);
-		Matrix.multiplyMM(World.MVPMatrix.values, 0, World.projectionMatrix.values, 0, World.MVPMatrix.values, 0);
-		World.simpleShader.setMVPMatrixUniform(World.MVPMatrix.values);
+		w.modelMatrix.identity();
+		Matrix.translateM(w.modelMatrix.values, 0, 0, 0, -5.0f);
+		Matrix.multiplyMM(w.MVPMatrix.values, 0, w.viewMatrix.values, 0, w.modelMatrix.values, 0);
+		Matrix.multiplyMM(w.MVPMatrix.values, 0, w.projectionMatrix.values, 0, w.MVPMatrix.values, 0);
+		w.simpleShader.setMVPMatrixUniform(w.MVPMatrix.values);
 
 		final float[] positions =
 				{
@@ -186,7 +169,7 @@ public class Quadtree
 		                                             .order(ByteOrder.nativeOrder())
 		                                             .asFloatBuffer()
 		                                             .put(positions);
-		World.simpleShader.setPositionAttribute(positionBuffer);
+		w.simpleShader.setPositionAttribute(positionBuffer);
 		final float[] colors =
 				{
 						1,0,0, 0.1f,
@@ -199,11 +182,11 @@ public class Quadtree
 		                                    .order(ByteOrder.nativeOrder())
 		                                    .asFloatBuffer()
 		                                    .put(colors);
-		World.simpleShader.setColorAttribute(colorBuffer);
+		w.simpleShader.setColorAttribute(colorBuffer);
 		GLES20.glDrawArrays(GLES20.GL_LINE_LOOP, 0, 5);
 
 		if(nodes[0] != null)
-			for (int i = 0; i < 4; i++) nodes[i].dbgDraw();
+			for (int i = 0; i < 4; i++) nodes[i].dbgDraw(w);
 	}
 
 	public void clear(boolean trimBranches)
@@ -222,5 +205,7 @@ public class Quadtree
 	public interface Member
 	{
 		Vec2 getCenter();
+		Vec2 getMin();
+		Vec2 getMax();
 	}
 }

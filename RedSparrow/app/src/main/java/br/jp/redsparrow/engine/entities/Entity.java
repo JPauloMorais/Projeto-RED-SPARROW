@@ -5,6 +5,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 import br.jp.redsparrow.engine.Consts;
+import br.jp.redsparrow.engine.GameActivity;
 import br.jp.redsparrow.engine.RGBA;
 import br.jp.redsparrow.engine.math.Vec2;
 import br.jp.redsparrow.engine.physics.AABB;
@@ -15,17 +16,24 @@ import br.jp.redsparrow.engine.rendering.Sprite;
 /**
  * Created by JoaoPaulo on 07/10/2015.
  */
-public class Entity extends Particle
+public class Entity implements Quadtree.Member
 {
 	public static final int TYPE_BEHAVIOUR_ON = 0x1;
 
 	private int uid;
 	public int flags;
 
+	public Vec2  loc;
+	public Vec2  vel;
+	public Vec2  acl;
+	public Vec2  scl;
+	public Vec2  acumForce;
+	public float lDamp;
+	public float maxLinerVel;
+
 	public float rot;
 	public float aVel;
-	public Vec2 scl;
-	public AABB bounds;
+	public float invMass;
 
 	public int         tmIndex;
 	public FloatBuffer texCoordDataBuffer;
@@ -37,7 +45,7 @@ public class Entity extends Particle
 	{
 		uid = -1;
 		flags = TYPE_BEHAVIOUR_ON;
-		setType((short) -1);
+		setType((short) - 1);
 		setId(- 1);
 		loc = new Vec2();
 		vel = new Vec2();
@@ -49,22 +57,24 @@ public class Entity extends Particle
 		texCoordDataBuffer = null;
 		colorDataBuffer = null;
 		controller = null;
-		invMass = 1.0f;
+		invMass = 10.0f;
 		acumForce = new Vec2();
-		lDamp = 0.7f;
-		bounds = new AABB();
+		lDamp = 0.9f;
+		maxLinerVel = scl.magnitude() * 200.0f;
 	}
 
 	public void integrate(final float delta)
 	{
-		Vec2.add(loc, vel, loc);
-//		Vec2.add(loc, vel, delta, loc);
+//		Vec2.add(loc, vel, loc);
+		Vec2.add(loc, vel, delta, loc);
 
 		Vec2 resAcl = acl.copy();
 		Vec2.add(resAcl, acumForce, invMass, resAcl);
 		Vec2.add(vel, resAcl, vel);
 //		Vec2.add(vel, resAcl, delta, vel);
 		Vec2.mult(vel, (float) Math.pow(lDamp, delta), vel); //Drag
+		if(vel.magnitude() >= maxLinerVel) // TODO: Max vels baseadas na massa
+			vel.setMagnitude(maxLinerVel);
 
 		acumForce.zero();
 		acl.zero();
@@ -99,7 +109,7 @@ public class Entity extends Particle
 		}
 	}
 
-	public void update(float delta) { if(controller!=null) controller.update(this, delta); }
+	public void update(final GameActivity gameActivity, final float delta) { if(controller!=null) controller.update(gameActivity,this, delta); }
 
 	public void setCurrentColors (RGBA lt, RGBA lb, RGBA rb, RGBA rt)
 	{
@@ -151,8 +161,26 @@ public class Entity extends Particle
 		return id;
 	}
 
+	@Override
+	public Vec2 getCenter ()
+	{
+		return loc;
+	}
+
+	@Override
+	public Vec2 getMin ()
+	{
+		return new Vec2(loc.x - (0.5f * scl.x), loc.y - (0.5f * scl.y));
+	}
+
+	@Override
+	public Vec2 getMax ()
+	{
+		return new Vec2(loc.x + (0.5f * scl.x), loc.y + (0.5f * scl.y));
+	}
+
 	public static abstract class Controller
 	{
-		public abstract void update(Entity parent, float delta);
+		public abstract void update(GameActivity gameActivity, Entity parent, float delta);
 	}
 }

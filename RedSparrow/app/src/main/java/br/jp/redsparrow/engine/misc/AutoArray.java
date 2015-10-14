@@ -74,8 +74,8 @@ public class AutoArray<T>
 	{
 		if(index >= data.length)
 			grow(index + GROWTH);
-
-		size = index+1;
+		if(size <= index)
+			size = index+1;
 		data[index] = o;
 	}
 
